@@ -1,0 +1,7 @@
+package com.example.otusapp.recipes.domain
+
+import com.example.otusapp.recipes.domain.model.Recipe
+
+interface RecipesRepository {
+    suspend fun loadRecipes(): List<Recipe>
+}
