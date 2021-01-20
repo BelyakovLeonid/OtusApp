@@ -1,37 +1,25 @@
 package com.example.otusapp.recipes.presentation
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.example.otusapp.R
 import com.example.otusapp.databinding.FRecipesListBinding
 import com.example.otusapp.recipes.presentation.adapter.RecipesAdapter
 
-class RecipesListFragment : Fragment() {
+class RecipesListFragment : Fragment(R.layout.f_recipes_list) {
 
     private val viewModel by viewModels<RecipesListViewModel>()
-
-    private var _binding: FRecipesListBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding(FRecipesListBinding::bind)
 
     private val adapter = RecipesAdapter()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FRecipesListBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         handleView()
         observeViewModel()
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun handleView() {
