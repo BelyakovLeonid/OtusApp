@@ -1,14 +1,16 @@
 package com.example.otusapp.recipes.data.remote.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class RecipesResponse(
-    @SerializedName("offset")
+    @SerialName("offset")
     val offset: Int,
-    @SerializedName("number")
+    @SerialName("number")
     val number: Int,
-    @SerializedName("results")
+    @SerialName("results")
     val results: List<RecipeDto>,
-    @SerializedName("totalResults")
+    @SerialName("totalResults")
     val totalResults: Int,
 )
