@@ -1,7 +1,9 @@
 package com.example.otusapp.recipes.data.remote
 
 import com.example.otusapp.base.constants.NetworkConstants
-import com.example.otusapp.base.network.ApiKeyInterceptor
+import com.example.otusapp.base.network.interceptors.ApiKeyInterceptor
+import com.example.otusapp.base.network.result.Result
+import com.example.otusapp.base.network.result.ResultAdapterFactory
 import com.example.otusapp.recipes.data.remote.model.RecipesResponse
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -17,8 +19,9 @@ interface RecipesApi {
 
     @GET("recipes/complexSearch/")
     suspend fun loadRecipes(
+        @Query("offset") offset: Int,
         @Query("number") number: Int = 10
-    ): RecipesResponse
+    ): Result<RecipesResponse>
 }
 
 object RetrofitClient {
@@ -41,6 +44,7 @@ object RetrofitClient {
             retrofit = Retrofit.Builder()
                 .baseUrl(NetworkConstants.BASE_URL)
                 .addConverterFactory(converterFactory)
+                .addCallAdapterFactory(ResultAdapterFactory())
                 .client(httpClient)
                 .build()
                 .create(RecipesApi::class.java)
