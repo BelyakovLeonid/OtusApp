@@ -2,15 +2,15 @@ package com.example.otusapp.recipes.presentation.model
 
 import com.example.otusapp.recipes.domain.model.Recipe
 
-data class RecipeUiModel(
+data class RecipeUi(
     val id: Long,
     val name: String,
     val subtitle: String
 )
 
 
-fun Recipe.toUi(): RecipeUiModel {
-    return RecipeUiModel(
+fun Recipe.toUi(): RecipeUi {
+    return RecipeUi(
         id = id,
         name = name,
         subtitle = subtitle
