@@ -5,10 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.example.otusapp.base.presentation.IEvent
 import com.example.otusapp.databinding.VRecipeItemBinding
-import com.example.otusapp.recipes.presentation.model.RecipeUiModel
+import com.example.otusapp.recipes.presentation.RecipesListContract
+import com.example.otusapp.recipes.presentation.model.RecipeUi
 
-class RecipesAdapter : ListAdapter<RecipeUiModel, ItemViewHolder>(RecipeDiffCallback()) {
+class RecipesAdapter(
+    private val onItemClick: (IEvent) -> Unit
+) : ListAdapter<RecipeUi, ItemViewHolder>(RecipeDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -17,7 +22,7 @@ class RecipesAdapter : ListAdapter<RecipeUiModel, ItemViewHolder>(RecipeDiffCall
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), onItemClick)
     }
 }
 
@@ -25,18 +30,22 @@ class ItemViewHolder(
     private val binding: VRecipeItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: RecipeUiModel) {
-        binding.vRecipeName.text = item.name
-        binding.vRecipeDescription.text = item.subtitle
+    fun bind(item: RecipeUi, onItemClick: (IEvent) -> Unit) {
+        binding.recipeName.text = item.name
+        binding.recipeDescription.text = item.subtitle
+        binding.root.setOnClickListener {
+            onItemClick.invoke(RecipesListContract.Event.OnItemClickEvent(item))
+        }
+        binding.recipeImage.load(item.subtitle)
     }
 }
 
-class RecipeDiffCallback : DiffUtil.ItemCallback<RecipeUiModel>() {
-    override fun areItemsTheSame(oldItem: RecipeUiModel, newItem: RecipeUiModel): Boolean {
-        return false
+class RecipeDiffCallback : DiffUtil.ItemCallback<RecipeUi>() {
+    override fun areItemsTheSame(oldItem: RecipeUi, newItem: RecipeUi): Boolean {
+        return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: RecipeUiModel, newItem: RecipeUiModel): Boolean {
-        return false
+    override fun areContentsTheSame(oldItem: RecipeUi, newItem: RecipeUi): Boolean {
+        return oldItem == newItem
     }
 }
