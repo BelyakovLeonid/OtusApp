@@ -19,6 +19,7 @@ interface RecipesApi {
 
     @GET("recipes/complexSearch/")
     suspend fun loadRecipes(
+        @Query("offset") offset: Int,
         @Query("number") number: Int = 10
     ): Result<RecipesResponse>
 }
