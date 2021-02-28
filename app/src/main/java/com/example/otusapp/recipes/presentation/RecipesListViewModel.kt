@@ -2,12 +2,14 @@ package com.example.otusapp.recipes.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.otusapp.OtusApp
 import com.example.otusapp.base.network.result.Result
 import com.example.otusapp.base.presentation.IEvent
 import com.example.otusapp.recipes.data.RecipesRepositoryImpl
 import com.example.otusapp.recipes.data.remote.RetrofitClient
 import com.example.otusapp.recipes.domain.RecipesInteractor
 import com.example.otusapp.recipes.domain.model.Recipe
+import com.example.otusapp.recipes.navigator.RecipesListNavigatorImpl
 import com.example.otusapp.recipes.presentation.model.toUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +21,9 @@ class RecipesListViewModel : ViewModel() {
     private val recipesApi = RetrofitClient.getClient()
     private val recipesRepository = RecipesRepositoryImpl(recipesApi)
     private val recipesInteractor = RecipesInteractor(recipesRepository)
+
+    private val router = OtusApp.cicerone.router
+    private val recipesNavigator = RecipesListNavigatorImpl(router)
 
     private val _items =
         MutableStateFlow<RecipesListContract.State>(RecipesListContract.State.Loading)
@@ -37,8 +42,7 @@ class RecipesListViewModel : ViewModel() {
 
     fun submitEvent(event: IEvent) {
         when (event) {
-            is RecipesListContract.Event.OnItemClickEvent -> {
-            } // TODO
+            is RecipesListContract.Event.OnItemClickEvent -> recipesNavigator.openRecipeDetail(event.item.id)
             is RecipesListContract.Event.OnScrolledToEnd -> loadMoreRecipes()
         }
     }
