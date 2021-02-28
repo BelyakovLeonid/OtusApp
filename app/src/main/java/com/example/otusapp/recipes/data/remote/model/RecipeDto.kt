@@ -1,14 +1,16 @@
 package com.example.otusapp.recipes.data.remote.model
 
 import com.example.otusapp.recipes.domain.model.Recipe
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class RecipeDto(
-    @SerializedName("id")
+    @SerialName("id")
     val id: Long,
-    @SerializedName("title")
+    @SerialName("title")
     val title: String,
-    @SerializedName("image")
+    @SerialName("image")
     val imageUrl: String,
 )
 
