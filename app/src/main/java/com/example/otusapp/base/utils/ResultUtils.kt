@@ -1,6 +1,6 @@
 package com.example.otusapp.base.utils
 
-import com.example.otusapp.base.network.result.Result
+import com.example.otusapp.base.data.network.result.Result
 
 fun <T, R> Result<T>.convertTo(convertation: (T) -> R): Result<R> {
     return when (this) {

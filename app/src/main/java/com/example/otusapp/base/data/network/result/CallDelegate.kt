@@ -1,4 +1,4 @@
-package com.example.otusapp.base.network.result
+package com.example.otusapp.base.data.network.result
 
 import okhttp3.Request
 import retrofit2.Call

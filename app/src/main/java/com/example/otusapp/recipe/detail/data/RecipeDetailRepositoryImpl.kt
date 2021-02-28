@@ -1,6 +1,6 @@
 package com.example.otusapp.recipe.detail.data
 
-import com.example.otusapp.base.network.result.Result
+import com.example.otusapp.base.data.network.result.Result
 import com.example.otusapp.base.utils.convertTo
 import com.example.otusapp.recipe.detail.data.remote.RecipeDetailApi
 import com.example.otusapp.recipe.detail.data.remote.model.RecipeDetailDto

@@ -1,6 +1,6 @@
 package com.example.otusapp.recipe.list.data.remote
 
-import com.example.otusapp.base.network.result.Result
+import com.example.otusapp.base.data.network.result.Result
 import com.example.otusapp.recipe.list.data.remote.response.RecipesResponse
 import retrofit2.http.GET
 import retrofit2.http.Query

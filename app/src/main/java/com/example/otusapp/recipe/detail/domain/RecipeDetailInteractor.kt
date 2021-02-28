@@ -1,6 +1,6 @@
 package com.example.otusapp.recipe.detail.domain
 
-import com.example.otusapp.base.network.result.Result
+import com.example.otusapp.base.data.network.result.Result
 import com.example.otusapp.recipe.detail.domain.model.RecipeDetail
 
 class RecipeDetailInteractor(

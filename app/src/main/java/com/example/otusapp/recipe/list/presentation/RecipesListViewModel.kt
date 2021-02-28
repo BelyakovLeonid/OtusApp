@@ -3,8 +3,8 @@ package com.example.otusapp.recipe.list.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.otusapp.OtusApp
-import com.example.otusapp.base.network.RetrofitClient
-import com.example.otusapp.base.network.result.Result
+import com.example.otusapp.base.data.network.RetrofitClient
+import com.example.otusapp.base.data.network.result.Result
 import com.example.otusapp.base.presentation.IEvent
 import com.example.otusapp.recipe.list.data.RecipesListRepositoryImpl
 import com.example.otusapp.recipe.list.data.remote.RecipesListApi

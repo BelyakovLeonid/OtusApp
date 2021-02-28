@@ -1,4 +1,4 @@
-package com.example.otusapp.base.network.result
+package com.example.otusapp.base.data.network.result
 
 sealed class Result<out T> {
     class Success<T>(val value: T) : Result<T>()

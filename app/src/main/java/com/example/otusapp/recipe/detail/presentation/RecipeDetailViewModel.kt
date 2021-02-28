@@ -2,8 +2,8 @@ package com.example.otusapp.recipe.detail.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.otusapp.base.network.RetrofitClient
-import com.example.otusapp.base.network.result.Result
+import com.example.otusapp.base.data.network.RetrofitClient
+import com.example.otusapp.base.data.network.result.Result
 import com.example.otusapp.recipe.detail.data.RecipeDetailRepositoryImpl
 import com.example.otusapp.recipe.detail.data.remote.RecipeDetailApi
 import com.example.otusapp.recipe.detail.domain.RecipeDetailInteractor

@@ -1,8 +1,8 @@
-package com.example.otusapp.base.network
+package com.example.otusapp.base.data.network
 
-import com.example.otusapp.base.constants.NetworkConstants
-import com.example.otusapp.base.network.interceptors.ApiKeyInterceptor
-import com.example.otusapp.base.network.result.ResultAdapterFactory
+import com.example.otusapp.base.data.network.constants.NetworkConstants
+import com.example.otusapp.base.data.network.interceptors.ApiKeyInterceptor
+import com.example.otusapp.base.data.network.result.ResultAdapterFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
