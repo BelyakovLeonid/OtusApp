@@ -1,20 +1,36 @@
 package com.example.otusapp.recipe.detail.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.example.otusapp.OtusApp
 import com.example.otusapp.R
 import com.example.otusapp.base.utils.observeFlow
 import com.example.otusapp.databinding.FRecipeDetailBinding
+import javax.inject.Inject
 
 
 class RecipeDetailFragment : Fragment(R.layout.f_recipe_detail) {
 
-    private val viewModel by viewModels<RecipeDetailViewModel>()
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel by viewModels<RecipeDetailViewModel> { viewModelFactory }
     private val binding by viewBinding(FRecipeDetailBinding::bind)
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val recipeDetailComponent = (requireActivity().application as OtusApp)
+            .appComponent
+            .recipeDetailComponent()
+            .create()
+        recipeDetailComponent.inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

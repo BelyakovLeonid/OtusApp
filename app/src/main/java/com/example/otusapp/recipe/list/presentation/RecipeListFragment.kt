@@ -1,26 +1,42 @@
 package com.example.otusapp.recipe.list.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.example.otusapp.OtusApp
 import com.example.otusapp.R
 import com.example.otusapp.base.utils.observeFlow
 import com.example.otusapp.databinding.FRecipesListBinding
 import com.example.otusapp.recipe.list.presentation.adapter.RecipesAdapter
+import javax.inject.Inject
 
 
 class RecipeListFragment : Fragment(R.layout.f_recipes_list) {
 
-    private val viewModel by viewModels<RecipeListViewModel>()
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel by viewModels<RecipeListViewModel> { viewModelFactory }
     private val binding by viewBinding(FRecipesListBinding::bind)
 
     private val recipesAdapter by lazy {
         RecipesAdapter(viewModel::submitEvent)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val recipeListComponent = (requireActivity().application as OtusApp)
+            .appComponent
+            .recipeListComponent()
+            .create()
+        recipeListComponent.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -10,7 +10,8 @@ import javax.inject.Singleton
     modules = [
         SubcomponentsModule::class,
         NetworkModule::class,
-        NavigationModule::class
+        NavigationModule::class,
+        ViewModelBuilderModule::class
     ]
 )
 @Singleton
