@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.otusapp.base.presentation.IEvent
 import com.example.otusapp.databinding.VRecipeItemBinding
-import com.example.otusapp.recipe.list.presentation.RecipesListContract
+import com.example.otusapp.recipe.list.presentation.RecipeListContract
 import com.example.otusapp.recipe.list.presentation.model.RecipeUi
 
 class RecipesAdapter(
@@ -34,7 +34,7 @@ class ItemViewHolder(
         binding.recipeName.text = item.name
         binding.recipeDescription.text = item.subtitle
         binding.root.setOnClickListener {
-            onItemClick.invoke(RecipesListContract.Event.OnItemClickEvent(item))
+            onItemClick.invoke(RecipeListContract.Event.OnItemClickEvent(item))
         }
         binding.recipeImage.load(item.subtitle)
     }

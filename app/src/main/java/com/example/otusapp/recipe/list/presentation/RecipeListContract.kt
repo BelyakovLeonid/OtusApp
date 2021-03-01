@@ -4,7 +4,7 @@ import com.example.otusapp.base.presentation.IEvent
 import com.example.otusapp.base.presentation.IState
 import com.example.otusapp.recipe.list.presentation.model.RecipeUi
 
-object RecipesListContract {
+object RecipeListContract {
 
     sealed class Event : IEvent {
         data class OnItemClickEvent(val item: RecipeUi) : Event()

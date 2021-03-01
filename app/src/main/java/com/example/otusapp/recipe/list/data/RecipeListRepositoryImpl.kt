@@ -3,15 +3,15 @@ package com.example.otusapp.recipe.list.data
 import com.example.otusapp.base.data.network.result.Result
 import com.example.otusapp.base.utils.convertTo
 import com.example.otusapp.base.utils.doIfSuccess
-import com.example.otusapp.recipe.list.data.remote.RecipesListApi
+import com.example.otusapp.recipe.list.data.remote.RecipeListApi
 import com.example.otusapp.recipe.list.data.remote.model.RecipeDto
 import com.example.otusapp.recipe.list.data.remote.model.toDomain
-import com.example.otusapp.recipe.list.domain.RecipesListRepository
+import com.example.otusapp.recipe.list.domain.RecipeListRepository
 import com.example.otusapp.recipe.list.domain.model.Recipe
 
-class RecipesListRepositoryImpl(
-    private val api: RecipesListApi
-) : RecipesListRepository {
+class RecipeListRepositoryImpl(
+    private val api: RecipeListApi
+) : RecipeListRepository {
 
     private var offset = 0
     private val inMemoryCache = mutableListOf<RecipeDto>()

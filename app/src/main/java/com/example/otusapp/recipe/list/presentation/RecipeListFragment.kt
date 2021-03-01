@@ -14,7 +14,7 @@ import com.example.otusapp.databinding.FRecipesListBinding
 import com.example.otusapp.recipe.list.presentation.adapter.RecipesAdapter
 
 
-class RecipesListFragment : Fragment(R.layout.f_recipes_list) {
+class RecipeListFragment : Fragment(R.layout.f_recipes_list) {
 
     private val viewModel by viewModels<RecipesListViewModel>()
     private val binding by viewBinding(FRecipesListBinding::bind)
@@ -44,7 +44,7 @@ class RecipesListFragment : Fragment(R.layout.f_recipes_list) {
                             totalItemCount - newLastVisibleItemPosition <= 3 // todo нужную константу
                         ) {
                             lastVisibleItemPosition = newLastVisibleItemPosition
-                            viewModel.submitEvent(RecipesListContract.Event.OnScrolledToEnd)
+                            viewModel.submitEvent(RecipeListContract.Event.OnScrolledToEnd)
                         }
                     }
                 }
@@ -53,19 +53,19 @@ class RecipesListFragment : Fragment(R.layout.f_recipes_list) {
         }
     }
 
-    private fun renderState(state: RecipesListContract.State) {
+    private fun renderState(state: RecipeListContract.State) {
         binding.recipesList.isVisible = state.isContentVisible
         binding.errorText.isVisible = state.isErrorVisible
         binding.loading.isVisible = state.isLoadingVisible
 
         when (state) {
-            is RecipesListContract.State.Data -> {
+            is RecipeListContract.State.Data -> {
                 recipesAdapter.submitList(state.items)
             }
-            is RecipesListContract.State.NoElements -> {
+            is RecipeListContract.State.NoElements -> {
                 binding.errorText.text = "Нет элементов..."
             }
-            is RecipesListContract.State.Error -> {
+            is RecipeListContract.State.Error -> {
                 binding.errorText.text = "Что-то пошло не так..."
             }
         }

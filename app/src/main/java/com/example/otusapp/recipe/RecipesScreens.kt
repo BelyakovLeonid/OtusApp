@@ -2,13 +2,13 @@ package com.example.otusapp.recipe
 
 import android.os.Bundle
 import com.example.otusapp.recipe.detail.presentation.RecipeDetailFragment
-import com.example.otusapp.recipe.list.presentation.RecipesListFragment
+import com.example.otusapp.recipe.list.presentation.RecipeListFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 
 object RecipesScreens {
 
     fun recipesList() = FragmentScreen {
-        RecipesListFragment()
+        RecipeListFragment()
     }
 
     fun recipeDetail(recipeId: Long) = FragmentScreen {

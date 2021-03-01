@@ -1,5 +1,5 @@
 package com.example.otusapp.recipe.list.presentation
 
-interface RecipesListNavigator {
+interface RecipeListNavigator {
     fun openRecipeDetail(recipeId: Long)
 }

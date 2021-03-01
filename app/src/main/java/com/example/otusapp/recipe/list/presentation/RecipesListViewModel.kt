@@ -6,11 +6,11 @@ import com.example.otusapp.OtusApp
 import com.example.otusapp.base.data.network.RetrofitClient
 import com.example.otusapp.base.data.network.result.Result
 import com.example.otusapp.base.presentation.IEvent
-import com.example.otusapp.recipe.list.data.RecipesListRepositoryImpl
-import com.example.otusapp.recipe.list.data.remote.RecipesListApi
-import com.example.otusapp.recipe.list.domain.RecipesListInteractor
+import com.example.otusapp.recipe.list.data.RecipeListRepositoryImpl
+import com.example.otusapp.recipe.list.data.remote.RecipeListApi
+import com.example.otusapp.recipe.list.domain.RecipeListInteractor
 import com.example.otusapp.recipe.list.domain.model.Recipe
-import com.example.otusapp.recipe.list.navigator.RecipesListNavigatorImpl
+import com.example.otusapp.recipe.list.navigator.RecipeListNavigatorImpl
 import com.example.otusapp.recipe.list.presentation.model.toUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,14 +19,14 @@ import retrofit2.create
 
 class RecipesListViewModel : ViewModel() {
 
-    private val navigator = RecipesListNavigatorImpl(OtusApp.cicerone.router)
-    private val recipesApi = RetrofitClient.getClient().create<RecipesListApi>()
-    private val recipesRepo = RecipesListRepositoryImpl(recipesApi)
-    private val recipesInteractor = RecipesListInteractor(recipesRepo)
+    private val navigator = RecipeListNavigatorImpl(OtusApp.cicerone.router)
+    private val recipesApi = RetrofitClient.getClient().create<RecipeListApi>()
+    private val recipesRepo = RecipeListRepositoryImpl(recipesApi)
+    private val recipesInteractor = RecipeListInteractor(recipesRepo)
 
     private val _items =
-        MutableStateFlow<RecipesListContract.State>(RecipesListContract.State.Loading)
-    val items: StateFlow<RecipesListContract.State> = _items
+        MutableStateFlow<RecipeListContract.State>(RecipeListContract.State.Loading)
+    val items: StateFlow<RecipeListContract.State> = _items
 
     init {
         loadMoreRecipes()
@@ -41,24 +41,24 @@ class RecipesListViewModel : ViewModel() {
 
     fun submitEvent(event: IEvent) {
         when (event) {
-            is RecipesListContract.Event.OnItemClickEvent -> navigator.openRecipeDetail(event.item.id)
-            is RecipesListContract.Event.OnScrolledToEnd -> loadMoreRecipes()
+            is RecipeListContract.Event.OnItemClickEvent -> navigator.openRecipeDetail(event.item.id)
+            is RecipeListContract.Event.OnScrolledToEnd -> loadMoreRecipes()
         }
     }
 
-    private fun transmitResultToState(result: Result<List<Recipe>>): RecipesListContract.State {
+    private fun transmitResultToState(result: Result<List<Recipe>>): RecipeListContract.State {
         return when (result) {
             is Result.Success -> {
                 val recipes = result.value.map(Recipe::toUi)
 
                 if (recipes.isNotEmpty()) {
-                    RecipesListContract.State.Data(recipes)
+                    RecipeListContract.State.Data(recipes)
                 } else {
-                    RecipesListContract.State.NoElements
+                    RecipeListContract.State.NoElements
                 }
             }
             else -> {
-                RecipesListContract.State.Error
+                RecipeListContract.State.Error
             }
         }
     }

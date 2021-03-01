@@ -5,7 +5,7 @@ import com.example.otusapp.recipe.list.data.remote.response.RecipesResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface RecipesListApi {
+interface RecipeListApi {
 
     @GET("recipes/complexSearch/")
     suspend fun loadRecipes(
