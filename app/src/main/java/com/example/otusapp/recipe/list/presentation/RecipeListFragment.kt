@@ -16,7 +16,7 @@ import com.example.otusapp.recipe.list.presentation.adapter.RecipesAdapter
 
 class RecipeListFragment : Fragment(R.layout.f_recipes_list) {
 
-    private val viewModel by viewModels<RecipesListViewModel>()
+    private val viewModel by viewModels<RecipeListViewModel>()
     private val binding by viewBinding(FRecipesListBinding::bind)
 
     private val recipesAdapter by lazy {

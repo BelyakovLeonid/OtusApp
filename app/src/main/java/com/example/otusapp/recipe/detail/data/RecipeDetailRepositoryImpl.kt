@@ -7,8 +7,9 @@ import com.example.otusapp.recipe.detail.data.remote.model.RecipeDetailDto
 import com.example.otusapp.recipe.detail.data.remote.model.toDomain
 import com.example.otusapp.recipe.detail.domain.RecipeDetailRepository
 import com.example.otusapp.recipe.detail.domain.model.RecipeDetail
+import javax.inject.Inject
 
-class RecipeDetailRepositoryImpl(
+class RecipeDetailRepositoryImpl @Inject constructor(
     private val recipesApi: RecipeDetailApi
 ) : RecipeDetailRepository {
 

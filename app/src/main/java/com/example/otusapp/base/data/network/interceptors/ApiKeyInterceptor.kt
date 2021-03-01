@@ -2,8 +2,12 @@ package com.example.otusapp.base.data.network.interceptors
 
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
+import javax.inject.Named
 
-class ApiKeyInterceptor(private val apiKey: String) : Interceptor {
+class ApiKeyInterceptor @Inject constructor(
+    @Named("ApiKey") private val apiKey: String
+) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
         val originalUrl = originalRequest.url

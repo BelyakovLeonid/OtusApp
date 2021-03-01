@@ -1,11 +1,10 @@
 package com.example.otusapp
 
 import android.app.Application
-import com.github.terrakok.cicerone.Cicerone
+import com.example.otusapp.base.di.AppComponent
+import com.example.otusapp.base.di.DaggerAppComponent
 
 class OtusApp : Application() {
 
-    companion object {
-        val cicerone = Cicerone.create()
-    }
+    val appComponent: AppComponent by lazy { DaggerAppComponent.create() }
 }

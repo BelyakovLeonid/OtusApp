@@ -8,8 +8,9 @@ import com.example.otusapp.recipe.list.data.remote.model.RecipeDto
 import com.example.otusapp.recipe.list.data.remote.model.toDomain
 import com.example.otusapp.recipe.list.domain.RecipeListRepository
 import com.example.otusapp.recipe.list.domain.model.Recipe
+import javax.inject.Inject
 
-class RecipeListRepositoryImpl(
+class RecipeListRepositoryImpl @Inject constructor(
     private val api: RecipeListApi
 ) : RecipeListRepository {
 
