@@ -11,8 +11,10 @@ object NavigationModule {
 
     @Provides
     @Singleton
+    @JvmStatic
     fun provideCicerone(): Cicerone<Router> = Cicerone.create()
 
     @Provides
+    @JvmStatic
     fun provideRouter(cicerone: Cicerone<Router>): Router = cicerone.router
 }

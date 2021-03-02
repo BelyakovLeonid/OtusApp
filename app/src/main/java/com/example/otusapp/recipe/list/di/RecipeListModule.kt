@@ -11,18 +11,20 @@ import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.create
 
+@Module(includes = [RecipeListBindsModule::class])
+object RecipeListModule {
+
+
+    @Provides
+    fun providesApi(retrofit: Retrofit): RecipeListApi = retrofit.create()
+}
+
 @Module
-interface RecipeListModule {
+interface RecipeListBindsModule {
 
     @Binds
     fun bindsNavigator(navigator: RecipeListNavigatorImpl): RecipeListNavigator
 
     @Binds
     fun bindsRepository(repository: RecipeListRepositoryImpl): RecipeListRepository
-
-    companion object {
-
-        @Provides
-        fun providesApi(retrofit: Retrofit): RecipeListApi = retrofit.create()
-    }
 }

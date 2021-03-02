@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(R.layout.a_main) {
 
-    lateinit var injector: RootComponent
+    private lateinit var injector: RootComponent
 
     @Inject
     lateinit var cicerone: Cicerone<Router>

@@ -9,15 +9,17 @@ import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.create
 
+@Module(includes = [RecipeDetailBindsModule::class])
+object RecipeDetailModule {
+
+    @Provides
+    @JvmStatic
+    fun provideApi(retrofit: Retrofit): RecipeDetailApi = retrofit.create()
+}
+
 @Module
-interface RecipeDetailModule {
+interface RecipeDetailBindsModule {
 
     @Binds
     fun bindsRepository(repository: RecipeDetailRepositoryImpl): RecipeDetailRepository
-
-    companion object {
-
-        @Provides
-        fun provideApi(retrofit: Retrofit): RecipeDetailApi = retrofit.create()
-    }
 }
