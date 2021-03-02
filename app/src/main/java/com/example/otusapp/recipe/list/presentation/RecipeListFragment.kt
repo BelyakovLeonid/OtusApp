@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,16 +15,22 @@ import com.example.otusapp.OtusApp
 import com.example.otusapp.R
 import com.example.otusapp.base.utils.observeFlow
 import com.example.otusapp.databinding.FRecipesListBinding
+import com.example.otusapp.recipe.list.di.DaggerRecipeListComponent
+import com.example.otusapp.recipe.list.di.RecipeListComponent
 import com.example.otusapp.recipe.list.presentation.adapter.RecipesAdapter
-import javax.inject.Inject
 
 
 class RecipeListFragment : Fragment(R.layout.f_recipes_list) {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private lateinit var injector: RecipeListComponent
 
-    private val viewModel by viewModels<RecipeListViewModel> { viewModelFactory }
+    private val viewModel by viewModels<RecipeListViewModel> {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return injector.viewModel as T
+            }
+        }
+    }
     private val binding by viewBinding(FRecipesListBinding::bind)
 
     private val recipesAdapter by lazy {
@@ -32,11 +39,8 @@ class RecipeListFragment : Fragment(R.layout.f_recipes_list) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val recipeListComponent = (requireActivity().application as OtusApp)
-            .appComponent
-            .recipeListComponent()
-            .create()
-        recipeListComponent.inject(this)
+        val appComponent = (requireActivity().application as OtusApp).appComponent
+        injector = DaggerRecipeListComponent.factory().create(appComponent)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

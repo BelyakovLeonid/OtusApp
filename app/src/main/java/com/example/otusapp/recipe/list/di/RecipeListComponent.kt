@@ -1,15 +1,21 @@
 package com.example.otusapp.recipe.list.di
 
-import com.example.otusapp.recipe.list.presentation.RecipeListFragment
-import dagger.Subcomponent
+import com.example.otusapp.base.di.AppComponent
+import com.example.otusapp.base.di.scopes.FragmentScope
+import com.example.otusapp.recipe.list.presentation.RecipeListViewModel
+import dagger.Component
 
-@Subcomponent(modules = [RecipeListModule::class])
+@Component(
+    dependencies = [AppComponent::class],
+    modules = [RecipeListModule::class]
+)
+@FragmentScope
 interface RecipeListComponent {
 
-    @Subcomponent.Factory
-    interface Factory {
-        fun create(): RecipeListComponent
-    }
+    val viewModel: RecipeListViewModel
 
-    fun inject(fragment: RecipeListFragment)
+    @Component.Factory
+    interface Factory {
+        fun create(appComponent: AppComponent): RecipeListComponent
+    }
 }

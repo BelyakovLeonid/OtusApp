@@ -1,23 +1,21 @@
 package com.example.otusapp.base.di
 
-import com.example.otusapp.recipe.detail.di.RecipeDetailComponent
-import com.example.otusapp.recipe.list.di.RecipeListComponent
-import com.example.otusapp.root.di.RootComponent
+import com.github.terrakok.cicerone.Cicerone
+import com.github.terrakok.cicerone.Router
 import dagger.Component
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Component(
     modules = [
-        SubcomponentsModule::class,
         NetworkModule::class,
         NavigationModule::class,
-        ViewModelBuilderModule::class
     ]
 )
 @Singleton
 interface AppComponent {
 
-    fun rootComponent(): RootComponent.Factory
-    fun recipeListComponent(): RecipeListComponent.Factory
-    fun recipeDetailComponent(): RecipeDetailComponent.Factory
+    fun provideRetrofit(): Retrofit
+    fun provideCicerone(): Cicerone<Router>
+    fun provideRouter(): Router
 }
