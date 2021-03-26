@@ -1,12 +1,10 @@
 package com.example.otusapp.root.presentation
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.example.otusapp.OtusApp
 import com.example.otusapp.R
+import com.example.otusapp.base.presentation.appComponent
+import com.example.otusapp.base.presentation.viewModel
 import com.example.otusapp.root.di.DaggerRootComponent
 import com.example.otusapp.root.di.RootComponent
 import com.github.terrakok.cicerone.Cicerone
@@ -23,18 +21,10 @@ class MainActivity : AppCompatActivity(R.layout.a_main) {
 
     private val navigator = AppNavigator(this, R.id.mainContainer)
 
-    private val viewModel by viewModels<MainViewModel> {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return injector.viewModel as T
-            }
-        }
-    }
+    private val viewModel by viewModel { injector.viewModel }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val appComponent = (application as OtusApp).appComponent
         injector = DaggerRootComponent.factory().create(appComponent)
         injector.inject(this)
 

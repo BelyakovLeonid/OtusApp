@@ -5,14 +5,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.example.otusapp.OtusApp
 import com.example.otusapp.R
+import com.example.otusapp.base.presentation.appComponent
+import com.example.otusapp.base.presentation.viewModel
 import com.example.otusapp.base.utils.observeFlow
 import com.example.otusapp.databinding.FRecipesListBinding
 import com.example.otusapp.recipe.list.di.DaggerRecipeListComponent
@@ -24,13 +22,8 @@ class RecipeListFragment : Fragment(R.layout.f_recipes_list) {
 
     private lateinit var injector: RecipeListComponent
 
-    private val viewModel by viewModels<RecipeListViewModel> {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return injector.viewModel as T
-            }
-        }
-    }
+    private val viewModel by viewModel { injector.viewModel }
+
     private val binding by viewBinding(FRecipesListBinding::bind)
 
     private val recipesAdapter by lazy {
@@ -39,7 +32,6 @@ class RecipeListFragment : Fragment(R.layout.f_recipes_list) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val appComponent = (requireActivity().application as OtusApp).appComponent
         injector = DaggerRecipeListComponent.factory().create(appComponent)
     }
 
