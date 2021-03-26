@@ -2,27 +2,20 @@ package com.example.otusapp.recipe.list.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.otusapp.OtusApp
-import com.example.otusapp.base.data.network.RetrofitClient
 import com.example.otusapp.base.data.network.result.Result
 import com.example.otusapp.base.presentation.IEvent
-import com.example.otusapp.recipe.list.data.RecipeListRepositoryImpl
-import com.example.otusapp.recipe.list.data.remote.RecipeListApi
 import com.example.otusapp.recipe.list.domain.RecipeListInteractor
 import com.example.otusapp.recipe.list.domain.model.Recipe
-import com.example.otusapp.recipe.list.navigator.RecipeListNavigatorImpl
 import com.example.otusapp.recipe.list.presentation.model.toUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import retrofit2.create
+import javax.inject.Inject
 
-class RecipesListViewModel : ViewModel() {
-
-    private val navigator = RecipeListNavigatorImpl(OtusApp.cicerone.router)
-    private val recipesApi = RetrofitClient.getClient().create<RecipeListApi>()
-    private val recipesRepo = RecipeListRepositoryImpl(recipesApi)
-    private val recipesInteractor = RecipeListInteractor(recipesRepo)
+class RecipeListViewModel @Inject constructor(
+    private val navigator: RecipeListNavigator,
+    private val recipesInteractor: RecipeListInteractor
+) : ViewModel() {
 
     private val _items =
         MutableStateFlow<RecipeListContract.State>(RecipeListContract.State.Loading)

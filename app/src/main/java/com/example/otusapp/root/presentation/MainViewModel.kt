@@ -1,13 +1,12 @@
 package com.example.otusapp.root.presentation
 
 import androidx.lifecycle.ViewModel
-import com.example.otusapp.OtusApp
 import com.example.otusapp.base.presentation.IEvent
-import com.example.otusapp.root.navigator.MainNavigatorImpl
+import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
-
-    private val navigator = MainNavigatorImpl(OtusApp.cicerone.router)
+class MainViewModel @Inject constructor(
+    private val navigator: MainNavigator
+) : ViewModel() {
 
     fun submitEvent(event: IEvent) {
         when (event) {
