@@ -1,2 +1,6 @@
+include ':core-network'
+include ':core-network-impl'
+include ':module-injector'
+include ':core-network-api'
 include ':app'
 rootProject.name = "OtusApp"

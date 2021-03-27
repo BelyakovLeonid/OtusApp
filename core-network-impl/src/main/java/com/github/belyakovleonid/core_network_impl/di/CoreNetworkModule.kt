@@ -1,8 +1,8 @@
-package com.example.otusapp.base.di
+package com.github.belyakovleonid.core_network_impl.di
 
-import com.example.otusapp.base.data.network.constants.NetworkConstants
-import com.example.otusapp.base.data.network.interceptors.ApiKeyInterceptor
-import com.example.otusapp.base.data.network.result.ResultAdapterFactory
+import com.github.belyakovleonid.core_network_impl.constants.NetworkConstants
+import com.github.belyakovleonid.core_network_impl.interceptors.ApiKeyInterceptor
+import com.github.belyakovleonid.core_network_impl.result.ResultAdapterFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Binds
 import dagger.Module
@@ -18,8 +18,8 @@ import retrofit2.Retrofit
 import javax.inject.Named
 import javax.inject.Singleton
 
-@Module(includes = [NetworkBindsModule::class])
-object NetworkModule {
+@Module(includes = [CoreNetworkBindsModule::class])
+object CoreNetworkModule {
 
     @Provides
     @Singleton
@@ -76,7 +76,7 @@ object NetworkModule {
 }
 
 @Module
-interface NetworkBindsModule {
+interface CoreNetworkBindsModule {
 
     @Binds
     @Named("ApiKeyInterceptor")

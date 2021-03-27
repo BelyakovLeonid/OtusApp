@@ -1,4 +1,4 @@
-package com.example.otusapp.base.data.network.result
+package com.github.belyakovleonid.core_network_impl.result
 
 import retrofit2.Call
 import retrofit2.CallAdapter
@@ -20,7 +20,7 @@ class ResultAdapterFactory : CallAdapter.Factory() {
         if (rawReturnType == Call::class.java) {
             if (returnType is ParameterizedType) {
                 val callInnerType: Type = getParameterUpperBound(0, returnType)
-                if (getRawType(callInnerType) == Result::class.java) {
+                if (getRawType(callInnerType) == com.github.belyakovleonid.core_network_api.model.Result::class.java) {
                     if (callInnerType is ParameterizedType) {
                         val resultInnerType = getParameterUpperBound(0, callInnerType)
                         return ResultCallAdapter<Any?>(resultInnerType)
@@ -34,9 +34,11 @@ class ResultAdapterFactory : CallAdapter.Factory() {
     }
 }
 
-private class ResultCallAdapter<R>(private val type: Type) : CallAdapter<R, Call<Result<R>>> {
+private class ResultCallAdapter<R>(private val type: Type) :
+    CallAdapter<R, Call<com.github.belyakovleonid.core_network_api.model.Result<R>>> {
 
     override fun responseType() = type
 
-    override fun adapt(call: Call<R>): Call<Result<R>> = ResultCall(call)
+    override fun adapt(call: Call<R>): Call<com.github.belyakovleonid.core_network_api.model.Result<R>> =
+        ResultCall(call)
 }

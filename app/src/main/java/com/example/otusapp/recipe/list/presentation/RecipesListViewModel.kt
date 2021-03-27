@@ -2,11 +2,11 @@ package com.example.otusapp.recipe.list.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.otusapp.base.data.network.result.Result
 import com.example.otusapp.base.presentation.IEvent
 import com.example.otusapp.recipe.list.domain.RecipeListInteractor
 import com.example.otusapp.recipe.list.domain.model.Recipe
 import com.example.otusapp.recipe.list.presentation.model.toUi
+import com.github.belyakovleonid.core_network_api.model.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

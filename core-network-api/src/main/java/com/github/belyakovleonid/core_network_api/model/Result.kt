@@ -1,4 +1,4 @@
-package com.example.otusapp.base.data.network.result
+package com.github.belyakovleonid.core_network_api.model
 
 sealed class Result<out T> {
     class Success<T>(val value: T) : Result<T>()

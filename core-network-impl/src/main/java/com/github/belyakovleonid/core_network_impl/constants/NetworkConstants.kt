@@ -1,4 +1,4 @@
-package com.example.otusapp.base.data.network.constants
+package com.github.belyakovleonid.core_network_impl.constants
 
 object NetworkConstants {
     const val API_KEY = "f96ceb4a0a5b4c1e9b0e70a2c5677fce"

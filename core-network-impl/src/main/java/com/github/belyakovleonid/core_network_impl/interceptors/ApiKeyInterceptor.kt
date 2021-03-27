@@ -1,4 +1,4 @@
-package com.example.otusapp.base.data.network.interceptors
+package com.github.belyakovleonid.core_network_impl.interceptors
 
 import okhttp3.Interceptor
 import okhttp3.Response

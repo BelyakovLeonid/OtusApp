@@ -1,4 +1,4 @@
-package com.example.otusapp.base.data.network.result
+package com.github.belyakovleonid.core_network_impl.result
 
 import okhttp3.Request
 import retrofit2.Call

@@ -1,12 +1,12 @@
 package com.example.otusapp.recipe.detail.data
 
-import com.example.otusapp.base.data.network.result.Result
-import com.example.otusapp.base.utils.convertTo
 import com.example.otusapp.recipe.detail.data.remote.RecipeDetailApi
 import com.example.otusapp.recipe.detail.data.remote.model.RecipeDetailDto
 import com.example.otusapp.recipe.detail.data.remote.model.toDomain
 import com.example.otusapp.recipe.detail.domain.RecipeDetailRepository
 import com.example.otusapp.recipe.detail.domain.model.RecipeDetail
+import com.github.belyakovleonid.core_network_api.model.Result
+import com.github.belyakovleonid.core_network_api.model.convertTo
 import javax.inject.Inject
 
 class RecipeDetailRepositoryImpl @Inject constructor(
