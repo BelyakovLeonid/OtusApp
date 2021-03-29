@@ -4,6 +4,7 @@ include ':core',
         ':core-network-impl',
         ':module-injector',
         ':feature-recipe-list',
+        ':feature-recipe-detail',
         ':app'
 
 rootProject.name = "OtusApp"
