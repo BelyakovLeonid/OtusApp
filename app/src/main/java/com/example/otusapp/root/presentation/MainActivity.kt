@@ -3,12 +3,11 @@ package com.example.otusapp.root.presentation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.otusapp.R
-import com.example.otusapp.base.presentation.appComponent
-import com.example.otusapp.base.presentation.viewModel
 import com.example.otusapp.root.di.DaggerRootComponent
 import com.example.otusapp.root.di.RootComponent
-import com.github.terrakok.cicerone.Cicerone
-import com.github.terrakok.cicerone.Router
+import com.github.belyakovleonid.core.presentation.providersFacade
+import com.github.belyakovleonid.core.presentation.viewModel
+import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import javax.inject.Inject
 
@@ -17,7 +16,7 @@ class MainActivity : AppCompatActivity(R.layout.a_main) {
     private lateinit var injector: RootComponent
 
     @Inject
-    lateinit var cicerone: Cicerone<Router>
+    lateinit var navigatorHolder: NavigatorHolder
 
     private val navigator = AppNavigator(this, R.id.mainContainer)
 
@@ -25,7 +24,7 @@ class MainActivity : AppCompatActivity(R.layout.a_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        injector = DaggerRootComponent.factory().create(appComponent)
+        injector = DaggerRootComponent.factory().create(providersFacade)
         injector.inject(this)
 
         if (savedInstanceState == null) {
@@ -35,11 +34,11 @@ class MainActivity : AppCompatActivity(R.layout.a_main) {
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        cicerone.getNavigatorHolder().setNavigator(navigator)
+        navigatorHolder.setNavigator(navigator)
     }
 
     override fun onPause() {
-        cicerone.getNavigatorHolder().removeNavigator()
+        navigatorHolder.removeNavigator()
         super.onPause()
     }
 }

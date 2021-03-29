@@ -7,12 +7,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.otusapp.R
-import com.example.otusapp.base.presentation.appComponent
-import com.example.otusapp.base.presentation.viewModel
-import com.example.otusapp.base.utils.observeFlow
 import com.example.otusapp.databinding.FRecipeDetailBinding
 import com.example.otusapp.recipe.detail.di.DaggerRecipeDetailComponent
 import com.example.otusapp.recipe.detail.di.RecipeDetailComponent
+import com.github.belyakovleonid.core.presentation.observeFlow
+import com.github.belyakovleonid.core.presentation.providersFacade
+import com.github.belyakovleonid.core.presentation.viewModel
 
 
 class RecipeDetailFragment : Fragment(R.layout.f_recipe_detail) {
@@ -25,7 +25,7 @@ class RecipeDetailFragment : Fragment(R.layout.f_recipe_detail) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        injector = DaggerRecipeDetailComponent.factory().create(appComponent)
+        injector = DaggerRecipeDetailComponent.factory().create(providersFacade)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

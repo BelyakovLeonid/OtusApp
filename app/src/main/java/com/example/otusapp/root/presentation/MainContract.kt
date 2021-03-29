@@ -1,6 +1,6 @@
 package com.example.otusapp.root.presentation
 
-import com.example.otusapp.base.presentation.IEvent
+import com.github.belyakovleonid.core.presentation.IEvent
 
 object MainContract {
 

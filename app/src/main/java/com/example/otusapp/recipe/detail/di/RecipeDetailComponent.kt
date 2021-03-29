@@ -1,12 +1,12 @@
 package com.example.otusapp.recipe.detail.di
 
-import com.example.otusapp.base.di.AppComponent
-import com.example.otusapp.base.di.scopes.FragmentScope
 import com.example.otusapp.recipe.detail.presentation.RecipeDetailViewModel
+import com.github.belyakovleonid.core.ProvidersFacade
+import com.github.belyakovleonid.core.di.FragmentScope
 import dagger.Component
 
 @Component(
-    dependencies = [AppComponent::class],
+    dependencies = [ProvidersFacade::class],
     modules = [RecipeDetailModule::class]
 )
 @FragmentScope
@@ -16,6 +16,6 @@ interface RecipeDetailComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(appComponent: AppComponent): RecipeDetailComponent
+        fun create(facade: ProvidersFacade): RecipeDetailComponent
     }
 }

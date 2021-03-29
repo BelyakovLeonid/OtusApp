@@ -1,7 +1,7 @@
 package com.example.otusapp.recipe.detail.presentation
 
-import com.example.otusapp.base.presentation.IState
 import com.example.otusapp.recipe.detail.presentation.model.RecipeDetailUi
+import com.github.belyakovleonid.core.presentation.IState
 
 object RecipeDetailContract {
 

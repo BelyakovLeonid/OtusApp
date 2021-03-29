@@ -1,14 +1,13 @@
 package com.example.otusapp.root.di
 
-import com.example.otusapp.base.di.AppComponent
-import com.example.otusapp.base.di.scopes.ActivityScope
 import com.example.otusapp.root.presentation.MainActivity
 import com.example.otusapp.root.presentation.MainViewModel
+import com.github.belyakovleonid.core.ProvidersFacade
+import com.github.belyakovleonid.core.di.ActivityScope
 import dagger.Component
 
 @Component(
-    dependencies = [AppComponent::class],
-    modules = [RootModule::class]
+    dependencies = [ProvidersFacade::class],
 )
 @ActivityScope
 interface RootComponent {
@@ -19,6 +18,6 @@ interface RootComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(appComponent: AppComponent): RootComponent
+        fun create(facade: ProvidersFacade): RootComponent
     }
 }
