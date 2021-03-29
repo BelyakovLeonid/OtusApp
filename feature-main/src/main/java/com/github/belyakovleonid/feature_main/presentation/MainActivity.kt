@@ -1,12 +1,12 @@
-package com.example.otusapp.root.presentation
+package com.github.belyakovleonid.feature_main.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.otusapp.R
-import com.example.otusapp.root.di.DaggerRootComponent
-import com.example.otusapp.root.di.RootComponent
 import com.github.belyakovleonid.core.presentation.providersFacade
 import com.github.belyakovleonid.core.presentation.viewModel
+import com.github.belyakovleonid.feature_main.R
+import com.github.belyakovleonid.feature_main.di.DaggerRootComponent
+import com.github.belyakovleonid.feature_main.di.RootComponent
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import javax.inject.Inject

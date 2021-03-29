@@ -1,9 +1,9 @@
-package com.example.otusapp.root.di
+package com.github.belyakovleonid.feature_main.di
 
-import com.example.otusapp.root.presentation.MainActivity
-import com.example.otusapp.root.presentation.MainViewModel
 import com.github.belyakovleonid.core.ProvidersFacade
 import com.github.belyakovleonid.core.di.ActivityScope
+import com.github.belyakovleonid.feature_main.presentation.MainActivity
+import com.github.belyakovleonid.feature_main.presentation.MainViewModel
 import dagger.Component
 
 @Component(

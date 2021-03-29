@@ -1,4 +1,4 @@
-package com.example.otusapp.root.presentation
+package com.github.belyakovleonid.feature_main.presentation
 
 import androidx.lifecycle.ViewModel
 import com.github.belyakovleonid.core.presentation.IEvent
