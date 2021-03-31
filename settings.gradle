@@ -1,7 +1,6 @@
 include ':core',
         ':core-network-api',
         ':core-network-impl',
-        ':module-injector',
         ':feature-recipe-list',
         ':feature-recipe-detail',
         ':feature-main',

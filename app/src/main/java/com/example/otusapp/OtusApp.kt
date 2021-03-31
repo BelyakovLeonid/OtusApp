@@ -1,6 +1,7 @@
 package com.example.otusapp
 
 import android.app.Application
+import com.example.otusapp.di.DaggerFacadeComponent
 import com.github.belyakovleonid.core.AppWithProvidersFacade
 import com.github.belyakovleonid.core.CoreNetworkProviderFactory
 import com.github.belyakovleonid.core.ProvidersFacade

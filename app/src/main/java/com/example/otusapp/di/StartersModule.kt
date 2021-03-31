@@ -1,4 +1,4 @@
-package com.example.otusapp
+package com.example.otusapp.di
 
 import com.github.belyakovleonid.core.starters.RecipeDetailStarter
 import com.github.belyakovleonid.core.starters.RecipeListStarter

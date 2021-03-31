@@ -1,4 +1,4 @@
-package com.example.otusapp
+package com.example.otusapp.di
 
 import com.github.belyakovleonid.core.ProvidersFacade
 import com.github.belyakovleonid.core_network_api.CoreNetworkProvider

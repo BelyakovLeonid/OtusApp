@@ -35,7 +35,6 @@ android {
 
 dependencies {
     implementation project(":core")
-    implementation project(":module-injector")
     implementation project(":feature-main")
     implementation project(":feature-recipe-list")
     implementation project(":feature-recipe-detail")

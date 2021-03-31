@@ -1,3 +1,0 @@
-package com.github.belyakovleonid.core_network_api
-
-interface AppWithNetworkProvider

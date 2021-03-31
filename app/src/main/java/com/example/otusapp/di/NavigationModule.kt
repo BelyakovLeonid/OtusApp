@@ -1,4 +1,4 @@
-package com.example.otusapp
+package com.example.otusapp.di
 
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
