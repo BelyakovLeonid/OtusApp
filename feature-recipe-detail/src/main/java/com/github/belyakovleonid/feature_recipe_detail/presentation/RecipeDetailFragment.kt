@@ -16,7 +16,11 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailContract.State>(R.layout.f
 
     private lateinit var injector: RecipeDetailComponent
 
-    override val viewModel: RecipeDetailViewModel by viewModel { injector.viewModel }
+    override val viewModel: RecipeDetailViewModel by viewModel {
+        injector.viewModelFactory.create(
+            RecipeDetailParams(arguments?.getLong(ARG_RECIPE_ID))
+        )
+    }
 
     private val binding by viewBinding(FRecipeDetailBinding::bind)
 

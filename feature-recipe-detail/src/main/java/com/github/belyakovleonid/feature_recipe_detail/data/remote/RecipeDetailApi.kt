@@ -9,6 +9,6 @@ interface RecipeDetailApi {
 
     @GET("recipes/{id}/information")
     suspend fun loadRecipeDetail(
-        @Path("id") id: Long
+        @Path("id") id: Long?
     ): Result<RecipeDetailDto>
 }

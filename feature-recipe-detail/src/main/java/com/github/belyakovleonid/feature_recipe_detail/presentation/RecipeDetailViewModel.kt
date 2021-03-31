@@ -2,21 +2,24 @@ package com.github.belyakovleonid.feature_recipe_detail.presentation
 
 import androidx.lifecycle.viewModelScope
 import com.github.belyakovleonid.core.presentation.base.BaseViewModel
+import com.github.belyakovleonid.core.viewmodel.AssistedVMFactory
 import com.github.belyakovleonid.core_network_api.model.Result
 import com.github.belyakovleonid.feature_recipe_detail.domain.RecipeDetailInteractor
 import com.github.belyakovleonid.feature_recipe_detail.domain.model.RecipeDetail
 import com.github.belyakovleonid.feature_recipe_detail.presentation.model.toUi
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class RecipeDetailViewModel @Inject constructor(
-    private val recipesInteractor: RecipeDetailInteractor
+class RecipeDetailViewModel @AssistedInject constructor(
+    private val recipesInteractor: RecipeDetailInteractor,
+    @Assisted private val params: RecipeDetailParams
 ) : BaseViewModel<RecipeDetailContract.State>(RecipeDetailContract.State.Loading) {
 
     init {
         viewModelScope.launch {
-            val recipeId = 0L
-            val result = recipesInteractor.loadRecipe(recipeId)
+            val result = recipesInteractor.loadRecipe(params.recipeId)
             mutableState.value = transmitResultToState(result)
         }
     }
@@ -31,4 +34,7 @@ class RecipeDetailViewModel @Inject constructor(
             }
         }
     }
+
+    @AssistedFactory
+    interface Factory : AssistedVMFactory<RecipeDetailViewModel, RecipeDetailParams>
 }
