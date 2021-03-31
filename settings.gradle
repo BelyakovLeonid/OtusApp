@@ -1,5 +1,4 @@
 include ':core',
-        ':core-network',
         ':core-network-api',
         ':core-network-impl',
         ':module-injector',

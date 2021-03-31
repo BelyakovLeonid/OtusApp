@@ -2,8 +2,8 @@ package com.example.otusapp
 
 import android.app.Application
 import com.github.belyakovleonid.core.AppWithProvidersFacade
+import com.github.belyakovleonid.core.CoreNetworkProviderFactory
 import com.github.belyakovleonid.core.ProvidersFacade
-import com.github.belyakovleonid.core_network.CoreNetworkProviderFactory
 
 class OtusApp : Application(), AppWithProvidersFacade {
 

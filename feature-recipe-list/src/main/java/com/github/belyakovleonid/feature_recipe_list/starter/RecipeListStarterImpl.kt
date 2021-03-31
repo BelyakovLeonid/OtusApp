@@ -10,6 +10,6 @@ class RecipeListStarterImpl @Inject constructor(
 ) : RecipeListStarter {
 
     override fun startRecipeList() {
-        router.navigateTo(RecipeListScreens.recipesList())
+        router.newRootScreen(RecipeListScreens.recipesList())
     }
 }

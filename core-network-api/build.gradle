@@ -24,5 +24,7 @@ android {
 
 dependencies {
     implementation project(":module-injector")
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+    //Retrofit
+    api 'com.squareup.retrofit2:retrofit:2.9.0'
 }

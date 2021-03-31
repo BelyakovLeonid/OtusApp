@@ -33,17 +33,18 @@ android {
 }
 
 dependencies {
-    api project(":core-network")
+    api project(":core-network-api")
+    implementation project(":core-network-impl")
 
     //Android
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation "androidx.activity:activity-ktx:1.2.2"
-    implementation "androidx.fragment:fragment-ktx:1.3.2"
+    api "androidx.activity:activity-ktx:1.2.2"
+    api "androidx.fragment:fragment-ktx:1.3.2"
 
     //Dagger
-    implementation 'com.google.dagger:dagger:2.33'
+    api 'com.google.dagger:dagger:2.33'
     kapt 'com.google.dagger:dagger-compiler:2.33'
 
     // Cicerone
-    implementation "com.github.terrakok:cicerone:6.6"
+    api "com.github.terrakok:cicerone:6.6"
 }

@@ -49,16 +49,10 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation "androidx.activity:activity-ktx:1.2.2"
-    implementation "androidx.fragment:fragment-ktx:1.3.2"
+    
+    //Dagger
+    kapt 'com.google.dagger:dagger-compiler:2.33'
 
     //ViewBindingDelegate
     implementation 'com.kirich1409.viewbindingpropertydelegate:vbpd-noreflection:1.4.1'
-
-    // Cicerone
-    implementation "com.github.terrakok:cicerone:6.6"
-
-    //Dagger
-    implementation 'com.google.dagger:dagger:2.33'
-    kapt 'com.google.dagger:dagger-compiler:2.33'
 }
