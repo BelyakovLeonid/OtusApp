@@ -1,5 +1,6 @@
 package com.github.belyakovleonid.feature_recipe_detail.di
 
+import com.github.belyakovleonid.core.di.FragmentScope
 import com.github.belyakovleonid.core.viewmodel.AssistedVMFactory
 import com.github.belyakovleonid.feature_recipe_detail.data.RecipeDetailRepositoryImpl
 import com.github.belyakovleonid.feature_recipe_detail.data.remote.RecipeDetailApi
@@ -27,7 +28,8 @@ interface RecipeDetailBindsModule {
     fun bindsRepository(repository: RecipeDetailRepositoryImpl): RecipeDetailRepository
 
     @Binds
-    fun bindsViewModel(
+    @FragmentScope
+    fun bindsVMFactory(
         factory: RecipeDetailViewModel.Factory
     ): AssistedVMFactory<RecipeDetailViewModel, RecipeDetailParams>
 }

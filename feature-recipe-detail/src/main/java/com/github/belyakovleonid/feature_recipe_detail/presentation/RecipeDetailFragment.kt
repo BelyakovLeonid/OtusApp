@@ -5,6 +5,7 @@ import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.belyakovleonid.core.presentation.base.BaseFragment
 import com.github.belyakovleonid.core.presentation.providersFacade
+import com.github.belyakovleonid.core.presentation.requireParams
 import com.github.belyakovleonid.core.presentation.viewModel
 import com.github.belyakovleonid.feature_recipe_detail.R
 import com.github.belyakovleonid.feature_recipe_detail.databinding.FRecipeDetailBinding
@@ -17,9 +18,7 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailContract.State>(R.layout.f
     private lateinit var injector: RecipeDetailComponent
 
     override val viewModel: RecipeDetailViewModel by viewModel {
-        injector.viewModelFactory.create(
-            RecipeDetailParams(arguments?.getLong(ARG_RECIPE_ID))
-        )
+        injector.viewModelFactory.create(requireParams())
     }
 
     private val binding by viewBinding(FRecipeDetailBinding::bind)
@@ -39,9 +38,5 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailContract.State>(R.layout.f
                 binding.recipeName.text = state.recipe.name
             }
         }
-    }
-
-    companion object {
-        const val ARG_RECIPE_ID = "arg_recipe_id"
     }
 }

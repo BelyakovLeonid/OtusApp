@@ -1,3 +1,5 @@
 package com.github.belyakovleonid.core.viewmodel
 
-interface BaseParams
+import android.os.Parcelable
+
+interface BaseParams : Parcelable
