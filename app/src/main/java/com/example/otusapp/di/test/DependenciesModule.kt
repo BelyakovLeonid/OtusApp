@@ -1,7 +1,7 @@
 package com.example.otusapp.di.test
 
 import com.github.belyakovleonid.core.DependenciesProvider
-import com.github.belyakovleonid.feature_main.di.RootDependencies
+import com.github.belyakovleonid.feature_main.di.MainDependencies
 import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailDependencies
 import com.github.belyakovleonid.feature_recipe_list.di.RecipeListDependencies
 import com.github.belyakovleonid.module_injector.BaseDependencies
@@ -14,9 +14,9 @@ interface DependenciesModule {
 
     @Binds
     @IntoMap
-    @DependenciesKey(RootDependencies::class)
+    @DependenciesKey(MainDependencies::class)
     fun provideRootDependencies(
-        dependencies: RootDependencies
+        dependencies: MainDependencies
     ): BaseDependencies
 
     @Binds

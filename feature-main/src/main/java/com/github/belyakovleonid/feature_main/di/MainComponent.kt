@@ -4,13 +4,13 @@ import com.github.belyakovleonid.core.di.ActivityScope
 import dagger.Component
 
 @Component(
-    dependencies = [RootDependencies::class],
+    dependencies = [MainDependencies::class],
 )
 @ActivityScope
-interface RootComponent : RootApiProvider {
+interface MainComponent : MainApiProvider {
 
     @Component.Factory
     interface Factory {
-        fun create(dependencies: RootDependencies): RootComponent
+        fun create(dependencies: MainDependencies): MainComponent
     }
 }

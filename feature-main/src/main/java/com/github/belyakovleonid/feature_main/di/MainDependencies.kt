@@ -5,7 +5,7 @@ import com.github.belyakovleonid.module_injector.BaseDependencies
 import com.github.terrakok.cicerone.NavigatorHolder
 import javax.inject.Inject
 
-class RootDependencies @Inject constructor(
+class MainDependencies @Inject constructor(
     val navigatorHolder: NavigatorHolder,
     val recipeListStarter: RecipeListStarter
 ) : BaseDependencies

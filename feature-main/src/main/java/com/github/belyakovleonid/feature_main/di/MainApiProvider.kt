@@ -4,7 +4,7 @@ import com.github.belyakovleonid.feature_main.presentation.MainActivity
 import com.github.belyakovleonid.feature_main.presentation.MainViewModel
 import com.github.belyakovleonid.module_injector.BaseApiProvider
 
-interface RootApiProvider : BaseApiProvider {
+interface MainApiProvider : BaseApiProvider {
 
     val viewModel: MainViewModel
 

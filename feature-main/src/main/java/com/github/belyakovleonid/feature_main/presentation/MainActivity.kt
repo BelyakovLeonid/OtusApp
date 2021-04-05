@@ -5,15 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.belyakovleonid.core.presentation.getDependencies
 import com.github.belyakovleonid.core.presentation.viewModel
 import com.github.belyakovleonid.feature_main.R
-import com.github.belyakovleonid.feature_main.di.RootApiProvider
-import com.github.belyakovleonid.feature_main.di.RootComponentHolder
+import com.github.belyakovleonid.feature_main.di.MainApiProvider
+import com.github.belyakovleonid.feature_main.di.MainComponentHolder
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(R.layout.a_main) {
 
-    private lateinit var injector: RootApiProvider
+    private lateinit var injector: MainApiProvider
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(R.layout.a_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        injector = RootComponentHolder.getInstance(getDependencies())
+        injector = MainComponentHolder.getInstance(getDependencies())
         injector.inject(this)
 
         if (savedInstanceState == null) {
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(R.layout.a_main) {
     override fun onDestroy() {
         super.onDestroy()
         if (isFinishing) {
-            RootComponentHolder.release()
+            MainComponentHolder.release()
         }
     }
 }
