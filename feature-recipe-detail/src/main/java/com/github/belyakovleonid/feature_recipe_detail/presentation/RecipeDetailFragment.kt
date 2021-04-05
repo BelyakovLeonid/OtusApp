@@ -6,18 +6,18 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.github.belyakovleonid.core.presentation.getDependencies
 import com.github.belyakovleonid.core.presentation.observeFlow
-import com.github.belyakovleonid.core.presentation.providersFacade
 import com.github.belyakovleonid.core.presentation.viewModel
 import com.github.belyakovleonid.feature_recipe_detail.R
 import com.github.belyakovleonid.feature_recipe_detail.databinding.FRecipeDetailBinding
-import com.github.belyakovleonid.feature_recipe_detail.di.DaggerRecipeDetailComponent
-import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailComponent
+import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailApiProvider
+import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailComponentHolder
 
 
 class RecipeDetailFragment : Fragment(R.layout.f_recipe_detail) {
 
-    private lateinit var injector: RecipeDetailComponent
+    private lateinit var injector: RecipeDetailApiProvider
 
     private val viewModel: RecipeDetailViewModel by viewModel { injector.viewModel }
 
@@ -25,7 +25,7 @@ class RecipeDetailFragment : Fragment(R.layout.f_recipe_detail) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        injector = DaggerRecipeDetailComponent.factory().create(providersFacade)
+        injector = RecipeDetailComponentHolder.getInstance(getDependencies())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,6 +42,13 @@ class RecipeDetailFragment : Fragment(R.layout.f_recipe_detail) {
             is RecipeDetailContract.State.Data -> {
                 binding.recipeName.text = state.recipe.name
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (activity?.isFinishing == true) {
+            RecipeDetailComponentHolder.release()
         }
     }
 

@@ -14,7 +14,6 @@ import retrofit2.create
 @Module(includes = [RecipeListBindsModule::class])
 object RecipeListModule {
 
-
     @Provides
     fun providesApi(retrofit: Retrofit): RecipeListApi = retrofit.create()
 }
