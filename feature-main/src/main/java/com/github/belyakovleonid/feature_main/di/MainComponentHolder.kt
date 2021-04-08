@@ -5,6 +5,6 @@ import com.github.belyakovleonid.module_injector.BaseComponentHolder
 object MainComponentHolder : BaseComponentHolder<MainApiProvider, MainDependencies>() {
 
     override fun initializeComponent(dependencies: MainDependencies): MainApiProvider {
-        return DaggerRootComponent.factory().create(dependencies)
+        return DaggerMainComponent.factory().create(dependencies)
     }
 }
