@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.belyakovleonid.core.presentation.base.BaseFragment
-import com.github.belyakovleonid.core.presentation.providersFacade
+import com.github.belyakovleonid.core.presentation.getDependencies
 import com.github.belyakovleonid.core.presentation.requireParams
 import com.github.belyakovleonid.core.presentation.viewModel
 import com.github.belyakovleonid.feature_recipe_detail.R

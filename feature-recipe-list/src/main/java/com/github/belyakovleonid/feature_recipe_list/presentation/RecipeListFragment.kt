@@ -1,15 +1,12 @@
 package com.github.belyakovleonid.feature_recipe_list.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.belyakovleonid.core.presentation.addOnScrollToEndListener
 import com.github.belyakovleonid.core.presentation.base.BaseFragment
-import com.github.belyakovleonid.core.presentation.providersFacade
 import com.github.belyakovleonid.core.presentation.getDependencies
-import com.github.belyakovleonid.core.presentation.observeFlow
 import com.github.belyakovleonid.core.presentation.viewModel
 import com.github.belyakovleonid.feature_recipe_list.R
 import com.github.belyakovleonid.feature_recipe_list.data.RecipeListRepositoryImpl
