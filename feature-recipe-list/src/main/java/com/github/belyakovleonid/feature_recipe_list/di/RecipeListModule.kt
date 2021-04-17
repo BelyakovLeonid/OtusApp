@@ -3,8 +3,6 @@ package com.github.belyakovleonid.feature_recipe_list.di
 import com.github.belyakovleonid.feature_recipe_list.data.RecipeListRepositoryImpl
 import com.github.belyakovleonid.feature_recipe_list.data.remote.RecipeListApi
 import com.github.belyakovleonid.feature_recipe_list.domain.RecipeListRepository
-import com.github.belyakovleonid.feature_recipe_list.navigator.RecipeListNavigatorImpl
-import com.github.belyakovleonid.feature_recipe_list.presentation.RecipeListNavigator
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -20,9 +18,6 @@ object RecipeListModule {
 
 @Module
 interface RecipeListBindsModule {
-
-    @Binds
-    fun bindsNavigator(navigator: RecipeListNavigatorImpl): RecipeListNavigator
 
     @Binds
     fun bindsRepository(repository: RecipeListRepositoryImpl): RecipeListRepository
