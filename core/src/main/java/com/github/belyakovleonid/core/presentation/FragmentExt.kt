@@ -6,8 +6,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.github.belyakovleonid.core.AppWithProvidersFacade
-import com.github.belyakovleonid.core.ProvidersFacade
+import com.github.belyakovleonid.core.AppWithDependenciesProvider
+import com.github.belyakovleonid.module_injector.BaseDependencies
 import com.github.belyakovleonid.core.viewmodel.BaseParams
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
@@ -25,8 +25,11 @@ inline fun <reified VM : ViewModel> Fragment.viewModel(
     }
 }
 
-val Fragment.providersFacade: ProvidersFacade
-    get() = (requireActivity().application as AppWithProvidersFacade).providersFacade
+inline fun <reified D : BaseDependencies> Fragment.getDependencies(): D {
+    return (requireActivity().application as AppWithDependenciesProvider)
+        .dependenciesProvider
+        .provideDependency(D::class.java)
+}
 
 fun <T> Fragment.observeFlow(flow: Flow<T>, action: (T) -> Unit) {
     flow.onEach { action(it) }.launchIn(viewLifecycleOwner.lifecycleScope)

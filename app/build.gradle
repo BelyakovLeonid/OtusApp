@@ -38,6 +38,7 @@ dependencies {
     implementation project(":feature-main")
     implementation project(":feature-recipe-list")
     implementation project(":feature-recipe-detail")
+    implementation project(":module-injector")
 
     //Dagger
     kapt 'com.google.dagger:dagger-compiler:2.33'

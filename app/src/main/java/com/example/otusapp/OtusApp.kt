@@ -1,14 +1,16 @@
 package com.example.otusapp
 
 import android.app.Application
-import com.example.otusapp.di.DaggerFacadeComponent
-import com.github.belyakovleonid.core.AppWithProvidersFacade
-import com.github.belyakovleonid.core.CoreNetworkProviderFactory
-import com.github.belyakovleonid.core.ProvidersFacade
+import com.example.otusapp.di.DaggerDependenciesProviderComponent
+import com.github.belyakovleonid.core.AppWithDependenciesProvider
+import com.github.belyakovleonid.core.CoreNetworkApiFactory
+import com.github.belyakovleonid.core.DependenciesProvider
 
-class OtusApp : Application(), AppWithProvidersFacade {
+class OtusApp : Application(), AppWithDependenciesProvider {
 
-    override val providersFacade: ProvidersFacade by lazy {
-        DaggerFacadeComponent.factory().create(CoreNetworkProviderFactory.createNetworkProvider())
+    override val dependenciesProvider: DependenciesProvider by lazy {
+        DaggerDependenciesProviderComponent.factory()
+            .create(CoreNetworkApiFactory.createNetworkApi())
+            .dependenciesProvider
     }
 }

@@ -9,13 +9,13 @@ import com.github.belyakovleonid.core.presentation.requireParams
 import com.github.belyakovleonid.core.presentation.viewModel
 import com.github.belyakovleonid.feature_recipe_detail.R
 import com.github.belyakovleonid.feature_recipe_detail.databinding.FRecipeDetailBinding
-import com.github.belyakovleonid.feature_recipe_detail.di.DaggerRecipeDetailComponent
-import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailComponent
+import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailApiProvider
+import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailComponentHolder
 
 
 class RecipeDetailFragment : BaseFragment<RecipeDetailContract.State>(R.layout.f_recipe_detail) {
 
-    private lateinit var injector: RecipeDetailComponent
+    private lateinit var injector: RecipeDetailApiProvider
 
     override val viewModel: RecipeDetailViewModel by viewModel {
         injector.viewModelFactory.create(requireParams())
@@ -25,7 +25,7 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailContract.State>(R.layout.f
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        injector = DaggerRecipeDetailComponent.factory().create(providersFacade)
+        injector = RecipeDetailComponentHolder.getInstance(getDependencies())
     }
 
     override fun renderState(state: RecipeDetailContract.State) {

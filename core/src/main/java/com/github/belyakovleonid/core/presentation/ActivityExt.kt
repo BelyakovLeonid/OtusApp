@@ -4,8 +4,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.github.belyakovleonid.core.AppWithProvidersFacade
-import com.github.belyakovleonid.core.ProvidersFacade
+import com.github.belyakovleonid.core.AppWithDependenciesProvider
+import com.github.belyakovleonid.module_injector.BaseDependencies
 
 inline fun <reified VM : ViewModel> AppCompatActivity.viewModel(
     crossinline vmProvider: () -> VM
@@ -17,5 +17,8 @@ inline fun <reified VM : ViewModel> AppCompatActivity.viewModel(
     }
 }
 
-val AppCompatActivity.providersFacade: ProvidersFacade
-    get() = (application as AppWithProvidersFacade).providersFacade
+inline fun <reified D : BaseDependencies> AppCompatActivity.getDependencies(): D {
+    return (application as AppWithDependenciesProvider)
+        .dependenciesProvider
+        .provideDependency(D::class.java)
+}

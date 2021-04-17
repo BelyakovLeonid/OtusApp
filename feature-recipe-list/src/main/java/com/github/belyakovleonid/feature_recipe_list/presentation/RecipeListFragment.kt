@@ -1,24 +1,31 @@
 package com.github.belyakovleonid.feature_recipe_list.presentation
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.belyakovleonid.core.presentation.addOnScrollToEndListener
 import com.github.belyakovleonid.core.presentation.base.BaseFragment
 import com.github.belyakovleonid.core.presentation.providersFacade
+import com.github.belyakovleonid.core.presentation.getDependencies
+import com.github.belyakovleonid.core.presentation.observeFlow
 import com.github.belyakovleonid.core.presentation.viewModel
 import com.github.belyakovleonid.feature_recipe_list.R
+import com.github.belyakovleonid.feature_recipe_list.data.RecipeListRepositoryImpl
 import com.github.belyakovleonid.feature_recipe_list.databinding.FRecipesListBinding
-import com.github.belyakovleonid.feature_recipe_list.di.DaggerRecipeListComponent
-import com.github.belyakovleonid.feature_recipe_list.di.RecipeListComponent
+import com.github.belyakovleonid.feature_recipe_list.di.RecipeListApiProvider
+import com.github.belyakovleonid.feature_recipe_list.di.RecipeListComponentHolder
 import com.github.belyakovleonid.feature_recipe_list.presentation.adapter.RecipesListAdapter
+import javax.inject.Inject
 
 
 class RecipeListFragment : BaseFragment<RecipeListContract.State>(R.layout.f_recipes_list) {
 
-    private lateinit var injector: RecipeListComponent
+    private lateinit var injector: RecipeListApiProvider
+
+    @Inject
+    lateinit var repositoryImpl: RecipeListRepositoryImpl
 
     override val viewModel: RecipeListViewModel by viewModel { injector.viewModel }
 
@@ -28,9 +35,17 @@ class RecipeListFragment : BaseFragment<RecipeListContract.State>(R.layout.f_rec
         RecipesListAdapter(viewModel::submitEvent)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        injector = DaggerRecipeListComponent.factory().create(providersFacade)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injector = RecipeListComponentHolder.getInstance(getDependencies())
+        injector.inject(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (activity?.isFinishing == true) {
+            RecipeListComponentHolder.release()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
