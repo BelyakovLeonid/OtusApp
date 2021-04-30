@@ -14,6 +14,7 @@ class StatisticsApiImpl @Inject constructor() : StatisticsApi {
                     name = "Фрукты и овощи",
                     iconUrl = "https://drive.google.com/file/d/1q8ho3ZBiGm0V-ihoV_-oL4-pfLTJGwbs/view?usp=sharing",
                     percent = 0.35,
+                    color = "#F29702",
                     subcategories = listOf(
                         StatisticsSubcategoryDto(
                             name = "Банан",
@@ -45,6 +46,7 @@ class StatisticsApiImpl @Inject constructor() : StatisticsApi {
                     name = "Мясные продукты",
                     iconUrl = "https://drive.google.com/file/d/1gk9XUnPIfGMUdNfiYNKO60Edl3VIglo7/view?usp=sharing",
                     percent = 0.18,
+                    color = "#EC5179",
                     subcategories = listOf(
                         StatisticsSubcategoryDto(
                             name = "Свинина",
@@ -64,6 +66,7 @@ class StatisticsApiImpl @Inject constructor() : StatisticsApi {
                     name = "Молочные продукты и яйца",
                     iconUrl = "https://drive.google.com/file/d/1R0xpbZEa_4WExW8jw7EJ6LySY7w4BKHg/view?usp=sharing",
                     percent = 0.22,
+                    color = "#A0EBFF",
                     subcategories = listOf(
                         StatisticsSubcategoryDto(
                             name = "Яйца",
@@ -87,6 +90,7 @@ class StatisticsApiImpl @Inject constructor() : StatisticsApi {
                     name = "Хлеб и выпечка",
                     iconUrl = "https://drive.google.com/file/d/1Gp3EdFUOTUVDMiHUEZxGQsnoj7qeLA9g/view?usp=sharing",
                     percent = 0.05,
+                    color = "#936242",
                     subcategories = listOf(
                         StatisticsSubcategoryDto(
                             name = "Хлеб",
@@ -102,6 +106,7 @@ class StatisticsApiImpl @Inject constructor() : StatisticsApi {
                     name = "Морепродукты",
                     iconUrl = "https://drive.google.com/file/d/1gvKv5zu9kiwNsv98pVHipF0bIy8yCHSV/view?usp=sharing",
                     percent = 0.10,
+                    color = "#9EADC0",
                     subcategories = listOf(
                         StatisticsSubcategoryDto(
                             name = "Сельдь",

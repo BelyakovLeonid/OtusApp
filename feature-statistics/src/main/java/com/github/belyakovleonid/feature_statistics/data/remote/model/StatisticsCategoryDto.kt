@@ -6,6 +6,7 @@ data class StatisticsCategoryDto(
     val name: String,
     val iconUrl: String,
     val percent: Double,
+    val color: String,
     val subcategories: List<StatisticsSubcategoryDto>
 )
 
@@ -13,5 +14,6 @@ fun StatisticsCategoryDto.toDomain() = StatisticsCategory(
     name = name,
     iconUrl = iconUrl,
     percent = percent,
+    color = color,
     subcategories = subcategories.map(StatisticsSubcategoryDto::toDomain)
 )
