@@ -38,6 +38,7 @@ dependencies {
     implementation project(":feature-main")
     implementation project(":feature-recipe-list")
     implementation project(":feature-recipe-detail")
+    implementation project(":feature-statistics")
     implementation project(":module-injector")
 
     //Dagger

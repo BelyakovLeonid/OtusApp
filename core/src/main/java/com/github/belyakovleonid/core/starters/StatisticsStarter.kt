@@ -1,5 +1,5 @@
 package com.github.belyakovleonid.core.starters
 
-interface RecipeListStarter {
+interface StatisticsStarter {
     fun start()
 }

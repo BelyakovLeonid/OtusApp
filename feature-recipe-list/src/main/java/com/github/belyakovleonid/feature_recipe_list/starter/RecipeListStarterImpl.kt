@@ -9,7 +9,7 @@ class RecipeListStarterImpl @Inject constructor(
     private val router: Router
 ) : RecipeListStarter {
 
-    override fun startRecipeList() {
+    override fun start() {
         router.newRootScreen(RecipeListScreens.recipesList())
     }
 }
