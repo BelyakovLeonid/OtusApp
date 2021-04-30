@@ -5,6 +5,7 @@ import com.github.belyakovleonid.core.presentation.base.BaseViewModel
 import com.github.belyakovleonid.core_network_api.model.Result
 import com.github.belyakovleonid.feature_statistics.domain.StatisticsInteractor
 import com.github.belyakovleonid.feature_statistics.domain.model.StatisticsCategory
+import com.github.belyakovleonid.feature_statistics.presentation.model.toPercentUi
 import com.github.belyakovleonid.feature_statistics.presentation.model.toUi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,10 +30,15 @@ class StatisticsViewModel @Inject constructor(
     ): StatisticsContract.State {
         return when (result) {
             is Result.Success -> {
-                val recipes = result.value.map(StatisticsCategory::toUi)
+                val resultSorted = result.value.sortedByDescending { it.percent }
+                val percents = resultSorted.map(StatisticsCategory::toPercentUi)
+                val categories = resultSorted.map(StatisticsCategory::toUi)
 
-                if (recipes.isNotEmpty()) {
-                    StatisticsContract.State.Data(recipes)
+                if (percents.isNotEmpty() && categories.isNotEmpty()) {
+                    StatisticsContract.State.Data(
+                        statisticPercents = percents,
+                        statisticCategories = categories
+                    )
                 } else {
                     StatisticsContract.State.NoElements
                 }

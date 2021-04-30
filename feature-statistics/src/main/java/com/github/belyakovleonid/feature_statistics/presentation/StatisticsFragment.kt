@@ -1,6 +1,7 @@
 package com.github.belyakovleonid.feature_statistics.presentation
 
 import android.os.Bundle
+import android.util.Log
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.belyakovleonid.core.presentation.base.BaseFragment
 import com.github.belyakovleonid.core.presentation.getDependencies
@@ -24,5 +25,14 @@ class StatisticsFragment : BaseFragment<StatisticsContract.State>(R.layout.f_sta
     }
 
     override fun renderState(state: StatisticsContract.State) {
+        when (state) {
+            is StatisticsContract.State.Data -> {
+                Log.d(
+                    "MyTag",
+                    "total = ${state.statisticPercents.sumBy { (it.percent * 100).toInt() }}"
+                )
+                binding.percentView.setData(state.statisticPercents)
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@ import com.github.belyakovleonid.feature_statistics.domain.model.StatisticsCateg
 data class StatisticsCategoryDto(
     val name: String,
     val iconUrl: String,
-    val percent: Double,
+    val percent: Float,
     val color: String,
     val subcategories: List<StatisticsSubcategoryDto>
 )

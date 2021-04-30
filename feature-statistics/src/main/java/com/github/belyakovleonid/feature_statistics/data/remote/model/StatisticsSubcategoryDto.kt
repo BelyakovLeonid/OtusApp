@@ -4,7 +4,7 @@ import com.github.belyakovleonid.feature_statistics.domain.model.StatisticsSubca
 
 data class StatisticsSubcategoryDto(
     val name: String,
-    val percent: Double
+    val percent: Float
 )
 
 fun StatisticsSubcategoryDto.toDomain() = StatisticsSubcategory(
