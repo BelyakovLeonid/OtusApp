@@ -9,20 +9,15 @@ import com.github.belyakovleonid.core.presentation.base.BaseFragment
 import com.github.belyakovleonid.core.presentation.getDependencies
 import com.github.belyakovleonid.core.presentation.viewModel
 import com.github.belyakovleonid.feature_recipe_list.R
-import com.github.belyakovleonid.feature_recipe_list.data.RecipeListRepositoryImpl
 import com.github.belyakovleonid.feature_recipe_list.databinding.FRecipesListBinding
 import com.github.belyakovleonid.feature_recipe_list.di.RecipeListApiProvider
 import com.github.belyakovleonid.feature_recipe_list.di.RecipeListComponentHolder
 import com.github.belyakovleonid.feature_recipe_list.presentation.adapter.RecipesListAdapter
-import javax.inject.Inject
 
 
 class RecipeListFragment : BaseFragment<RecipeListContract.State>(R.layout.f_recipes_list) {
 
     private lateinit var injector: RecipeListApiProvider
-
-    @Inject
-    lateinit var repositoryImpl: RecipeListRepositoryImpl
 
     override val viewModel: RecipeListViewModel by viewModel { injector.viewModel }
 
@@ -35,7 +30,6 @@ class RecipeListFragment : BaseFragment<RecipeListContract.State>(R.layout.f_rec
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injector = RecipeListComponentHolder.getInstance(getDependencies())
-        injector.inject(this)
     }
 
     override fun onDestroy() {
