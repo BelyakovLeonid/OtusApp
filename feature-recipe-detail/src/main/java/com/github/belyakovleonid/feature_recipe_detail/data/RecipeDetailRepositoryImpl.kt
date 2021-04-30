@@ -13,7 +13,7 @@ class RecipeDetailRepositoryImpl @Inject constructor(
     private val recipesApi: RecipeDetailApi
 ) : RecipeDetailRepository {
 
-    override suspend fun loadRecipe(id: Long): Result<RecipeDetail> {
+    override suspend fun loadRecipe(id: Long?): Result<RecipeDetail> {
         val result = recipesApi.loadRecipeDetail(id)
         return result.convertTo(RecipeDetailDto::toDomain)
     }

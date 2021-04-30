@@ -8,7 +8,7 @@ class RecipeDetailInteractor @Inject constructor(
     private val recipesRepository: RecipeDetailRepository
 ) {
 
-    suspend fun loadRecipe(id: Long): Result<RecipeDetail> {
+    suspend fun loadRecipe(id: Long?): Result<RecipeDetail> {
         return recipesRepository.loadRecipe(id)
     }
 }

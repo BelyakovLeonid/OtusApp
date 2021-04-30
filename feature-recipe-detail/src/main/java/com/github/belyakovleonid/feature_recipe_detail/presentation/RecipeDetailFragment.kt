@@ -1,13 +1,11 @@
 package com.github.belyakovleonid.feature_recipe_detail.presentation
 
 import android.content.Context
-import android.os.Bundle
-import android.view.View
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.github.belyakovleonid.core.presentation.base.BaseFragment
 import com.github.belyakovleonid.core.presentation.getDependencies
-import com.github.belyakovleonid.core.presentation.observeFlow
+import com.github.belyakovleonid.core.presentation.requireParams
 import com.github.belyakovleonid.core.presentation.viewModel
 import com.github.belyakovleonid.feature_recipe_detail.R
 import com.github.belyakovleonid.feature_recipe_detail.databinding.FRecipeDetailBinding
@@ -15,11 +13,13 @@ import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailApiProvide
 import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailComponentHolder
 
 
-class RecipeDetailFragment : Fragment(R.layout.f_recipe_detail) {
+class RecipeDetailFragment : BaseFragment<RecipeDetailContract.State>(R.layout.f_recipe_detail) {
 
     private lateinit var injector: RecipeDetailApiProvider
 
-    private val viewModel: RecipeDetailViewModel by viewModel { injector.viewModel }
+    override val viewModel: RecipeDetailViewModel by viewModel {
+        injector.viewModelFactory.create(requireParams())
+    }
 
     private val binding by viewBinding(FRecipeDetailBinding::bind)
 
@@ -28,12 +28,7 @@ class RecipeDetailFragment : Fragment(R.layout.f_recipe_detail) {
         injector = RecipeDetailComponentHolder.getInstance(getDependencies())
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        observeFlow(viewModel.items, ::renderState)
-    }
-
-    private fun renderState(state: RecipeDetailContract.State) {
+    override fun renderState(state: RecipeDetailContract.State) {
         binding.contentGroup.isVisible = state.isContentVisible
         binding.errorText.isVisible = state.isErrorVisible
         binding.loading.isVisible = state.isLoadingVisible
@@ -43,16 +38,5 @@ class RecipeDetailFragment : Fragment(R.layout.f_recipe_detail) {
                 binding.recipeName.text = state.recipe.name
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (activity?.isFinishing == true) {
-            RecipeDetailComponentHolder.release()
-        }
-    }
-
-    companion object {
-        const val ARG_RECIPE_ID = "arg_recipe_id"
     }
 }
