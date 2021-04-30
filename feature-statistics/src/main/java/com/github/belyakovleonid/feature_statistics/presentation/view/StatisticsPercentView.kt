@@ -2,15 +2,14 @@ package com.github.belyakovleonid.feature_statistics.presentation.view
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.content.res.use
 import com.github.belyakovleonid.core.presentation.dpToPx
-import com.github.belyakovleonid.feature_statistics.R
 import com.github.belyakovleonid.feature_statistics.presentation.model.StatisticsPercentUiModel
+import kotlin.math.min
 
 class StatisticsPercentView @JvmOverloads constructor(
     context: Context,
@@ -24,33 +23,48 @@ class StatisticsPercentView @JvmOverloads constructor(
         style = Paint.Style.FILL
     }
 
+    private val borderRect = RectF()
     private val borderPath = Path()
-
-    private var cornerRadius: Float = context.dpToPx(DEFAULT_CORNER_RADIUS_DP)
-
-    init {
-        context.obtainStyledAttributes(attributeSet, R.styleable.StatisticsPercentView).use {
-            cornerRadius = it.getDimension(R.styleable.StatisticsPercentView_cornerRadius, 0F)
-        }
-    }
+    private val dividerWidth = context.dpToPx(DEFAULT_DIVIDER_DP)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val desiredHeight = context.dpToPx(DEFAULT_HEIGHT_DP) + paddingTop + paddingBottom
+
+        setMeasuredDimension(
+            widthMeasureSpec,
+            measureDimension(desiredHeight.toInt(), heightMeasureSpec)
+        )
+    }
+
+    private fun measureDimension(desiredSize: Int, measureSpec: Int): Int {
+        val specMode = MeasureSpec.getMode(measureSpec)
+        val specSize = MeasureSpec.getSize(measureSpec)
+
+        return when (specMode) {
+            MeasureSpec.EXACTLY -> specSize
+            MeasureSpec.AT_MOST -> min(desiredSize, specSize)
+            else -> desiredSize
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        borderRect.bottom = h.toFloat()
+        borderRect.right = w.toFloat()
+        borderPath.reset()
+        borderPath.addRoundRect(borderRect, h / 2f, h / 2f, Path.Direction.CW)
     }
 
     override fun onDraw(canvas: Canvas) {
+        canvas.clipPath(borderPath)
         var occupiedSpace = 0f
         data.forEach { model ->
-            paint.color = model.color ?: Color.GRAY
+            paint.color = model.color
 
             canvas.drawRect(
                 occupiedSpace,
                 0f,
-                occupiedSpace + (width * model.percent),
+                occupiedSpace + (width * model.percent) - dividerWidth,
                 height.toFloat(),
                 paint
             )
@@ -65,6 +79,7 @@ class StatisticsPercentView @JvmOverloads constructor(
     }
 
     companion object {
-        private const val DEFAULT_CORNER_RADIUS_DP = 12
+        private const val DEFAULT_HEIGHT_DP = 20
+        private const val DEFAULT_DIVIDER_DP = 1
     }
 }
