@@ -1,2 +1,10 @@
-include ':app'
+include ':core',
+        ':core-network-api',
+        ':core-network-impl',
+        ':feature-recipe-list',
+        ':feature-recipe-detail',
+        ':feature-main',
+        ':module-injector',
+        ':app'
+
 rootProject.name = "OtusApp"

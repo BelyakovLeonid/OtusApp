@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
 }
@@ -9,8 +9,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.otusapp"
-        minSdkVersion 28
+        minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -34,16 +33,19 @@ android {
 }
 
 dependencies {
-    implementation project(":core")
-    implementation project(":feature-main")
-    implementation project(":feature-recipe-list")
-    implementation project(":feature-recipe-detail")
+    api project(":core-network-api")
+    implementation project(":core-network-impl")
     implementation project(":module-injector")
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
+    //Android
     implementation 'androidx.appcompat:appcompat:1.2.0'
+    api "androidx.activity:activity-ktx:1.2.2"
+    api "androidx.fragment:fragment-ktx:1.3.2"
 
     //Dagger
+    api 'com.google.dagger:dagger:2.33'
     kapt 'com.google.dagger:dagger-compiler:2.33'
+
+    // Cicerone
+    api "com.github.terrakok:cicerone:6.6"
 }

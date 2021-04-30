@@ -1,7 +1,8 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -9,11 +10,13 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.otusapp"
-        minSdkVersion 28
+        minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -23,11 +26,14 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -35,15 +41,24 @@ android {
 
 dependencies {
     implementation project(":core")
-    implementation project(":feature-main")
-    implementation project(":feature-recipe-list")
-    implementation project(":feature-recipe-detail")
     implementation project(":module-injector")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    // Serialization
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
 
     //Dagger
     kapt 'com.google.dagger:dagger-compiler:2.33'
+
+    //ViewBindingDelegate
+    implementation 'com.kirich1409.viewbindingpropertydelegate:vbpd-noreflection:1.4.1'
+
+    // Coil
+    implementation "io.coil-kt:coil:1.1.1"
 }

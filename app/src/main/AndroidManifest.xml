@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OtusApp">
-        <activity android:name=".root.presentation.MainActivity">
+        <activity android:name="com.github.belyakovleonid.feature_main.presentation.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,10 +1,16 @@
 package com.example.otusapp
 
 import android.app.Application
-import com.example.otusapp.base.di.AppComponent
-import com.example.otusapp.base.di.DaggerAppComponent
+import com.example.otusapp.di.DaggerDependenciesProviderComponent
+import com.github.belyakovleonid.core.AppWithDependenciesProvider
+import com.github.belyakovleonid.core.CoreNetworkApiFactory
+import com.github.belyakovleonid.core.DependenciesProvider
 
-class OtusApp : Application() {
+class OtusApp : Application(), AppWithDependenciesProvider {
 
-    val appComponent: AppComponent by lazy { DaggerAppComponent.create() }
+    override val dependenciesProvider: DependenciesProvider by lazy {
+        DaggerDependenciesProviderComponent.factory()
+            .create(CoreNetworkApiFactory.createNetworkApi())
+            .dependenciesProvider
+    }
 }
