@@ -14,8 +14,11 @@ abstract class BaseFragment<S : IState>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupView()
         observeFlow(viewModel.state, ::renderState)
     }
+
+    open fun setupView() = Unit
 
     protected abstract fun renderState(state: S)
 }

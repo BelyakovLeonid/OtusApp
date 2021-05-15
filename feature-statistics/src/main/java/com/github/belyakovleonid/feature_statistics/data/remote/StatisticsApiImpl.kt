@@ -12,7 +12,7 @@ class StatisticsApiImpl @Inject constructor() : StatisticsApi {
             listOf(
                 StatisticsCategoryDto(
                     name = "Фрукты и овощи",
-                    iconUrl = "https://drive.google.com/file/d/1q8ho3ZBiGm0V-ihoV_-oL4-pfLTJGwbs/view?usp=sharing",
+                    iconUrl = "https://i.ibb.co/jgVLyP9/fruit.png",
                     percent = 0.35F,
                     color = "#F29702",
                     subcategories = listOf(
@@ -44,7 +44,7 @@ class StatisticsApiImpl @Inject constructor() : StatisticsApi {
                 ),
                 StatisticsCategoryDto(
                     name = "Мясные продукты",
-                    iconUrl = "https://drive.google.com/file/d/1gk9XUnPIfGMUdNfiYNKO60Edl3VIglo7/view?usp=sharing",
+                    iconUrl = "https://i.ibb.co/nQ6fxjf/meat.png",
                     percent = 0.18F,
                     color = "#EC5179",
                     subcategories = listOf(
@@ -64,7 +64,7 @@ class StatisticsApiImpl @Inject constructor() : StatisticsApi {
                 ),
                 StatisticsCategoryDto(
                     name = "Молочные продукты и яйца",
-                    iconUrl = "https://drive.google.com/file/d/1R0xpbZEa_4WExW8jw7EJ6LySY7w4BKHg/view?usp=sharing",
+                    iconUrl = "https://i.ibb.co/jrs7D9Y/Milk-1.png",
                     percent = 0.22F,
                     color = "#A0EBFF",
                     subcategories = listOf(
@@ -88,7 +88,7 @@ class StatisticsApiImpl @Inject constructor() : StatisticsApi {
                 ),
                 StatisticsCategoryDto(
                     name = "Хлеб и выпечка",
-                    iconUrl = "https://drive.google.com/file/d/1Gp3EdFUOTUVDMiHUEZxGQsnoj7qeLA9g/view?usp=sharing",
+                    iconUrl = "https://i.ibb.co/nBpWVwM/bread-2.png",
                     percent = 0.15F,
                     color = "#936242",
                     subcategories = listOf(
@@ -104,7 +104,7 @@ class StatisticsApiImpl @Inject constructor() : StatisticsApi {
                 ),
                 StatisticsCategoryDto(
                     name = "Морепродукты",
-                    iconUrl = "https://drive.google.com/file/d/1gvKv5zu9kiwNsv98pVHipF0bIy8yCHSV/view?usp=sharing",
+                    iconUrl = "https://i.ibb.co/3zdNTkr/fish.png",
                     percent = 0.10F,
                     color = "#9EADC0",
                     subcategories = listOf(
