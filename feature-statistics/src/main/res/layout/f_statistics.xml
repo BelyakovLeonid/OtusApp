@@ -4,13 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.github.belyakovleonid.feature_statistics.presentation.view.StatisticsPercentView
-        android:id="@+id/percentView"
-        android:layout_width="0px"
-        android:layout_height="20dp"
+    <com.github.belyakovleonid.feature_statistics.presentation.view.StatisticPercentDiagramView
+        android:id="@+id/percentDiagramView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.github.belyakovleonid.feature_statistics.presentation.view.StatisticsPercentView
+        android:id="@+id/percentView"
+        android:layout_width="0px"
+        android:layout_marginTop="40dp"
+        android:layout_height="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/percentDiagramView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/productList"
