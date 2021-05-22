@@ -6,14 +6,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.github.belyakovleonid.core.presentation.IEvent
 import com.github.belyakovleonid.feature_statistics.databinding.ItemCategoryBinding
 import com.github.belyakovleonid.feature_statistics.databinding.ItemSubcategoryBinding
-import com.github.belyakovleonid.feature_statistics.presentation.StatisticsContract
 import com.github.belyakovleonid.feature_statistics.presentation.model.StatisticsItemUiModel
 
 class StatisticsCategoryAdapter(
-    private val onItemClick: (IEvent) -> Unit
+    private val onCategoryClick: (StatisticsItemUiModel.Category) -> Unit
 ) : ListAdapter<StatisticsItemUiModel, RecyclerView.ViewHolder>(RecipeDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -31,7 +29,7 @@ class StatisticsCategoryAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is CategoryViewHolder -> {
-                holder.bind(getItem(position) as StatisticsItemUiModel.Category, onItemClick)
+                holder.bind(getItem(position) as StatisticsItemUiModel.Category, onCategoryClick)
             }
             is SubcategoryViewHolder -> {
                 holder.bind(getItem(position) as StatisticsItemUiModel.Subcategory)
@@ -56,14 +54,15 @@ class CategoryViewHolder(
     private val binding: ItemCategoryBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: StatisticsItemUiModel.Category, onItemClick: (IEvent) -> Unit) = with(binding) {
+    fun bind(
+        item: StatisticsItemUiModel.Category,
+        onItemClick: (StatisticsItemUiModel.Category) -> Unit
+    ) = with(binding) {
         itemImage.load(item.iconUrl)
         itemText.text = item.name
         itemPercent.text = item.percentText
         itemCollapseIcon.rotation = if (item.expanded) 0F else 180F
-        root.setOnClickListener {
-            onItemClick.invoke(StatisticsContract.Event.CategoryClicked(item))
-        }
+        root.setOnClickListener { onItemClick.invoke(item) }
     }
 }
 

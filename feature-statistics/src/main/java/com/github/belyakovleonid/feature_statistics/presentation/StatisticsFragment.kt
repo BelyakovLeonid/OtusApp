@@ -21,7 +21,7 @@ class StatisticsFragment : BaseFragment<StatisticsContract.State>(R.layout.f_sta
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
         StatisticsCategoryAdapter(
-            viewModel::submitEvent
+            onCategoryClick = { viewModel.submitEvent(StatisticsContract.Event.CategoryClicked(it)) }
         )
     }
 
@@ -30,13 +30,17 @@ class StatisticsFragment : BaseFragment<StatisticsContract.State>(R.layout.f_sta
         injector = StatisticsComponentHolder.getInstance(getDependencies())
     }
 
-    override fun setupView() {
-        binding.productList.adapter = adapter
+    override fun setupView() = with(binding) {
+        productList.adapter = adapter
+        chartView.onItemSelectListener = {
+            viewModel.submitEvent(StatisticsContract.Event.ChartItemClicked(it))
+        }
     }
 
     override fun renderState(state: StatisticsContract.State) = with(binding) {
         when (state) {
             is StatisticsContract.State.Data -> {
+                chartView.setData(state.weightTrackChart)
                 percentDiagramView.setData(state.statisticPercents)
                 percentView.setData(state.statisticPercents)
                 adapter.submitList(state.statisticCategories)

@@ -13,7 +13,7 @@ class StatisticsRepositoryImpl @Inject constructor(
     private val api: StatisticsApi
 ) : StatisticsRepository {
 
-    override suspend fun getStatisticsForPeriod(): Result<List<StatisticsCategory>> {
+    override suspend fun getStatisticsInfo(): Result<List<StatisticsCategory>> {
         return api.loadStatistics().convertTo { it.map(StatisticsCategoryDto::toDomain) }
     }
 }
