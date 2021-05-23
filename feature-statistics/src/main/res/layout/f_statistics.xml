@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.github.belyakovleonid.feature_statistics.presentation.view.WeightChartView
+    <com.github.belyakovleonid.feature_statistics.presentation.view.weightchart.WeightChartView
         android:id="@+id/chartView"
         android:layout_width="wrap_content"
         android:layout_height="600dp"

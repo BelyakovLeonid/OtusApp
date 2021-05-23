@@ -1,4 +1,4 @@
-package com.github.belyakovleonid.feature_statistics.presentation.view
+package com.github.belyakovleonid.feature_statistics.presentation.view.weightchart
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -25,7 +25,7 @@ class WeightChartView @JvmOverloads constructor(
     var onItemSelectListener: ((WeightTrackUiModel) -> Unit)? = null
 
     // точки на графике
-    private var data: List<WeightTrackUiModel> = emptyList()
+    private var dataSet: WeightDataSet = WeightDataSet.EMPTY_SET
     private var chartData: List<WeightChartItem> = emptyList()
 
     //оси графика
@@ -130,7 +130,11 @@ class WeightChartView @JvmOverloads constructor(
     }
 
     fun setData(data: List<WeightTrackUiModel>) {
-        this.data = data
+        dataSet = WeightDataSet(
+            rawData = data,
+            maxWeight = data.maxByOrNull { it.weight }?.weight ?: 0f,
+            minWeight = data.minByOrNull { it.weight }?.weight ?: 0f
+        )
         recalculateView()
         invalidate()
     }
@@ -195,35 +199,26 @@ class WeightChartView @JvmOverloads constructor(
     private fun calculateChartOffset() {
         val doubleTextPadding = 2 * chartAxisTextPadding
 
-        val bottomText = data.firstOrNull()?.dateText ?: ""
-        chartOffsetBottom = doubleTextPadding + radius + textPaint.measureTextHeight(bottomText)
-
+        chartOffsetBottom = doubleTextPadding + radius + textPaint.textSize
         chartOffsetRight = radius + doubleTextPadding
         chartOffsetTop = radius + doubleTextPadding
-
-        val maxWeightItem = data.maxByOrNull { it.weight }
         chartOffsetLeft = 2 * chartAxisTextPadding + radius + textPaint.measureText(
-            maxWeightItem?.weightText ?: ""
+            getWeightString(dataSet.maxWeight)
         )
     }
 
     private fun calculateScaleDivision() {
         rowCount = ((height - chartOffsetBottom - chartOffsetTop) / rowHeight).toInt()
         verticalAxisCount = rowCount + 1
-
-        columnWidth = (width - chartOffsetLeft - chartOffsetRight) / (data.size - 1)
-
-        val maxWeight = data.maxByOrNull { it.weight }?.weight ?: 0f
-        val minWeight = data.minByOrNull { it.weight }?.weight ?: 0f
-        scaleDivision = (maxWeight - minWeight) / rowCount
+        columnWidth = (width - chartOffsetLeft - chartOffsetRight) / (dataSet.lastIndex)
+        scaleDivision = (dataSet.maxWeight - dataSet.minWeight) / rowCount
         scaleValue = rowHeight / scaleDivision
     }
 
     private fun calculateChartData() {
-        val minWeight = data.minByOrNull { it.weight }?.weight ?: 0f
-        chartData = data.mapIndexed { index, item ->
+        chartData = dataSet.rawData.mapIndexed { index, item ->
             val x = chartOffsetLeft + index * columnWidth
-            val y = height - chartOffsetBottom - (item.weight - minWeight) * scaleValue
+            val y = height - chartOffsetBottom - (item.weight - dataSet.minWeight) * scaleValue
 
             WeightChartItem(
                 rawItem = item,
@@ -238,9 +233,8 @@ class WeightChartView @JvmOverloads constructor(
     }
 
     private fun calculateAxisData() {
-        val minWeight = data.minByOrNull { it.weight }?.weight ?: 0f
         verticalAxisData = List(rowCount + 1) { i ->
-            val text = getWeightString(i * scaleDivision + minWeight)
+            val text = getWeightString(i * scaleDivision + dataSet.minWeight)
             val textHeight = textPaint.measureTextHeight(text)
             AxisChartItem(
                 text = text,
@@ -290,23 +284,3 @@ class WeightChartView @JvmOverloads constructor(
         private const val DEFAULT_RADIUS_DP = 6
     }
 }
-
-private data class WeightChartItem(
-    val rawItem: WeightTrackUiModel,
-    val isSelected: Boolean,
-    val x: Float,
-    val y: Float,
-    val labelText: String,
-    val labelX: Float,
-    val labelY: Float,
-)
-
-private data class AxisChartItem(
-    val text: String,
-    val textX: Float,
-    val textY: Float,
-    val startX: Float = 0f,
-    val startY: Float = 0f,
-    val endX: Float = 0f,
-    val endY: Float = 0f
-)
