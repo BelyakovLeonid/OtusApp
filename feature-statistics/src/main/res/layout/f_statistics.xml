@@ -4,13 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.github.belyakovleonid.feature_statistics.presentation.view.StatisticChartView
+    <com.github.belyakovleonid.feature_statistics.presentation.view.WeightChartView
         android:id="@+id/chartView"
         android:layout_width="wrap_content"
         android:layout_height="600dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:wcv_chart_color="@color/teal_200"
+        app:wcv_selected_color="@color/teal_200_test" />
 
     <com.github.belyakovleonid.feature_statistics.presentation.view.StatisticPercentDiagramView
         android:id="@+id/percentDiagramView"
