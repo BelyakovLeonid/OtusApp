@@ -3,10 +3,4 @@
     <declare-styleable name="StatisticsPercentView">
         <attr name="corner_radius" format="dimension" />
     </declare-styleable>
-    <declare-styleable name="WeightChartView">
-        <attr name="wcv_chart_color" format="color" />
-        <attr name="wcv_selected_color" format="color" />
-        <attr name="wcv_skeleton_color" format="color" />
-        <attr name="wcv_text_color" format="color" />
-    </declare-styleable>
 </resources>

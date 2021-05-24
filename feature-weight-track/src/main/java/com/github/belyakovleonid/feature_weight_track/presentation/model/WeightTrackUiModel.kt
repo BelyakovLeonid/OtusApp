@@ -1,8 +1,8 @@
-package com.github.belyakovleonid.feature_statistics.presentation.model
+package com.github.belyakovleonid.feature_weight_track.presentation.model
 
 import com.github.belyakovleonid.core.presentation.getDateString
 import com.github.belyakovleonid.core.presentation.getWeightString
-import com.github.belyakovleonid.feature_statistics.domain.model.WeightTrack
+import com.github.belyakovleonid.feature_weight_track.domain.model.WeightTrack
 import kotlinx.datetime.LocalDate
 
 data class WeightTrackUiModel(
@@ -12,7 +12,6 @@ data class WeightTrackUiModel(
     val weightText: String,
     val dateText: String
 )
-
 
 fun WeightTrack.toUi() = WeightTrackUiModel(
     isSelected = false,

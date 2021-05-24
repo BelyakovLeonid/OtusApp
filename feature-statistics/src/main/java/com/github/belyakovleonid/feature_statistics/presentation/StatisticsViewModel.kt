@@ -6,7 +6,6 @@ import com.github.belyakovleonid.core.presentation.base.BaseViewModel
 import com.github.belyakovleonid.core_network_api.model.Result
 import com.github.belyakovleonid.feature_statistics.domain.StatisticsInteractor
 import com.github.belyakovleonid.feature_statistics.domain.model.StatisticsCategory
-import com.github.belyakovleonid.feature_statistics.domain.model.WeightTrack
 import com.github.belyakovleonid.feature_statistics.presentation.model.toPercentUi
 import com.github.belyakovleonid.feature_statistics.presentation.model.toUi
 import kotlinx.coroutines.launch
@@ -37,44 +36,29 @@ class StatisticsViewModel @Inject constructor(
                     statisticCategories = newCategories
                 )
             }
-            is StatisticsContract.Event.ChartItemClicked -> {
-                val currentValue = mutableState.value as? StatisticsContract.State.Data ?: return
-                val newChartData = currentValue.weightTrackChart.toMutableList()
-                val index = newChartData.indexOf(event.item)
-                newChartData[index] = event.item.copy(isSelected = !event.item.isSelected)
-                mutableState.value = currentValue.copy(
-                    weightTrackChart = newChartData
-                )
-            }
         }
     }
 
     private fun loadStatistics() {
         viewModelScope.launch {
-            val statisticResult = statisticsInteractor.getStatisticsInfo()
-            val weightResult = statisticsInteractor.getWeightTrackingInfo()
-            mutableState.value = transmitResultToState(statisticResult, weightResult)
+            val result = statisticsInteractor.getStatisticsInfo()
+            mutableState.value = transmitResultToState(result)
         }
     }
 
     private fun transmitResultToState(
-        statisticResult: Result<List<StatisticsCategory>>,
-        weightResult: Result<List<WeightTrack>>,
+        result: Result<List<StatisticsCategory>>
     ): StatisticsContract.State {
         return when {
-            statisticResult is Result.Success && weightResult is Result.Success -> {
-                val resultSorted = statisticResult.value.sortedByDescending { it.percent }
+            result is Result.Success -> {
+                val resultSorted = result.value.sortedByDescending { it.percent }
                 val percents = resultSorted.map(StatisticsCategory::toPercentUi)
                 val categories = resultSorted.map(StatisticsCategory::toUi)
 
-                val chartData = weightResult.value.sortedBy { it.date }
-                    .map(WeightTrack::toUi)
-
                 if (percents.isNotEmpty() && categories.isNotEmpty()) {
                     StatisticsContract.State.Data(
-                        weightTrackChart = chartData,
                         statisticPercents = percents,
-                        statisticCategories = categories,
+                        statisticCategories = categories
                     )
                 } else {
                     StatisticsContract.State.NoElements

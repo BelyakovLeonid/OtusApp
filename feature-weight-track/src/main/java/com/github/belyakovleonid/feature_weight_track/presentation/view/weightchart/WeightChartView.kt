@@ -1,4 +1,4 @@
-package com.github.belyakovleonid.feature_statistics.presentation.view.weightchart
+package com.github.belyakovleonid.feature_weight_track.presentation.view.weightchart
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,8 +11,8 @@ import androidx.core.content.res.use
 import com.github.belyakovleonid.core.presentation.dpToPx
 import com.github.belyakovleonid.core.presentation.getWeightString
 import com.github.belyakovleonid.core.presentation.measureTextHeight
-import com.github.belyakovleonid.feature_statistics.R
-import com.github.belyakovleonid.feature_statistics.presentation.model.WeightTrackUiModel
+import com.github.belyakovleonid.feature_weight_track.R
+import com.github.belyakovleonid.feature_weight_track.presentation.model.WeightTrackUiModel
 import kotlin.math.pow
 import kotlin.math.sqrt
 

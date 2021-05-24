@@ -1,4 +1,4 @@
-package com.github.belyakovleonid.feature_statistics.domain.model
+package com.github.belyakovleonid.feature_weight_track.domain.model
 
 import kotlinx.datetime.LocalDate
 

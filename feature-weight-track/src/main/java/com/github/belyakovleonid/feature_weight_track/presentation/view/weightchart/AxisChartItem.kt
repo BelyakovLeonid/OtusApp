@@ -1,4 +1,4 @@
-package com.github.belyakovleonid.feature_statistics.presentation.view.weightchart
+package com.github.belyakovleonid.feature_weight_track.presentation.view.weightchart
 
 data class AxisChartItem(
     val text: String,

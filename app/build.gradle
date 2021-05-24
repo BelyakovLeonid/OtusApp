@@ -40,6 +40,7 @@ dependencies {
     implementation project(":feature-recipe-detail")
     implementation project(":feature-statistics")
     implementation project(":module-injector")
+    implementation project(":feature-weight-track")
 
     //Dagger
     kapt 'com.google.dagger:dagger-compiler:2.33'

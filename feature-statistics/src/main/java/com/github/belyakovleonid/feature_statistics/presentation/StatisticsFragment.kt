@@ -32,15 +32,11 @@ class StatisticsFragment : BaseFragment<StatisticsContract.State>(R.layout.f_sta
 
     override fun setupView() = with(binding) {
         productList.adapter = adapter
-        chartView.onItemSelectListener = {
-            viewModel.submitEvent(StatisticsContract.Event.ChartItemClicked(it))
-        }
     }
 
     override fun renderState(state: StatisticsContract.State) = with(binding) {
         when (state) {
             is StatisticsContract.State.Data -> {
-                chartView.setData(state.weightTrackChart)
                 percentDiagramView.setData(state.statisticPercents)
                 percentView.setData(state.statisticPercents)
                 adapter.submitList(state.statisticCategories)
