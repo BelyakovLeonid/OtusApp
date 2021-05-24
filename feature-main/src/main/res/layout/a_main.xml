@@ -13,6 +13,8 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
+        app:itemTextColor="@color/tab_tint_color"
+        app:itemIconTint="@color/tab_tint_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/teal_200"
