@@ -1,5 +1,7 @@
 package com.github.belyakovleonid.core.starters
 
+import com.github.terrakok.cicerone.androidx.AppScreen
+
 interface WeightTrackStarter {
-    fun start()
+    fun getScreen(): AppScreen
 }

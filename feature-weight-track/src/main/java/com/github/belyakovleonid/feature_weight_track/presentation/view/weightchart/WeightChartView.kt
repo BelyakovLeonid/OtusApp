@@ -198,13 +198,12 @@ class WeightChartView @JvmOverloads constructor(
 
     private fun calculateChartOffset() {
         val doubleTextPadding = 2 * chartAxisTextPadding
+        val maxWeightText = getWeightString(dataSet.maxWeight)
 
         chartOffsetBottom = doubleTextPadding + radius + textPaint.textSize
         chartOffsetRight = radius + doubleTextPadding
-        chartOffsetTop = radius + doubleTextPadding
-        chartOffsetLeft = 2 * chartAxisTextPadding + radius + textPaint.measureText(
-            getWeightString(dataSet.maxWeight)
-        )
+        chartOffsetTop = radius + doubleTextPadding + textPaint.measureTextHeight(maxWeightText)
+        chartOffsetLeft = 2 * chartAxisTextPadding + radius + textPaint.measureText(maxWeightText)
     }
 
     private fun calculateScaleDivision() {

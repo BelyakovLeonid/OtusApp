@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main_tab_recipe_title">Recipes</string>
+    <string name="main_tab_statistics_title">Statistic</string>
+    <string name="main_tab_weight_title">Weight</string>
+</resources>

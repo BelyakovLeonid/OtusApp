@@ -2,9 +2,11 @@ package com.github.belyakovleonid.feature_main.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.belyakovleonid.core.presentation.getDependencies
 import com.github.belyakovleonid.core.presentation.viewModel
 import com.github.belyakovleonid.feature_main.R
+import com.github.belyakovleonid.feature_main.databinding.AMainBinding
 import com.github.belyakovleonid.feature_main.di.MainApiProvider
 import com.github.belyakovleonid.feature_main.di.MainComponentHolder
 import com.github.terrakok.cicerone.NavigatorHolder
@@ -22,6 +24,8 @@ class MainActivity : AppCompatActivity(R.layout.a_main) {
 
     private val viewModel by viewModel { injector.viewModel }
 
+    private val binding by viewBinding(AMainBinding::bind)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         injector = MainComponentHolder.getInstance(getDependencies())
@@ -29,6 +33,11 @@ class MainActivity : AppCompatActivity(R.layout.a_main) {
 
         if (savedInstanceState == null) {
             viewModel.submitEvent(MainContract.Event.OnScreenOpenEvent)
+        }
+
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
+            viewModel.submitEvent(MainContract.Event.OnTabSelectedEvent(it.order))
+            true
         }
     }
 

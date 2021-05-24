@@ -4,5 +4,5 @@ import com.github.belyakovleonid.core_network_api.model.Result
 import com.github.belyakovleonid.feature_weight_track.domain.model.WeightTrack
 
 interface WeightTrackRepository {
-    suspend fun getWeightTrackingInfo(): Result<List<WeightTrack>>
+    suspend fun getWeightTrackInfo(): Result<List<WeightTrack>>
 }

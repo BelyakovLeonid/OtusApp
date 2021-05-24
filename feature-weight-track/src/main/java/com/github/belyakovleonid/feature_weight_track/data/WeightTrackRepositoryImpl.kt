@@ -9,7 +9,7 @@ import javax.inject.Inject
 class WeightTrackRepositoryImpl @Inject constructor() : WeightTrackRepository {
 
     //todo it is a mock
-    override suspend fun getWeightTrackingInfo(): Result<List<WeightTrack>> {
+    override suspend fun getWeightTrackInfo(): Result<List<WeightTrack>> {
         return Result.Success(
             listOf(
                 WeightTrack(73f, LocalDate(2020, 10, 19)),

@@ -49,8 +49,8 @@ class StatisticsViewModel @Inject constructor(
     private fun transmitResultToState(
         result: Result<List<StatisticsCategory>>
     ): StatisticsContract.State {
-        return when {
-            result is Result.Success -> {
+        return when (result) {
+            is Result.Success -> {
                 val resultSorted = result.value.sortedByDescending { it.percent }
                 val percents = resultSorted.map(StatisticsCategory::toPercentUi)
                 val categories = resultSorted.map(StatisticsCategory::toUi)
