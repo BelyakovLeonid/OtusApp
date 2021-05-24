@@ -77,12 +77,15 @@ class WeightChartView @JvmOverloads constructor(
     private var chartOffsetLeft = 0f
     private var chartOffsetRight = 0f
 
-    private val rowHeight = context.dpToPx(DEFAULT_SKELETON_CELL_HEIGHT_DP)
+    private var rowHeight = 0f
     private var scaleDivision = 0f
     private var scaleValue = 0f
     private var rowCount = 0
     private var verticalAxisCount = 0
     private var columnWidth = 0f
+
+    private var weightAxisDelta = 0f
+    private var weightAxisOffset = 0f
 
     private val gestureDetector = GestureDetector(context, ChartGestureDetector())
 
@@ -191,7 +194,7 @@ class WeightChartView @JvmOverloads constructor(
 
     private fun recalculateView() {
         calculateChartOffset()
-        calculateScaleDivision()
+        calculateScale()
         calculateChartData()
         calculateAxisData()
     }
@@ -206,13 +209,31 @@ class WeightChartView @JvmOverloads constructor(
         chartOffsetLeft = 2 * chartAxisTextPadding + radius + textPaint.measureText(maxWeightText)
     }
 
-    private fun calculateScaleDivision() {
-        rowCount = ((height - chartOffsetBottom - chartOffsetTop) / rowHeight).toInt()
+    private fun calculateScale() {
+        val weightDelta = dataSet.maxWeight - dataSet.minWeight
+        val availableHeight = height - chartOffsetBottom - chartOffsetTop
+        scaleValue = availableHeight / weightDelta
+
+        scaleDivision = getScaleDivisionByWeightDelta(weightDelta)
+
+        val weightReminder = dataSet.minWeight.rem(scaleDivision)
+        weightAxisDelta = if (weightReminder == 0f) 0f else scaleDivision - weightReminder
+        weightAxisOffset = weightAxisDelta * scaleValue
+
+        rowCount = ((weightDelta - weightAxisDelta) / scaleDivision).toInt()
+        rowHeight = scaleDivision * scaleValue
         verticalAxisCount = rowCount + 1
+
         columnWidth = (width - chartOffsetLeft - chartOffsetRight) / (dataSet.lastIndex)
-        scaleDivision = (dataSet.maxWeight - dataSet.minWeight) / rowCount
-        scaleValue = rowHeight / scaleDivision
     }
+
+    private fun getScaleDivisionByWeightDelta(weightDelta: Float) = when {
+        weightDelta < 10 -> SCALE_DIVISION_SMALL
+        weightDelta < 30 -> SCALE_DIVISION_MEDIUM
+        weightDelta < 50 -> SCALE_DIVISION_LARGE
+        else -> SCALE_DIVISION_XLARGE
+    }
+
 
     private fun calculateChartData() {
         chartData = dataSet.rawData.mapIndexed { index, item ->
@@ -233,16 +254,16 @@ class WeightChartView @JvmOverloads constructor(
 
     private fun calculateAxisData() {
         verticalAxisData = List(rowCount + 1) { i ->
-            val text = getWeightString(i * scaleDivision + dataSet.minWeight)
+            val text = getWeightString(i * scaleDivision + weightAxisDelta + dataSet.minWeight)
             val textHeight = textPaint.measureTextHeight(text)
             AxisChartItem(
                 text = text,
                 textX = chartAxisTextPadding,
-                textY = height - chartOffsetBottom - i * rowHeight + textHeight / 2,
+                textY = height - chartOffsetBottom - weightAxisOffset - i * rowHeight + textHeight / 2,
                 startX = chartOffsetLeft,
-                startY = height - chartOffsetBottom - i * rowHeight,
+                startY = height - chartOffsetBottom - weightAxisOffset - i * rowHeight,
                 endX = width.toFloat() - chartOffsetRight,
-                endY = height - chartOffsetBottom - i * rowHeight
+                endY = height - chartOffsetBottom - weightAxisOffset - i * rowHeight
             )
         }
 
@@ -278,8 +299,12 @@ class WeightChartView @JvmOverloads constructor(
         private const val DEFAULT_SKELETON_STROKE_WIDTH_DP = 1
         private const val DEFAULT_SKELETON_STROKE_ON_DP = 3F
         private const val DEFAULT_SKELETON_STROKE_OFF_DP = 4F
-        private const val DEFAULT_SKELETON_CELL_HEIGHT_DP = 70
         private const val DEFAULT_TEXT_SP = 12
         private const val DEFAULT_RADIUS_DP = 6
+
+        private const val SCALE_DIVISION_SMALL = 1f
+        private const val SCALE_DIVISION_MEDIUM = 5f
+        private const val SCALE_DIVISION_LARGE = 10f
+        private const val SCALE_DIVISION_XLARGE = 2f
     }
 }

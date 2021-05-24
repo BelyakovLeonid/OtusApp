@@ -12,11 +12,11 @@ class WeightTrackRepositoryImpl @Inject constructor() : WeightTrackRepository {
     override suspend fun getWeightTrackInfo(): Result<List<WeightTrack>> {
         return Result.Success(
             listOf(
-                WeightTrack(73f, LocalDate(2020, 10, 19)),
+                WeightTrack(69f, LocalDate(2020, 10, 19)),
                 WeightTrack(85f, LocalDate(2020, 10, 20)),
-                WeightTrack(110f, LocalDate(2020, 11, 21)),
-                WeightTrack(90f, LocalDate(2020, 12, 22)),
-                WeightTrack(100f, LocalDate(2020, 12, 23))
+                WeightTrack(67f, LocalDate(2020, 11, 21)),
+                WeightTrack(64f, LocalDate(2020, 12, 22)),
+                WeightTrack(70f, LocalDate(2020, 12, 23))
             )
         )
     }
