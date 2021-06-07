@@ -22,8 +22,8 @@ class RecipeListViewModel @Inject constructor(
 
     private fun loadMoreRecipes() {
         viewModelScope.launch {
-            val result = recipesInteractor.loadMoreRecipes()
-            mutableState.value = transmitResultToState(result)
+//            val result = recipesInteractor.loadMoreRecipes()
+//            mutableState.value = transmitResultToState(result)
         }
     }
 

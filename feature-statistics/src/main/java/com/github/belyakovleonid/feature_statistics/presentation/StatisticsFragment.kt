@@ -37,8 +37,8 @@ class StatisticsFragment : BaseFragment<StatisticsContract.State>(R.layout.f_sta
     override fun renderState(state: StatisticsContract.State) = with(binding) {
         when (state) {
             is StatisticsContract.State.Data -> {
-                percentDiagramView.setData(state.statisticPercents)
-                percentView.setData(state.statisticPercents)
+                percentDiagramView.setData(state.statisticPercents, true)
+                percentView.setData(state.statisticPercents, true)
                 adapter.submitList(state.statisticCategories)
             }
         }

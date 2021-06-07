@@ -1,5 +1,6 @@
 package com.github.belyakovleonid.feature_statistics.presentation.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -13,6 +14,10 @@ import com.github.belyakovleonid.feature_statistics.presentation.model.Statistic
 class StatisticsCategoryAdapter(
     private val onCategoryClick: (StatisticsItemUiModel.Category) -> Unit
 ) : ListAdapter<StatisticsItemUiModel, RecyclerView.ViewHolder>(RecipeDiffCallback()) {
+
+    init {
+        setHasStableIds(true)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -29,7 +34,30 @@ class StatisticsCategoryAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is CategoryViewHolder -> {
-                holder.bind(getItem(position) as StatisticsItemUiModel.Category, onCategoryClick)
+                holder.bind(
+                    getItem(position) as StatisticsItemUiModel.Category,
+                    onCategoryClick,
+
+                    )
+            }
+            is SubcategoryViewHolder -> {
+                holder.bind(getItem(position) as StatisticsItemUiModel.Subcategory)
+            }
+        }
+    }
+
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        when (holder) {
+            is CategoryViewHolder -> {
+                holder.bind(
+                    getItem(position) as StatisticsItemUiModel.Category,
+                    onCategoryClick,
+                    payloads.firstOrNull() as? Boolean
+                )
             }
             is SubcategoryViewHolder -> {
                 holder.bind(getItem(position) as StatisticsItemUiModel.Subcategory)
@@ -44,6 +72,10 @@ class StatisticsCategoryAdapter(
         }
     }
 
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id
+    }
+
     companion object {
         const val CATEGORY_VIEW_TYPE = 1
         const val SUBCATEGORY_VIEW_TYPE = 2
@@ -56,12 +88,18 @@ class CategoryViewHolder(
 
     fun bind(
         item: StatisticsItemUiModel.Category,
-        onItemClick: (StatisticsItemUiModel.Category) -> Unit
+        onItemClick: (StatisticsItemUiModel.Category) -> Unit,
+        payloads: Boolean? = null
     ) = with(binding) {
-        itemImage.load(item.iconUrl)
-        itemText.text = item.name
-        itemPercent.text = item.percentText
-        itemCollapseIcon.rotation = if (item.expanded) 0F else 180F
+        if (payloads != null) {
+            itemCollapseIcon.rotation = if (payloads) 180F else 0F
+        } else {
+            Log.d("MyTag", "load")
+            itemImage.load(item.iconUrl)
+            itemText.text = item.name
+            itemPercent.text = item.percentText
+            itemCollapseIcon.rotation = if (item.expanded) 180F else 0F
+        }
         root.setOnClickListener { onItemClick.invoke(item) }
     }
 }
@@ -81,7 +119,7 @@ class RecipeDiffCallback : DiffUtil.ItemCallback<StatisticsItemUiModel>() {
         oldItem: StatisticsItemUiModel,
         newItem: StatisticsItemUiModel
     ): Boolean {
-        return oldItem.name == newItem.name
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
@@ -89,5 +127,20 @@ class RecipeDiffCallback : DiffUtil.ItemCallback<StatisticsItemUiModel>() {
         newItem: StatisticsItemUiModel
     ): Boolean {
         return oldItem == newItem
+    }
+
+    override fun getChangePayload(
+        oldItem: StatisticsItemUiModel,
+        newItem: StatisticsItemUiModel
+    ): Any? {
+        return if (oldItem is StatisticsItemUiModel.Category &&
+            newItem is StatisticsItemUiModel.Category &&
+            oldItem.id == newItem.id &&
+            oldItem != newItem
+        ) {
+            newItem.expanded
+        } else {
+            super.getChangePayload(oldItem, newItem)
+        }
     }
 }

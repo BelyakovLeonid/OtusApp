@@ -24,7 +24,7 @@ class StatisticsViewModel @Inject constructor(
             is StatisticsContract.Event.CategoryClicked -> {
                 val currentValue = mutableState.value as? StatisticsContract.State.Data ?: return
                 val newCategories = currentValue.statisticCategories.toMutableList()
-                val index = newCategories.indexOf(event.item)
+                val index = newCategories.indexOfFirst { it.id == event.item.id }
                 if (event.item.expanded) {
                     newCategories[index] = event.item.copy(expanded = false)
                     newCategories.removeAll(event.item.subcategories)
