@@ -1,6 +1,5 @@
 package com.github.belyakovleonid.feature_statistics.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -94,7 +93,6 @@ class CategoryViewHolder(
         if (payloads != null) {
             itemCollapseIcon.rotation = if (payloads) 180F else 0F
         } else {
-            Log.d("MyTag", "load")
             itemImage.load(item.iconUrl)
             itemText.text = item.name
             itemPercent.text = item.percentText

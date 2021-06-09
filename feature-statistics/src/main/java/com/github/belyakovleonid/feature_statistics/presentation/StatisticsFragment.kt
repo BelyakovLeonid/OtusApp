@@ -39,7 +39,7 @@ class StatisticsFragment : BaseFragment<StatisticsContract.State>(R.layout.f_sta
             is StatisticsContract.State.Data -> {
                 percentDiagramView.setData(state.statisticPercents, true)
                 percentView.setData(state.statisticPercents, true)
-                adapter.submitList(state.statisticCategories)
+                adapter.submitList(state.statisticCategories.getItems())
             }
         }
     }

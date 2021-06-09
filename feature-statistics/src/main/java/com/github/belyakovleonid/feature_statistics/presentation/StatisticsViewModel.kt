@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.belyakovleonid.core.presentation.IEvent
 import com.github.belyakovleonid.core.presentation.base.BaseViewModel
 import com.github.belyakovleonid.core_network_api.model.Result
+import com.github.belyakovleonid.core_ui.expandablelist.ExpandableList
 import com.github.belyakovleonid.feature_statistics.domain.StatisticsInteractor
 import com.github.belyakovleonid.feature_statistics.domain.model.StatisticsCategory
 import com.github.belyakovleonid.feature_statistics.presentation.model.toPercentUi
@@ -23,15 +24,8 @@ class StatisticsViewModel @Inject constructor(
         when (event) {
             is StatisticsContract.Event.CategoryClicked -> {
                 val currentValue = mutableState.value as? StatisticsContract.State.Data ?: return
-                val newCategories = currentValue.statisticCategories.toMutableList()
-                val index = newCategories.indexOfFirst { it.id == event.item.id }
-                if (event.item.expanded) {
-                    newCategories[index] = event.item.copy(expanded = false)
-                    newCategories.removeAll(event.item.subcategories)
-                } else {
-                    newCategories[index] = event.item.copy(expanded = true)
-                    newCategories.addAll(index + 1, event.item.subcategories)
-                }
+                val newCategories =
+                    currentValue.statisticCategories.getChangedStateOfItem(event.item)
                 mutableState.value = currentValue.copy(
                     statisticCategories = newCategories
                 )
@@ -58,7 +52,7 @@ class StatisticsViewModel @Inject constructor(
                 if (percents.isNotEmpty() && categories.isNotEmpty()) {
                     StatisticsContract.State.Data(
                         statisticPercents = percents,
-                        statisticCategories = categories
+                        statisticCategories = ExpandableList(categories)
                     )
                 } else {
                     StatisticsContract.State.NoElements
