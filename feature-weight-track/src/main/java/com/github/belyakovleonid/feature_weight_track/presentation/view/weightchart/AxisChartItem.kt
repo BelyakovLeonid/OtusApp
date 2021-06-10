@@ -1,11 +1,10 @@
 package com.github.belyakovleonid.feature_weight_track.presentation.view.weightchart
 
+import android.graphics.PointF
+import com.github.belyakovleonid.core_ui.expandablelist.PositionedText
+
 data class AxisChartItem(
-    val text: String,
-    val textX: Float,
-    val textY: Float,
-    val startX: Float = 0f,
-    val startY: Float = 0f,
-    val endX: Float = 0f,
-    val endY: Float = 0f
+    val text: PositionedText,
+    val start: PointF = PointF(),
+    val end: PointF = PointF()
 )

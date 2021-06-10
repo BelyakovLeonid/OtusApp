@@ -8,15 +8,16 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.LinearInterpolator
 import androidx.core.animation.doOnEnd
 import androidx.core.content.res.use
 import com.github.belyakovleonid.core.presentation.dpToPx
 import com.github.belyakovleonid.core.presentation.getWeightString
 import com.github.belyakovleonid.core.presentation.measureTextHeight
+import com.github.belyakovleonid.core_ui.expandablelist.PositionedText
+import com.github.belyakovleonid.core_ui.expandablelist.utils.*
 import com.github.belyakovleonid.feature_weight_track.R
 import com.github.belyakovleonid.feature_weight_track.presentation.model.WeightTrackUiModel
-import kotlin.math.pow
-import kotlin.math.sqrt
 
 class WeightChartView @JvmOverloads constructor(
     context: Context,
@@ -29,10 +30,14 @@ class WeightChartView @JvmOverloads constructor(
     // точки на графике
     private var dataSet: WeightDataSet = WeightDataSet.EMPTY_SET
     private var chartData: List<WeightChartItem> = emptyList()
+    private var chartSections: List<ChartSection> = emptyList()
 
     //оси графика
     private var horizontalAxisData: List<AxisChartItem> = emptyList()
     private var verticalAxisData: List<AxisChartItem> = emptyList()
+
+    private var totalLength = 0f
+    private var animatedLength = 0f
 
     private val clipOutPath = Path()
     private val pointsPath = Path()
@@ -88,16 +93,16 @@ class WeightChartView @JvmOverloads constructor(
 
     private val gestureDetector = GestureDetector(context, ChartGestureDetector())
 
-    private var progress = 1f
-
     private val animator by lazy(LazyThreadSafetyMode.NONE) {
         ValueAnimator.ofFloat(0f, 1f).apply {
             duration = ANIMATION_DURATION
+            interpolator = LinearInterpolator()
             addUpdateListener {
-                progress = animatedValue as Float
+                val progress = animatedValue as Float
+                animatedLength = totalLength * progress
                 invalidate()
             }
-            doOnEnd { progress = 1f }
+            doOnEnd { animatedLength = totalLength }
         }
     }
 
@@ -165,15 +170,15 @@ class WeightChartView @JvmOverloads constructor(
 
         // отрисовка подписей по вертикальной оси + отрисовка горизонтальных пунктирных линий
         verticalAxisData.forEach {
-            canvas.drawText(it.text, it.textX, it.textY, textPaint)
-            axisPath.moveTo(it.startX, it.startY)
-            axisPath.lineTo(it.endX, it.endY)
+            canvas.drawPositionedText(it.text, textPaint)
+            axisPath.moveTo(it.start)
+            axisPath.lineTo(it.end)
         }
         canvas.drawPath(axisPath, skeletonPaint)
 
         //отрисовка подписей по горизонтальной оси
         horizontalAxisData.forEach {
-            canvas.drawText(it.text, it.textX, it.textY, textPaint)
+            canvas.drawPositionedText(it.text, textPaint)
         }
     }
 
@@ -181,27 +186,29 @@ class WeightChartView @JvmOverloads constructor(
         if (chartData.isEmpty()) return
 
         pointsPath.reset()
-        pointsPath.moveTo(chartData.first().x, chartData.first().y)
+        pointsPath.moveTo(chartData.first().coordinates)
+        var occupiedLength = 0f
         chartData.forEachIndexed { i, item ->
             clipOutPath.reset()
-            val progressWidth = (width - offsets.left - offsets.right) * progress + offsets.left
-            if (item.x > progressWidth) {
+            val section = chartSections[i]
+
+            if (occupiedLength + section.length > animatedLength) {
                 // сюда попадаем только в случае, если вью анимируется
-                val previous = chartData.getOrNull(i - 1)
-                val x0 = previous?.x ?: item.x
-                val y0 = previous?.y ?: item.y
-                val progressX = (progressWidth - x0) / (item.x - x0)
+                val partProgress = (animatedLength - occupiedLength) / section.length
+
+
                 pointsPath.lineTo(
-                    progressWidth,
-                    (item.y - y0) * progressX + y0
+                    section.start.x + partProgress * (item.coordinates.x - section.start.x),
+                    section.start.y + partProgress * (item.coordinates.y - section.start.y)
                 )
                 canvas.drawPath(pointsPath, chartPaint)
                 return
             } else {
-                clipOutPath.addCircle(item.x, item.y, radius * 2 / 3, Path.Direction.CW)
+                clipOutPath.addCircle(item.coordinates, radius * 2 / 3, Path.Direction.CW)
                 canvas.clipOutPath(clipOutPath)
-                canvas.drawCircle(item.x, item.y, radius, pointsPaint)
-                pointsPath.lineTo(item.x, item.y)
+                canvas.drawCircle(item.coordinates, radius, pointsPaint)
+                pointsPath.lineTo(item.coordinates)
+                occupiedLength += section.length
             }
         }
 
@@ -212,15 +219,15 @@ class WeightChartView @JvmOverloads constructor(
         canvas.restore()
         chartData.forEach {
             if (it.isSelected) {
-                canvas.drawCircle(it.x, it.y, radius * 2, selectedPaint)
-                canvas.drawCircle(it.x, it.y, radius * 2, chartPaint)
+                canvas.drawCircle(it.coordinates, radius * 2, selectedPaint)
+                canvas.drawCircle(it.coordinates, radius * 2, chartPaint)
             }
         }
     }
 
     private fun drawItemsLabels(canvas: Canvas) {
         chartData.forEach {
-            canvas.drawText(it.labelText, it.labelX, it.labelY, labelTextPaint)
+            canvas.drawPositionedText(it.label, labelTextPaint)
         }
     }
 
@@ -277,11 +284,26 @@ class WeightChartView @JvmOverloads constructor(
             WeightChartItem(
                 rawItem = item,
                 isSelected = item.isSelected,
-                x = x,
-                y = y,
-                labelText = item.weightText,
-                labelX = x - textPaint.measureText(item.weightText) / 2,
-                labelY = y - radius - chartAxisTextPadding
+                coordinates = PointF(x, y),
+                label = PositionedText(
+                    text = item.weightText,
+                    coordinates = PointF(
+                        x - textPaint.measureText(item.weightText) / 2,
+                        y - radius - chartAxisTextPadding
+                    )
+                ),
+            )
+        }
+
+        totalLength = 0f
+        chartSections = chartData.mapIndexed { index, item ->
+            val previous = chartData.getOrNull(index - 1) ?: item
+            val sectionLength = item.coordinates.distanceTo(previous.coordinates)
+            totalLength += sectionLength
+            ChartSection(
+                start = previous.coordinates,
+                end = item.coordinates,
+                length = sectionLength
             )
         }
     }
@@ -290,23 +312,27 @@ class WeightChartView @JvmOverloads constructor(
         verticalAxisData = List(rowCount + 1) { i ->
             val text = getWeightString(i * scaleDivision + weightAxisDelta + dataSet.minWeight)
             val textHeight = textPaint.measureTextHeight(text)
+            val occupiedHeight = height - offsets.bottom - weightAxisOffset - i * rowHeight
             AxisChartItem(
-                text = text,
-                textX = chartAxisTextPadding,
-                textY = height - offsets.bottom - weightAxisOffset - i * rowHeight + textHeight / 2,
-                startX = offsets.left,
-                startY = height - offsets.bottom - weightAxisOffset - i * rowHeight,
-                endX = width.toFloat() - offsets.right,
-                endY = height - offsets.bottom - weightAxisOffset - i * rowHeight
+                start = PointF(offsets.left, occupiedHeight),
+                end = PointF(width.toFloat() - offsets.right, occupiedHeight),
+                text = PositionedText(
+                    text = text,
+                    coordinates = PointF(chartAxisTextPadding, occupiedHeight + textHeight / 2)
+                )
             )
         }
 
         horizontalAxisData = chartData.map {
             val text = it.rawItem.dateText
             AxisChartItem(
-                text = text,
-                textX = it.labelX - textPaint.measureText(text) / 2,
-                textY = height - chartAxisTextPadding,
+                text = PositionedText(
+                    text = text,
+                    coordinates = PointF(
+                        it.label.coordinates.x - textPaint.measureText(text) / 2,
+                        height - chartAxisTextPadding
+                    )
+                ),
             )
         }
     }
@@ -314,22 +340,22 @@ class WeightChartView @JvmOverloads constructor(
     inner class ChartGestureDetector : GestureDetector.SimpleOnGestureListener() {
         override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
             val nearestItem = chartData.minByOrNull {
-                getDistanceToTap(it.x, it.y, e)
+                getDistanceToTap(it, e)
             } ?: return false
 
-            if (getDistanceToTap(nearestItem.x, nearestItem.y, e) <= tapRadius) {
+            if (getDistanceToTap(nearestItem, e) <= tapRadius) {
                 onItemSelectListener?.invoke(nearestItem.rawItem)
             }
             return super.onSingleTapConfirmed(e)
         }
 
-        private fun getDistanceToTap(x: Float, y: Float, e: MotionEvent): Float {
-            return sqrt((x - e.x).pow(2) + (y - e.y).pow(2))
+        private fun getDistanceToTap(item: WeightChartItem, e: MotionEvent): Float {
+            return item.coordinates.distanceTo(e.x, e.y)
         }
     }
 
     companion object {
-        private const val ANIMATION_DURATION = 1300L
+        private const val ANIMATION_DURATION = 2000L
 
         private const val DEFAULT_AXIS_PADDING_DP = 8
         private const val DEFAULT_SKELETON_STROKE_WIDTH_DP = 1
