@@ -1,5 +1,6 @@
 package com.github.belyakovleonid.feature_weight_track.presentation.view.weightchart
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
@@ -7,6 +8,7 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.animation.doOnEnd
 import androidx.core.content.res.use
 import com.github.belyakovleonid.core.presentation.dpToPx
 import com.github.belyakovleonid.core.presentation.getWeightString
@@ -89,6 +91,19 @@ class WeightChartView @JvmOverloads constructor(
 
     private val gestureDetector = GestureDetector(context, ChartGestureDetector())
 
+    private var progress = 1f
+
+    private val animator by lazy(LazyThreadSafetyMode.NONE) {
+        ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = ANIMATION_DURATION
+            addUpdateListener {
+                progress = animatedValue as Float
+                invalidate()
+            }
+            doOnEnd { progress = 1f }
+        }
+    }
+
     init {
         context.obtainStyledAttributes(attributeSet, R.styleable.WeightChartView).use { a ->
             val chartColor = a.getColor(R.styleable.WeightChartView_wcv_chart_color, Color.BLACK)
@@ -132,16 +147,21 @@ class WeightChartView @JvmOverloads constructor(
         return true
     }
 
-    fun setData(data: List<WeightTrackUiModel>) {
+    fun setData(data: List<WeightTrackUiModel>, animate: Boolean) {
         dataSet = WeightDataSet(
             rawData = data,
             maxWeight = data.maxByOrNull { it.weight }?.weight ?: 0f,
             minWeight = data.minByOrNull { it.weight }?.weight ?: 0f
         )
         recalculateView()
-        invalidate()
-    }
 
+        if (animate) {
+            animator?.cancel()
+            animator.start()
+        } else {
+            invalidate()
+        }
+    }
 
     private fun drawChartSkelet(canvas: Canvas) {
         axisPath.reset()
@@ -165,12 +185,28 @@ class WeightChartView @JvmOverloads constructor(
 
         pointsPath.reset()
         pointsPath.moveTo(chartData.first().x, chartData.first().y)
-        chartData.forEach {
+        chartData.forEachIndexed { i, item ->
             clipOutPath.reset()
-            clipOutPath.addCircle(it.x, it.y, radius * 2 / 3, Path.Direction.CW)
-            canvas.clipOutPath(clipOutPath)
-            canvas.drawCircle(it.x, it.y, radius, pointsPaint)
-            pointsPath.lineTo(it.x, it.y)
+            val progressWidth =
+                (width - chartOffsetLeft - chartOffsetRight) * progress + chartOffsetLeft
+            if (item.x > progressWidth) {
+                // сюда попадаем только в случае, если вью анимируется
+                val previous = chartData.getOrNull(i - 1)
+                val x0 = previous?.x ?: item.x
+                val y0 = previous?.y ?: item.y
+                val progressX = (progressWidth - x0) / (item.x - x0)
+                pointsPath.lineTo(
+                    progressWidth,
+                    (item.y - y0) * progressX + y0
+                )
+                canvas.drawPath(pointsPath, chartPaint)
+                return
+            } else {
+                clipOutPath.addCircle(item.x, item.y, radius * 2 / 3, Path.Direction.CW)
+                canvas.clipOutPath(clipOutPath)
+                canvas.drawCircle(item.x, item.y, radius, pointsPaint)
+                pointsPath.lineTo(item.x, item.y)
+            }
         }
 
         canvas.drawPath(pointsPath, chartPaint)
@@ -295,6 +331,8 @@ class WeightChartView @JvmOverloads constructor(
     }
 
     companion object {
+        private const val ANIMATION_DURATION = 1300L
+
         private const val DEFAULT_AXIS_PADDING_DP = 8
         private const val DEFAULT_SKELETON_STROKE_WIDTH_DP = 1
         private const val DEFAULT_SKELETON_STROKE_ON_DP = 3F

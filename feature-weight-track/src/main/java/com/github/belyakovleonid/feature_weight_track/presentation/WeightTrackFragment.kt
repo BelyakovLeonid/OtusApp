@@ -32,7 +32,7 @@ class WeightTrackFragment : BaseFragment<WeightTrackContract.State>(R.layout.f_w
     override fun renderState(state: WeightTrackContract.State) = with(binding) {
         when (state) {
             is WeightTrackContract.State.Data -> {
-                chartView.setData(state.chartData)
+                chartView.setData(state.chartData, true)
             }
         }
     }
