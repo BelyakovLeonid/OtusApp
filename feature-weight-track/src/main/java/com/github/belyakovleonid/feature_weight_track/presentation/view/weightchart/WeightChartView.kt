@@ -34,7 +34,7 @@ class WeightChartView @JvmOverloads constructor(
 
     private val clipOutPath = Path()
     private val pointsPath = Path()
-    private val skeletonPath = Path()
+    private val axisPath = Path()
 
     private val radius = context.dpToPx(DEFAULT_RADIUS_DP)
     private val tapRadius = radius * 4
@@ -144,15 +144,15 @@ class WeightChartView @JvmOverloads constructor(
 
 
     private fun drawChartSkelet(canvas: Canvas) {
-        skeletonPath.reset()
+        axisPath.reset()
 
         // отрисовка подписей по вертикальной оси + отрисовка горизонтальных пунктирных линий
         verticalAxisData.forEach {
             canvas.drawText(it.text, it.textX, it.textY, textPaint)
-            skeletonPath.moveTo(it.startX, it.startY)
-            skeletonPath.lineTo(it.endX, it.endY)
+            axisPath.moveTo(it.startX, it.startY)
+            axisPath.lineTo(it.endX, it.endY)
         }
-        canvas.drawPath(skeletonPath, skeletonPaint)
+        canvas.drawPath(axisPath, skeletonPaint)
 
         //отрисовка подписей по горизонтальной оси
         horizontalAxisData.forEach {
@@ -178,12 +178,12 @@ class WeightChartView @JvmOverloads constructor(
 
     private fun drawSelectedItems(canvas: Canvas) {
         canvas.restore()
-        chartData
-            .filter { it.isSelected }
-            .forEach {
+        chartData.forEach {
+            if (it.isSelected) {
                 canvas.drawCircle(it.x, it.y, radius * 2, selectedPaint)
                 canvas.drawCircle(it.x, it.y, radius * 2, chartPaint)
             }
+        }
     }
 
     private fun drawItemsLabels(canvas: Canvas) {
