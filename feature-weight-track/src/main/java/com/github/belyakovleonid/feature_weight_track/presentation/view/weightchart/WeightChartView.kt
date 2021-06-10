@@ -9,7 +9,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
-import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnCancel
 import androidx.core.content.res.use
 import com.github.belyakovleonid.core.presentation.dpToPx
 import com.github.belyakovleonid.core.presentation.getWeightString
@@ -97,12 +97,13 @@ class WeightChartView @JvmOverloads constructor(
         ValueAnimator.ofFloat(0f, 1f).apply {
             duration = ANIMATION_DURATION
             interpolator = LinearInterpolator()
+
             addUpdateListener {
                 val progress = animatedValue as Float
                 animatedLength = totalLength * progress
                 invalidate()
             }
-            doOnEnd { animatedLength = totalLength }
+            doOnCancel { animatedLength = totalLength }
         }
     }
 
@@ -187,32 +188,40 @@ class WeightChartView @JvmOverloads constructor(
 
         pointsPath.reset()
         pointsPath.moveTo(chartData.first().coordinates)
+
         var occupiedLength = 0f
         chartData.forEachIndexed { i, item ->
-            clipOutPath.reset()
             val section = chartSections[i]
 
             if (occupiedLength + section.length > animatedLength) {
-                // сюда попадаем только в случае, если вью анимируется
-                val partProgress = (animatedLength - occupiedLength) / section.length
-
-
-                pointsPath.lineTo(
-                    section.start.x + partProgress * (item.coordinates.x - section.start.x),
-                    section.start.y + partProgress * (item.coordinates.y - section.start.y)
-                )
-                canvas.drawPath(pointsPath, chartPaint)
+                drawPartChartSection(canvas, section, occupiedLength)
                 return
             } else {
-                clipOutPath.addCircle(item.coordinates, radius * 2 / 3, Path.Direction.CW)
-                canvas.clipOutPath(clipOutPath)
-                canvas.drawCircle(item.coordinates, radius, pointsPaint)
-                pointsPath.lineTo(item.coordinates)
+                drawFullChartSection(canvas, item)
                 occupiedLength += section.length
             }
         }
 
         canvas.drawPath(pointsPath, chartPaint)
+    }
+
+    private fun drawPartChartSection(canvas: Canvas, section: ChartSection, occupiedLength: Float) {
+        // сюда попадаем только в случае, если вью анимируется
+        val partProgress = (animatedLength - occupiedLength) / section.length
+
+        pointsPath.lineTo(
+            section.start.x + partProgress * (section.end.x - section.start.x),
+            section.start.y + partProgress * (section.end.y - section.start.y)
+        )
+        canvas.drawPath(pointsPath, chartPaint)
+    }
+
+    private fun drawFullChartSection(canvas: Canvas, item: WeightChartItem) {
+        clipOutPath.reset()
+        clipOutPath.addCircle(item.coordinates, radius * 2 / 3, Path.Direction.CW)
+        canvas.clipOutPath(clipOutPath)
+        canvas.drawCircle(item.coordinates, radius, pointsPaint)
+        pointsPath.lineTo(item.coordinates)
     }
 
     private fun drawSelectedItems(canvas: Canvas) {
