@@ -74,10 +74,7 @@ class WeightChartView @JvmOverloads constructor(
     }
 
     private var chartAxisTextPadding = context.dpToPx(DEFAULT_AXIS_PADDING_DP)
-    private var chartOffsetTop = 0f
-    private var chartOffsetBottom = 0f
-    private var chartOffsetLeft = 0f
-    private var chartOffsetRight = 0f
+    private val offsets = RectF()
 
     private var rowHeight = 0f
     private var scaleDivision = 0f
@@ -187,8 +184,7 @@ class WeightChartView @JvmOverloads constructor(
         pointsPath.moveTo(chartData.first().x, chartData.first().y)
         chartData.forEachIndexed { i, item ->
             clipOutPath.reset()
-            val progressWidth =
-                (width - chartOffsetLeft - chartOffsetRight) * progress + chartOffsetLeft
+            val progressWidth = (width - offsets.left - offsets.right) * progress + offsets.left
             if (item.x > progressWidth) {
                 // сюда попадаем только в случае, если вью анимируется
                 val previous = chartData.getOrNull(i - 1)
@@ -239,15 +235,17 @@ class WeightChartView @JvmOverloads constructor(
         val doubleTextPadding = 2 * chartAxisTextPadding
         val maxWeightText = getWeightString(dataSet.maxWeight)
 
-        chartOffsetBottom = doubleTextPadding + radius + textPaint.textSize
-        chartOffsetRight = radius + doubleTextPadding
-        chartOffsetTop = radius + doubleTextPadding + textPaint.measureTextHeight(maxWeightText)
-        chartOffsetLeft = 2 * chartAxisTextPadding + radius + textPaint.measureText(maxWeightText)
+        offsets.set(
+            2 * chartAxisTextPadding + radius + textPaint.measureText(maxWeightText),
+            radius + doubleTextPadding + textPaint.measureTextHeight(maxWeightText),
+            radius + doubleTextPadding,
+            doubleTextPadding + radius + textPaint.textSize,
+        )
     }
 
     private fun calculateScale() {
         val weightDelta = dataSet.maxWeight - dataSet.minWeight
-        val availableHeight = height - chartOffsetBottom - chartOffsetTop
+        val availableHeight = height - offsets.bottom - offsets.top
         scaleValue = availableHeight / weightDelta
 
         scaleDivision = getScaleDivisionByWeightDelta(weightDelta)
@@ -260,7 +258,7 @@ class WeightChartView @JvmOverloads constructor(
         rowHeight = scaleDivision * scaleValue
         verticalAxisCount = rowCount + 1
 
-        columnWidth = (width - chartOffsetLeft - chartOffsetRight) / (dataSet.lastIndex)
+        columnWidth = (width - offsets.left - offsets.right) / (dataSet.lastIndex)
     }
 
     private fun getScaleDivisionByWeightDelta(weightDelta: Float) = when {
@@ -273,8 +271,8 @@ class WeightChartView @JvmOverloads constructor(
 
     private fun calculateChartData() {
         chartData = dataSet.rawData.mapIndexed { index, item ->
-            val x = chartOffsetLeft + index * columnWidth
-            val y = height - chartOffsetBottom - (item.weight - dataSet.minWeight) * scaleValue
+            val x = offsets.left + index * columnWidth
+            val y = height - offsets.bottom - (item.weight - dataSet.minWeight) * scaleValue
 
             WeightChartItem(
                 rawItem = item,
@@ -295,11 +293,11 @@ class WeightChartView @JvmOverloads constructor(
             AxisChartItem(
                 text = text,
                 textX = chartAxisTextPadding,
-                textY = height - chartOffsetBottom - weightAxisOffset - i * rowHeight + textHeight / 2,
-                startX = chartOffsetLeft,
-                startY = height - chartOffsetBottom - weightAxisOffset - i * rowHeight,
-                endX = width.toFloat() - chartOffsetRight,
-                endY = height - chartOffsetBottom - weightAxisOffset - i * rowHeight
+                textY = height - offsets.bottom - weightAxisOffset - i * rowHeight + textHeight / 2,
+                startX = offsets.left,
+                startY = height - offsets.bottom - weightAxisOffset - i * rowHeight,
+                endX = width.toFloat() - offsets.right,
+                endY = height - offsets.bottom - weightAxisOffset - i * rowHeight
             )
         }
 
