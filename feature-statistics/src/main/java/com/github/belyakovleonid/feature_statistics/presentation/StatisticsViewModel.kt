@@ -22,15 +22,21 @@ class StatisticsViewModel @Inject constructor(
 
     override fun submitEvent(event: IEvent) {
         when (event) {
-            is StatisticsContract.Event.CategoryClicked -> {
-                val currentValue = mutableState.value ?: return
-                val newCategories = currentValue.categories.getChangedStateOfItem(event.item)
-                mutableState.value = currentValue.copy(
-                    categories = newCategories,
-                    isDataAnimated = false
-                )
-            }
+            is StatisticsContract.Event.ItemClicked -> selectItem(event.item.id)
+            is StatisticsContract.Event.CategoryClicked -> selectItem(event.item.id)
         }
+    }
+
+    private fun selectItem(itemId: Long) {
+        val currentValue = mutableState.value ?: return
+        val newCategories = currentValue.categories.getChangedStateOfItem(itemId)
+        mutableState.value = currentValue.copy(
+            categories = newCategories,
+            isDataAnimated = false
+        )
+        mutableSideEffect.offer(
+            StatisticsContract.SideEffect.AnimateItem(itemId)
+        )
     }
 
     private fun loadStatistics() {

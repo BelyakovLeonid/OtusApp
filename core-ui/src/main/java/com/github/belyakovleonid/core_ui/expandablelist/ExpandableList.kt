@@ -7,10 +7,12 @@ class ExpandableList<I : Item, E : ExpandableItem>(
 ) {
 
     @Suppress("UNCHECKED_CAST", "TYPE_INFERENCE_ONLY_INPUT_TYPES_WARNING")
-    fun getChangedStateOfItem(item: E): ExpandableList<I, E> {
+    fun getChangedStateOfItem(itemId: Any): ExpandableList<I, E> {
         val result = runCatching {
             val newList = internalList.toMutableList()
-            val index = newList.indexOfFirst { it.id == item.id }
+            val index = newList.indexOfFirst { it.id == itemId }
+            val item = newList[index] as? E ?: return this
+
             if (item.isExpanded()) {
                 newList[index] = item.changeExpanded() as I
                 newList.removeAll(item.subItems)
@@ -23,7 +25,7 @@ class ExpandableList<I : Item, E : ExpandableItem>(
             Log.e("com.github.belyakovleonid", "error in getChangedStateOfItem $throwable")
         }
 
-        return result.getOrDefault(ExpandableList())
+        return result.getOrDefault(this)
     }
 
     fun getItems(): List<I> = internalList

@@ -33,6 +33,8 @@ class StatisticsFragment :
 
     override fun setupView() = with(binding) {
         productList.adapter = adapter
+        percentView.onItemClickListener = viewModel::submitEvent
+        percentDiagramView.onItemClickListener = viewModel::submitEvent
     }
 
     override fun renderState(state: StatisticsContract.State) = with(binding) {
@@ -42,7 +44,15 @@ class StatisticsFragment :
     }
 
     override fun reactToSideEffect(effect: StatisticsContract.SideEffect) = with(binding) {
-        percentDiagramView.animateData()
-        percentView.animateData()
+        when (effect) {
+            is StatisticsContract.SideEffect.AnimateData -> {
+                percentDiagramView.animateData()
+                percentView.animateData()
+            }
+            is StatisticsContract.SideEffect.AnimateItem -> {
+                percentDiagramView.animateItem(effect.itemId)
+                percentView.animateItem(effect.itemId)
+            }
+        }
     }
 }

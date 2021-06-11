@@ -20,9 +20,16 @@ object StatisticsContract {
         data class CategoryClicked(
             val item: StatisticsItemUiModel.Category
         ) : Event()
+
+        data class ItemClicked(
+            val item: StatisticsPercentUiModel
+        ) : Event()
     }
 
     sealed class SideEffect : ISideEffect {
         object AnimateData : SideEffect()
+        data class AnimateItem(
+            val itemId: Long
+        ) : SideEffect()
     }
 }

@@ -1,16 +1,20 @@
 package com.github.belyakovleonid.feature_statistics.presentation.view
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.animation.doOnEnd
 import com.github.belyakovleonid.core.presentation.dpToPx
+import com.github.belyakovleonid.feature_statistics.presentation.StatisticsContract
 import com.github.belyakovleonid.feature_statistics.presentation.model.StatisticsPercentUiModel
 import kotlin.math.min
 
@@ -20,18 +24,22 @@ class StatisticsPercentView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attributeSet, defStyleAttr) {
 
+    var onItemClickListener: ((StatisticsContract.Event) -> Unit)? = null
+
     private var data: List<StatisticsPercentUiModel> = emptyList()
     private var internalData: List<PercentItem> = emptyList()
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
     }
-
     private var cornerRadius = 0f
     private val borderRect = RectF()
     private val borderPath = Path()
     private var animatedPath = Path()
+
     private val dividerWidth = context.dpToPx(DEFAULT_DIVIDER_DP)
+
+    private val gestureDetector = GestureDetector(context, PercentGestureDetector())
 
     private val animator by lazy(LazyThreadSafetyMode.NONE) {
         ValueAnimator.ofFloat(0f, 1f).apply {
@@ -92,6 +100,12 @@ class StatisticsPercentView @JvmOverloads constructor(
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        gestureDetector.onTouchEvent(event)
+        return true
+    }
+
     fun setData(data: List<StatisticsPercentUiModel>) {
         this.data = data
         recalculateView()
@@ -121,6 +135,25 @@ class StatisticsPercentView @JvmOverloads constructor(
     fun animateData() {
         animator?.cancel()
         animator?.start()
+    }
+
+    fun animateItem(itemId: Long) {
+
+    }
+
+    inner class PercentGestureDetector : GestureDetector.SimpleOnGestureListener() {
+        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+            val clickedItem = internalData.find { item ->
+                item.containsClick(e)
+            } ?: return false
+
+            onItemClickListener?.invoke(StatisticsContract.Event.ItemClicked(clickedItem.rawItem))
+            return super.onSingleTapConfirmed(e)
+        }
+
+        private fun PercentItem.containsClick(e: MotionEvent): Boolean {
+            return coordinates.contains(e.x, e.y)
+        }
     }
 
     companion object {
