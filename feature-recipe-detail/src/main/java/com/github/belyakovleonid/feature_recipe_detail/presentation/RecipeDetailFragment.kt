@@ -3,6 +3,7 @@ package com.github.belyakovleonid.feature_recipe_detail.presentation
 import android.content.Context
 import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.github.belyakovleonid.core.presentation.ISideEffect
 import com.github.belyakovleonid.core.presentation.base.BaseFragment
 import com.github.belyakovleonid.core.presentation.getDependencies
 import com.github.belyakovleonid.core.presentation.requireParams
@@ -13,7 +14,8 @@ import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailApiProvide
 import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailComponentHolder
 
 
-class RecipeDetailFragment : BaseFragment<RecipeDetailContract.State>(R.layout.f_recipe_detail) {
+class RecipeDetailFragment :
+    BaseFragment<RecipeDetailContract.State, ISideEffect>(R.layout.f_recipe_detail) {
 
     private lateinit var injector: RecipeDetailApiProvider
 

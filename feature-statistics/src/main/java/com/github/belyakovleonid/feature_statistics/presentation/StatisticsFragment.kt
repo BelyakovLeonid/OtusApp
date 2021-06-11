@@ -11,7 +11,8 @@ import com.github.belyakovleonid.feature_statistics.di.StatisticsApiProvider
 import com.github.belyakovleonid.feature_statistics.di.StatisticsComponentHolder
 import com.github.belyakovleonid.feature_statistics.presentation.adapter.StatisticsCategoryAdapter
 
-class StatisticsFragment : BaseFragment<StatisticsContract.State>(R.layout.f_statistics) {
+class StatisticsFragment :
+    BaseFragment<StatisticsContract.State, StatisticsContract.SideEffect>(R.layout.f_statistics) {
 
     private lateinit var injector: StatisticsApiProvider
 
@@ -35,12 +36,13 @@ class StatisticsFragment : BaseFragment<StatisticsContract.State>(R.layout.f_sta
     }
 
     override fun renderState(state: StatisticsContract.State) = with(binding) {
-        when (state) {
-            is StatisticsContract.State.Data -> {
-                percentDiagramView.setData(state.statisticPercents, true)
-                percentView.setData(state.statisticPercents, true)
-                adapter.submitList(state.statisticCategories.getItems())
-            }
-        }
+        percentDiagramView.setData(state.percents)
+        percentView.setData(state.percents)
+        adapter.submitList(state.categories.getItems())
+    }
+
+    override fun reactToSideEffect(effect: StatisticsContract.SideEffect) = with(binding) {
+        percentDiagramView.animateData()
+        percentView.animateData()
     }
 }

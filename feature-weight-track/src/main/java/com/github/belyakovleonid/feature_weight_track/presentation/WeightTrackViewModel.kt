@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class WeightTrackViewModel @Inject constructor(
     private val weightTrackInteractor: WeightTrackInteractor
-) : BaseViewModel<WeightTrackContract.State>() {
+) : BaseViewModel<WeightTrackContract.State, WeightTrackContract.SideEffect>() {
 
     init {
         loadWeightTrack()
@@ -21,13 +21,14 @@ class WeightTrackViewModel @Inject constructor(
     override fun submitEvent(event: IEvent) {
         when (event) {
             is WeightTrackContract.Event.ChartItemClicked -> {
-                val currentValue = mutableState.value as? WeightTrackContract.State.Data ?: return
+                val currentValue = mutableState.value ?: return
                 val newChartData = currentValue.chartData.map {
                     val newState = if (it == event.item) !event.item.isSelected else false
                     it.copy(isSelected = newState)
                 }
                 mutableState.value = currentValue.copy(
-                    chartData = newChartData
+                    chartData = newChartData,
+                    isChartAnimated = false
                 )
             }
         }
@@ -37,6 +38,7 @@ class WeightTrackViewModel @Inject constructor(
         viewModelScope.launch {
             val result = weightTrackInteractor.getWeightTrackInfo()
             mutableState.value = transmitResultToState(result)
+            mutableSideEffect.send(WeightTrackContract.SideEffect.AnimateChart)
         }
     }
 
@@ -48,16 +50,15 @@ class WeightTrackViewModel @Inject constructor(
                 val chartData = result.value.sortedBy { it.date }
                     .map(WeightTrack::toUi)
 
-                if (chartData.isNullOrEmpty()) {
-                    WeightTrackContract.State.NoElements
-                } else {
-                    WeightTrackContract.State.Data(
-                        chartData = chartData
-                    )
-                }
+                WeightTrackContract.State(
+                    chartData = chartData,
+                    isChartAnimated = true
+                )
             }
             else -> {
-                WeightTrackContract.State.Error
+                WeightTrackContract.State(
+                    hasError = true
+                )
             }
         }
     }

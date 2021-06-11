@@ -1,6 +1,7 @@
 package com.github.belyakovleonid.feature_main.presentation
 
 import com.github.belyakovleonid.core.presentation.IEvent
+import com.github.belyakovleonid.core.presentation.ISideEffect
 import com.github.belyakovleonid.core.presentation.IState
 import com.github.belyakovleonid.core.presentation.base.BaseViewModel
 import com.github.belyakovleonid.core.starters.RecipeListStarter
@@ -14,7 +15,7 @@ class MainViewModel @Inject constructor(
     recipeListStarter: RecipeListStarter,
     statisticsStarter: StatisticsStarter,
     weightTrackStarter: WeightTrackStarter
-) : BaseViewModel<IState>() {
+) : BaseViewModel<IState, ISideEffect>() {
 
     private val tabScreens = listOf(
         recipeListStarter.getScreen(),

@@ -11,6 +11,7 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.core.animation.doOnCancel
 import androidx.core.content.res.use
+import androidx.core.view.doOnPreDraw
 import com.github.belyakovleonid.core.presentation.dpToPx
 import com.github.belyakovleonid.core.presentation.getWeightString
 import com.github.belyakovleonid.core.presentation.measureTextHeight
@@ -103,6 +104,7 @@ class WeightChartView @JvmOverloads constructor(
                 animatedLength = totalLength * progress
                 invalidate()
             }
+            doOnPreDraw { animatedLength = 0f }
             doOnCancel { animatedLength = totalLength }
         }
     }
@@ -141,7 +143,7 @@ class WeightChartView @JvmOverloads constructor(
         drawChartSkelet(canvas)
         drawChartItems(canvas)
         drawSelectedItems(canvas)
-        drawItemsLabels(canvas)
+//        drawItemsLabels(canvas)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -150,20 +152,19 @@ class WeightChartView @JvmOverloads constructor(
         return true
     }
 
-    fun setData(data: List<WeightTrackUiModel>, animate: Boolean) {
+    fun setData(data: List<WeightTrackUiModel>) {
         dataSet = WeightDataSet(
             rawData = data,
             maxWeight = data.maxByOrNull { it.weight }?.weight ?: 0f,
             minWeight = data.minByOrNull { it.weight }?.weight ?: 0f
         )
         recalculateView()
+        invalidate()
+    }
 
-        if (animate) {
-            animator?.cancel()
-            animator.start()
-        } else {
-            invalidate()
-        }
+    fun animateData() {
+        animator?.cancel()
+        animator.start()
     }
 
     private fun drawChartSkelet(canvas: Canvas) {
@@ -185,24 +186,28 @@ class WeightChartView @JvmOverloads constructor(
 
     private fun drawChartItems(canvas: Canvas) {
         if (chartData.isEmpty()) return
+        var occupiedLength = 0f
+        var drawnItems = 0
 
+        // отрисовка линий между точками графика
         pointsPath.reset()
         pointsPath.moveTo(chartData.first().coordinates)
-
-        var occupiedLength = 0f
-        chartData.forEachIndexed { i, item ->
-            val section = chartSections[i]
-
-            if (occupiedLength + section.length > animatedLength) {
-                drawPartChartSection(canvas, section, occupiedLength)
-                return
+        for (i in 0..chartData.lastIndex) {
+            if (occupiedLength + chartSections[i].length > animatedLength) {
+                drawPartChartSection(canvas, chartSections[i], occupiedLength)
+                break
             } else {
-                drawFullChartSection(canvas, item)
-                occupiedLength += section.length
+                drawnItems++
+                drawFullChartSection(canvas, chartData[i])
+                occupiedLength += chartSections[i].length
             }
         }
-
         canvas.drawPath(pointsPath, chartPaint)
+
+        // отрисовка подписей к точкам графика
+        chartData.take(drawnItems).forEach { item ->
+            canvas.drawPositionedText(item.label, labelTextPaint)
+        }
     }
 
     private fun drawPartChartSection(canvas: Canvas, section: ChartSection, occupiedLength: Float) {
@@ -213,7 +218,6 @@ class WeightChartView @JvmOverloads constructor(
             section.start.x + partProgress * (section.end.x - section.start.x),
             section.start.y + partProgress * (section.end.y - section.start.y)
         )
-        canvas.drawPath(pointsPath, chartPaint)
     }
 
     private fun drawFullChartSection(canvas: Canvas, item: WeightChartItem) {
@@ -231,12 +235,6 @@ class WeightChartView @JvmOverloads constructor(
                 canvas.drawCircle(it.coordinates, radius * 2, selectedPaint)
                 canvas.drawCircle(it.coordinates, radius * 2, chartPaint)
             }
-        }
-    }
-
-    private fun drawItemsLabels(canvas: Canvas) {
-        chartData.forEach {
-            canvas.drawPositionedText(it.label, labelTextPaint)
         }
     }
 
@@ -315,6 +313,7 @@ class WeightChartView @JvmOverloads constructor(
                 length = sectionLength
             )
         }
+        animatedLength = totalLength
     }
 
     private fun calculateAxisData() {

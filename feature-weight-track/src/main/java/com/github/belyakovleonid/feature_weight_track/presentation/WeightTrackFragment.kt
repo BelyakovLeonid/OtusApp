@@ -10,7 +10,8 @@ import com.github.belyakovleonid.feature_weight_track.databinding.FWeightTrackBi
 import com.github.belyakovleonid.feature_weight_track.di.WeightTrackApiProvider
 import com.github.belyakovleonid.feature_weight_track.di.WeightTrackComponentHolder
 
-class WeightTrackFragment : BaseFragment<WeightTrackContract.State>(R.layout.f_weight_track) {
+class WeightTrackFragment :
+    BaseFragment<WeightTrackContract.State, WeightTrackContract.SideEffect>(R.layout.f_weight_track) {
 
     private lateinit var injector: WeightTrackApiProvider
 
@@ -30,11 +31,11 @@ class WeightTrackFragment : BaseFragment<WeightTrackContract.State>(R.layout.f_w
     }
 
     override fun renderState(state: WeightTrackContract.State) = with(binding) {
-        when (state) {
-            is WeightTrackContract.State.Data -> {
-                chartView.setData(state.chartData, true)
-            }
-        }
+        chartView.setData(state.chartData)
+    }
+
+    override fun reactToSideEffect(effect: WeightTrackContract.SideEffect) = with(binding) {
+        chartView.animateData()
     }
 
     override fun onDestroy() {

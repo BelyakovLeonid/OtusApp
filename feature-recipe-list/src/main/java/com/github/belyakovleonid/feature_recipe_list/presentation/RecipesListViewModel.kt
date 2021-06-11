@@ -2,6 +2,7 @@ package com.github.belyakovleonid.feature_recipe_list.presentation
 
 import androidx.lifecycle.viewModelScope
 import com.github.belyakovleonid.core.presentation.IEvent
+import com.github.belyakovleonid.core.presentation.ISideEffect
 import com.github.belyakovleonid.core.presentation.base.BaseViewModel
 import com.github.belyakovleonid.core.starters.RecipeDetailStarter
 import com.github.belyakovleonid.core_network_api.model.Result
@@ -14,7 +15,7 @@ import javax.inject.Inject
 class RecipeListViewModel @Inject constructor(
     private val recipeDetailStarter: RecipeDetailStarter,
     private val recipesInteractor: RecipeListInteractor
-) : BaseViewModel<RecipeListContract.State>(RecipeListContract.State.Loading) {
+) : BaseViewModel<RecipeListContract.State, ISideEffect>(RecipeListContract.State.Loading) {
 
     init {
         loadMoreRecipes()

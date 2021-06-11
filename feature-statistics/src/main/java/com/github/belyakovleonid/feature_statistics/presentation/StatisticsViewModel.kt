@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 class StatisticsViewModel @Inject constructor(
     private val statisticsInteractor: StatisticsInteractor
-) : BaseViewModel<StatisticsContract.State>() {
+) : BaseViewModel<StatisticsContract.State, StatisticsContract.SideEffect>() {
 
     init {
         loadStatistics()
@@ -23,11 +23,11 @@ class StatisticsViewModel @Inject constructor(
     override fun submitEvent(event: IEvent) {
         when (event) {
             is StatisticsContract.Event.CategoryClicked -> {
-                val currentValue = mutableState.value as? StatisticsContract.State.Data ?: return
-                val newCategories =
-                    currentValue.statisticCategories.getChangedStateOfItem(event.item)
+                val currentValue = mutableState.value ?: return
+                val newCategories = currentValue.categories.getChangedStateOfItem(event.item)
                 mutableState.value = currentValue.copy(
-                    statisticCategories = newCategories
+                    categories = newCategories,
+                    isDataAnimated = false
                 )
             }
         }
@@ -37,6 +37,7 @@ class StatisticsViewModel @Inject constructor(
         viewModelScope.launch {
             val result = statisticsInteractor.getStatisticsInfo()
             mutableState.value = transmitResultToState(result)
+            mutableSideEffect.send(StatisticsContract.SideEffect.AnimateData)
         }
     }
 
@@ -49,17 +50,16 @@ class StatisticsViewModel @Inject constructor(
                 val percents = resultSorted.map(StatisticsCategory::toPercentUi)
                 val categories = resultSorted.map(StatisticsCategory::toUi)
 
-                if (percents.isNotEmpty() && categories.isNotEmpty()) {
-                    StatisticsContract.State.Data(
-                        statisticPercents = percents,
-                        statisticCategories = ExpandableList(categories)
-                    )
-                } else {
-                    StatisticsContract.State.NoElements
-                }
+                StatisticsContract.State(
+                    percents = percents,
+                    categories = ExpandableList(categories),
+                    isDataAnimated = true
+                )
             }
             else -> {
-                StatisticsContract.State.Error
+                StatisticsContract.State(
+                    hasError = true
+                )
             }
         }
     }

@@ -149,15 +149,15 @@ class StatisticPercentDiagramView @JvmOverloads constructor(
 
     }
 
-    fun setData(data: List<StatisticsPercentUiModel>, animate: Boolean) {
+    fun setData(data: List<StatisticsPercentUiModel>) {
         this.data = data
         recalculateView()
-        if (animate) {
-            animator?.cancel()
-            animator?.start()
-        } else {
-            invalidate()
-        }
+        invalidate()
+    }
+
+    fun animateData() {
+        animator?.cancel()
+        animator?.start()
     }
 
     companion object {
