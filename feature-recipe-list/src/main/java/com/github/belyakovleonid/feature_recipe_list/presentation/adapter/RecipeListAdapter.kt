@@ -30,13 +30,13 @@ class ItemViewHolder(
     private val binding: VRecipeItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: RecipeUi, onItemClick: (IEvent) -> Unit) {
-        binding.recipeName.text = item.name
-        binding.recipeDescription.text = item.subtitle
-        binding.root.setOnClickListener {
+    fun bind(item: RecipeUi, onItemClick: (IEvent) -> Unit) = with(binding) {
+        recipeName.text = item.name
+        recipeDescription.text = item.subtitle
+        root.setOnClickListener {
             onItemClick.invoke(RecipeListContract.Event.OnItemClickEvent(item))
         }
-        binding.recipeImage.load(item.subtitle)
+        recipeImage.load(item.subtitle)
     }
 }
 

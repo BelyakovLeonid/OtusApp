@@ -6,5 +6,8 @@ object MainContract {
 
     sealed class Event : IEvent {
         object OnScreenOpenEvent : Event()
+        data class OnTabSelectedEvent(
+            val tabOrder: Int
+        ) : Event()
     }
 }

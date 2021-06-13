@@ -1,10 +1,13 @@
 include ':core',
+        ':core-ui',
         ':core-network-api',
         ':core-network-impl',
         ':feature-recipe-list',
         ':feature-recipe-detail',
         ':feature-main',
         ':module-injector',
+        ':feature-statistics',
+        ':feature-weight-track',
         ':app'
 
 rootProject.name = "OtusApp"

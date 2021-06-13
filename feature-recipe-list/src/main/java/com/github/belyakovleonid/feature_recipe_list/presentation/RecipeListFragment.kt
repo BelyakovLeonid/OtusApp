@@ -1,7 +1,6 @@
 package com.github.belyakovleonid.feature_recipe_list.presentation
 
 import android.os.Bundle
-import android.view.View
 import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.belyakovleonid.core.presentation.addOnScrollToEndListener
@@ -39,17 +38,10 @@ class RecipeListFragment : BaseFragment<RecipeListContract.State>(R.layout.f_rec
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        handleView()
-    }
-
-    private fun handleView() {
-        with(binding.recipesList) {
-            adapter = recipesAdapter
-            addOnScrollToEndListener(SCROLL_TO_END_TRIGGER_COUNT) {
-                viewModel.submitEvent(RecipeListContract.Event.OnScrolledToEnd)
-            }
+    override fun setupView() = with(binding.recipesList) {
+        adapter = recipesAdapter
+        addOnScrollToEndListener(SCROLL_TO_END_TRIGGER_COUNT) {
+            viewModel.submitEvent(RecipeListContract.Event.OnScrolledToEnd)
         }
     }
 
