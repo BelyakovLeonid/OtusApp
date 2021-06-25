@@ -5,15 +5,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.animation.doOnCancel
+import androidx.core.animation.doOnEnd
 import com.github.belyakovleonid.core.presentation.addProgressListener
 import com.github.belyakovleonid.core.presentation.dpToPx
 import com.github.belyakovleonid.core.presentation.gradsToRadians
+import com.github.belyakovleonid.core.presentation.radiansToGrads
 import com.github.belyakovleonid.core_ui.expandablelist.utils.distanceTo
 import com.github.belyakovleonid.core_ui.expandablelist.utils.drawCircle
 import com.github.belyakovleonid.feature_statistics.presentation.StatisticsContract
@@ -43,20 +44,17 @@ class StatisticPercentDiagramView @JvmOverloads constructor(
     }
 
     private val drawingRectF = RectF()
-    private val animatedExpandedDrawingRectF = RectF()
-    private val animatedCollapsingDrawingRectF = RectF()
 
     private var center = PointF()
     private var radius = 0f
     private var internalRadius = 0f
     private var offset = 0f
 
-    private var animatedClipAngle = 0f
-    private var animatedExpandedItemId: Long? = null
-    private var animatedCollapsingItemId: Long? = null
+    private var animatorsMap = emptyMap<Long, RectF>()
+    private val animatorsExpandedMap = HashMap<Long, ValueAnimator>()
+    private val animatorsCollapsingMap = HashMap<Long, ValueAnimator>()
 
-    private var itemExpandAnimator: ValueAnimator? = null
-    private var itemCollapseAnimator: ValueAnimator? = null
+    private var animatedClipAngle = 0f
     private val animator by lazy(LazyThreadSafetyMode.NONE) {
         ValueAnimator.ofFloat(0f, 1f).apply {
             duration = INITIAL_ANIMATION_DURATION
@@ -158,7 +156,6 @@ class StatisticPercentDiagramView @JvmOverloads constructor(
 
     private fun recalculateInternalData() {
         var occupiedAngle = DEFAULT_START_DEGREE
-
         internalData = data.map {
             val selfAngle = it.percent * TOTAL_DEGREE
             val startAngle = occupiedAngle
@@ -173,93 +170,61 @@ class StatisticPercentDiagramView @JvmOverloads constructor(
                 color = it.color
             )
         }
+        animatorsMap = data.map { it.id to RectF(drawingRectF) }.toMap()
     }
 
-    private val animatorsMap = HashMap<Long, RectF>()
-    private val animatorsExpandedMap = HashMap<Long, ValueAnimator>()
-    private val animatorsCollapsingMap = HashMap<Long, ValueAnimator>()
-
     fun animateItem(itemId: Long, expand: Boolean) {
-        val currentExpanded = animatorsExpandedMap[itemId]
-        val currentCollapsing = animatorsCollapsingMap[itemId]
+        val itemExpandedAnim = animatorsExpandedMap[itemId]
+        val itemCollapsingAnim = animatorsCollapsingMap[itemId]
+        val oppositeAnim = if (expand) itemCollapsingAnim else itemExpandedAnim
+        val startTime = getInverseTimeAnim(oppositeAnim)
+        itemExpandedAnim?.cancel()
+        itemCollapsingAnim?.cancel()
 
-        if (expand) {
-            val time = if (currentCollapsing?.isRunning == true) {
-                currentCollapsing.currentPlayTime
-            } else {
-                EXPAND_COLLAPSE_ANIMATION_DURATION
+        when {
+            expand && itemExpandedAnim == null -> {
+                createAndStartAnimator(animatorsExpandedMap, itemId, startTime, true)
             }
-            currentCollapsing?.cancel()
-            if (currentExpanded == null) {
-                animatorsMap[itemId] = RectF()
-                animatorsExpandedMap[itemId] = ValueAnimator.ofFloat(0f, 1f).apply {
-                    duration = EXPAND_COLLAPSE_ANIMATION_DURATION
-                    addProgressListener<Float> { progress ->
-                        val animatedOffset = offset * (1 - progress)
-                        animatorsMap[itemId]?.set(
-                            animatedOffset,
-                            animatedOffset,
-                            width - animatedOffset,
-                            height - animatedOffset
-                        )
-                        invalidate()
-                    }
-                    currentPlayTime = EXPAND_COLLAPSE_ANIMATION_DURATION - time
-                    start()
-                }
-            } else {
-                if (!currentExpanded.isRunning) {
-                    currentExpanded.cancel()
-                    animatorsExpandedMap[itemId]?.currentPlayTime =
-                        EXPAND_COLLAPSE_ANIMATION_DURATION - time
-                    animatorsExpandedMap[itemId]?.start()
-                }
+            !expand && itemCollapsingAnim == null -> {
+                createAndStartAnimator(animatorsCollapsingMap, itemId, startTime, false)
             }
-        } else {
-            val time = if (currentExpanded?.isRunning == true) {
-                currentExpanded.currentPlayTime
-            } else {
-                EXPAND_COLLAPSE_ANIMATION_DURATION
-            }
-            currentExpanded?.cancel()
-
-            Log.d("MyTag", "coll time = $time")
-            if (currentCollapsing == null) {
-                animatorsMap[itemId] = RectF()
-                animatorsCollapsingMap[itemId] = ValueAnimator.ofFloat(0f, 1f).apply {
-                    duration = EXPAND_COLLAPSE_ANIMATION_DURATION
-                    addProgressListener<Float> { progress ->
-                        val animatedOffset = offset * progress
-
-                        Log.d("MyTag", "coll progress = $progress")
-                        animatorsMap[itemId]?.set(
-                            animatedOffset,
-                            animatedOffset,
-                            width - animatedOffset,
-                            height - animatedOffset
-                        )
-                        invalidate()
-                    }
-                    currentPlayTime = EXPAND_COLLAPSE_ANIMATION_DURATION - time
-                    start()
-                }
-            } else {
-                if (!currentCollapsing.isRunning) {
-                    currentCollapsing.cancel()
-                    animatorsCollapsingMap[itemId]?.currentPlayTime =
-                        EXPAND_COLLAPSE_ANIMATION_DURATION - time
-                    animatorsCollapsingMap[itemId]?.start()
-                }
-            }
+            expand -> itemExpandedAnim?.currentPlayTime = startTime
+            else -> itemCollapsingAnim?.currentPlayTime = startTime
         }
+    }
+
+    private fun createAndStartAnimator(
+        animMap: MutableMap<Long, ValueAnimator>,
+        itemId: Long,
+        startTime: Long,
+        expand: Boolean
+    ) {
+        animMap[itemId] = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = ITEM_ANIMATION_DURATION
+            doOnEnd { animMap.remove(itemId) }
+            addProgressListener<Float> { progress ->
+                val animatedOffset = if (expand) offset * (1 - progress) else offset * progress
+                animatorsMap[itemId]?.set(
+                    animatedOffset,
+                    animatedOffset,
+                    width - animatedOffset,
+                    height - animatedOffset
+                )
+                invalidate()
+            }
+            currentPlayTime = startTime
+            start()
+        }
+    }
+
+    private fun getInverseTimeAnim(animator: ValueAnimator?): Long {
+        val passedTime = animator?.currentPlayTime ?: ITEM_ANIMATION_DURATION
+        return ITEM_ANIMATION_DURATION - passedTime
     }
 
     inner class DiagramGestureDetector : GestureDetector.SimpleOnGestureListener() {
         override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-            val clickedItem = internalData.find { item ->
-                item.containsClick(e)
-            } ?: return false
-
+            val clickedItem = internalData.find { it.containsClick(e) } ?: return false
             onItemClickListener?.invoke(StatisticsContract.Event.ItemClicked(clickedItem.rawItem))
             return super.onSingleTapConfirmed(e)
         }
@@ -276,13 +241,13 @@ class StatisticPercentDiagramView @JvmOverloads constructor(
             }
 
             return clickR in internalRadius..radius &&
-                    (clickAngle / PI * 180) in startAngle..endAngle
+                    radiansToGrads(clickAngle) in startAngle..endAngle
         }
     }
 
     companion object {
         private const val INITIAL_ANIMATION_DURATION = 800L
-        private const val EXPAND_COLLAPSE_ANIMATION_DURATION = 400L
+        private const val ITEM_ANIMATION_DURATION = 400L
         private const val DEFAULT_DIVIDER_WIDTH_DP = 5
         private const val DEFAULT_START_DEGREE = -180F
         private const val TOTAL_DEGREE = 360F
