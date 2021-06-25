@@ -7,6 +7,10 @@
     <color name="teal_200_test">#9003DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#000000</color>
+    <color name="blue">#1C90D9</color>
+    <color name="light_blue">#93CDF1</color>
+    <color name="red">#FF474E</color>
     <color name="gray">#9D9D9D</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="ripple">#9D9D9D</color>
 </resources>
