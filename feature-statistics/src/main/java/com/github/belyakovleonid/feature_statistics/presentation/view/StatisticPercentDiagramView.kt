@@ -95,6 +95,12 @@ class StatisticPercentDiagramView @JvmOverloads constructor(
         return true
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        animatorsExpandedMap.forEach { (_, animator) -> animator.cancel() }
+        animatorsCollapsingMap.forEach { (_, animator) -> animator.cancel() }
+    }
+
     override fun onDraw(canvas: Canvas) {
         drawDiagram(canvas)
         clipPath(canvas)
@@ -247,7 +253,7 @@ class StatisticPercentDiagramView @JvmOverloads constructor(
 
     companion object {
         private const val INITIAL_ANIMATION_DURATION = 800L
-        private const val ITEM_ANIMATION_DURATION = 400L
+        private const val ITEM_ANIMATION_DURATION = 4000L
         private const val DEFAULT_DIVIDER_WIDTH_DP = 5
         private const val DEFAULT_START_DEGREE = -180F
         private const val TOTAL_DEGREE = 360F
