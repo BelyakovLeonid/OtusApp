@@ -49,9 +49,13 @@ class StatisticsFragment :
                 percentDiagramView.animateData()
                 percentView.animateData()
             }
-            is StatisticsContract.SideEffect.AnimateItem -> {
-                percentDiagramView.animateItem(effect.itemId)
-                percentView.animateItem(effect.itemId)
+            is StatisticsContract.SideEffect.AnimExpandItem -> {
+                percentDiagramView.animateItem(effect.itemId, true)
+//                percentView.animateItem(effect.itemId)
+            }
+            is StatisticsContract.SideEffect.AnimCollapseItem -> {
+                percentDiagramView.animateItem(effect.itemId, false)
+//                percentView.animateItem(effect.itemId)
             }
         }
     }

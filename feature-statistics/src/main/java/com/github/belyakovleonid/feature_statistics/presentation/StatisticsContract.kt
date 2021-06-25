@@ -28,8 +28,7 @@ object StatisticsContract {
 
     sealed class SideEffect : ISideEffect {
         object AnimateData : SideEffect()
-        data class AnimateItem(
-            val itemId: Long
-        ) : SideEffect()
+        data class AnimExpandItem(val itemId: Long) : SideEffect()
+        data class AnimCollapseItem(val itemId: Long) : SideEffect()
     }
 }

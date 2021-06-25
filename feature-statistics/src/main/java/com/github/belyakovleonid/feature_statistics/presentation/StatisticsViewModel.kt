@@ -29,14 +29,24 @@ class StatisticsViewModel @Inject constructor(
 
     private fun selectItem(itemId: Long) {
         val currentValue = mutableState.value ?: return
+        val prevExpanded = currentValue.categories.getCurrentExpanded()
         val newCategories = currentValue.categories.getChangedStateOfItem(itemId)
         mutableState.value = currentValue.copy(
             categories = newCategories,
             isDataAnimated = false
         )
-        mutableSideEffect.offer(
-            StatisticsContract.SideEffect.AnimateItem(itemId)
-        )
+        when (prevExpanded?.id) {
+            itemId -> {
+                mutableSideEffect.offer(StatisticsContract.SideEffect.AnimCollapseItem(itemId))
+            }
+            null -> {
+                mutableSideEffect.offer(StatisticsContract.SideEffect.AnimExpandItem(itemId))
+            }
+            else -> {
+                mutableSideEffect.offer(StatisticsContract.SideEffect.AnimCollapseItem(prevExpanded.id))
+                mutableSideEffect.offer(StatisticsContract.SideEffect.AnimExpandItem(itemId))
+            }
+        }
     }
 
     private fun loadStatistics() {
