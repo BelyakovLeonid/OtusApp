@@ -4,6 +4,7 @@ import com.github.belyakovleonid.core.di.FragmentScope
 import dagger.Component
 
 @Component(
+    dependencies = [WeightTrackDependencies::class],
     modules = [WeightTrackModule::class]
 )
 @FragmentScope
@@ -11,6 +12,6 @@ interface WeightTrackComponent : WeightTrackApiProvider {
 
     @Component.Factory
     interface Factory {
-        fun create(): WeightTrackComponent
+        fun create(dependencies: WeightTrackDependencies): WeightTrackComponent
     }
 }

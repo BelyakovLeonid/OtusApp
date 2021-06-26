@@ -3,7 +3,7 @@ package com.github.belyakovleonid.feature_weight_track.presentation.model
 import com.github.belyakovleonid.core.presentation.getDateString
 import com.github.belyakovleonid.core.presentation.getWeightString
 import com.github.belyakovleonid.feature_weight_track.domain.model.WeightTrack
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 
 data class WeightTrackUiModel(
     val isSelected: Boolean,

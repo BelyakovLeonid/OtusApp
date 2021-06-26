@@ -10,13 +10,12 @@ import com.github.belyakovleonid.feature_weight_track.databinding.FWeightTrackBi
 import com.github.belyakovleonid.feature_weight_track.di.WeightTrackApiProvider
 import com.github.belyakovleonid.feature_weight_track.di.WeightTrackComponentHolder
 
-class WeightTrackFragment :
-    BaseFragment<WeightTrackContract.State, WeightTrackContract.SideEffect>(R.layout.f_weight_track) {
+class WeightTrackFragment : BaseFragment<WeightTrackContract.State, WeightTrackContract.SideEffect>(
+    R.layout.f_weight_track
+) {
 
     private lateinit var injector: WeightTrackApiProvider
-
     override val viewModel: WeightTrackViewModel by viewModel { injector.viewModel }
-
     private val binding by viewBinding(FWeightTrackBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -10,7 +10,9 @@ class OtusApp : Application(), AppWithDependenciesProvider {
 
     override val dependenciesProvider: DependenciesProvider by lazy {
         DaggerDependenciesProviderComponent.factory()
-            .create(CoreNetworkApiFactory.createNetworkApi())
-            .dependenciesProvider
+            .create(
+                applicationContext,
+                CoreNetworkApiFactory.createNetworkApi()
+            ).dependenciesProvider
     }
 }

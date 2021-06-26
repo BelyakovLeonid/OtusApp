@@ -3,11 +3,11 @@ package com.github.belyakovleonid.feature_weight_track.presentation
 import androidx.lifecycle.viewModelScope
 import com.github.belyakovleonid.core.presentation.IEvent
 import com.github.belyakovleonid.core.presentation.base.BaseViewModel
-import com.github.belyakovleonid.core_network_api.model.Result
 import com.github.belyakovleonid.feature_weight_track.domain.WeightTrackInteractor
 import com.github.belyakovleonid.feature_weight_track.domain.model.WeightTrack
 import com.github.belyakovleonid.feature_weight_track.presentation.model.toUi
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class WeightTrackViewModel @Inject constructor(
@@ -15,7 +15,7 @@ class WeightTrackViewModel @Inject constructor(
 ) : BaseViewModel<WeightTrackContract.State, WeightTrackContract.SideEffect>() {
 
     init {
-        loadWeightTrack()
+        subscribeToWeightTracks()
     }
 
     override fun submitEvent(event: IEvent) {
@@ -34,20 +34,20 @@ class WeightTrackViewModel @Inject constructor(
         }
     }
 
-    private fun loadWeightTrack() {
-        viewModelScope.launch {
-            val result = weightTrackInteractor.getWeightTrackInfo()
-            mutableState.value = transmitResultToState(result)
-            mutableSideEffect.send(WeightTrackContract.SideEffect.AnimateChart)
-        }
+    private fun subscribeToWeightTracks() {
+        weightTrackInteractor.getWeightTrackAsFlow()
+            .onEach {
+                mutableState.value = transmitResultToState(it)
+                mutableSideEffect.send(WeightTrackContract.SideEffect.AnimateChart)
+            }.launchIn(viewModelScope)
     }
 
     private fun transmitResultToState(
-        result: Result<List<WeightTrack>>
+        result: List<WeightTrack>
     ): WeightTrackContract.State {
-        return when (result) {
-            is Result.Success -> {
-                val chartData = result.value.sortedBy { it.date }
+        return when {
+            result.isNotEmpty() -> {
+                val chartData = result.sortedBy { it.date }
                     .map(WeightTrack::toUi)
 
                 WeightTrackContract.State(
