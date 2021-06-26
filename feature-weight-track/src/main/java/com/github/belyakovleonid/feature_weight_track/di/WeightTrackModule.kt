@@ -27,6 +27,10 @@ object WeightTrackModule {
     @JvmStatic
     @Provides
     fun provideWeightTrackDao(database: WeightTrackDatabase) = database.getWeightTrackDao()
+
+    @JvmStatic
+    @Provides
+    fun provideWeightGoalDao(database: WeightTrackDatabase) = database.getWeightGoalDao()
 }
 
 @Module

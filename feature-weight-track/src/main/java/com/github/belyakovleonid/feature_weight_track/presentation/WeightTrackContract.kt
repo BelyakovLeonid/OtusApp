@@ -8,9 +8,9 @@ import com.github.belyakovleonid.feature_weight_track.presentation.model.WeightT
 object WeightTrackContract {
 
     data class State(
+        val goalWeight: Float? = null,
         val chartData: List<WeightTrackUiModel> = emptyList(),
         val isChartAnimated: Boolean = false,
-        val hasError: Boolean = false
     ) : IState
 
     sealed class Event : IEvent {

@@ -4,10 +4,11 @@ import androidx.lifecycle.viewModelScope
 import com.github.belyakovleonid.core.presentation.IEvent
 import com.github.belyakovleonid.core.presentation.base.BaseViewModel
 import com.github.belyakovleonid.feature_weight_track.domain.WeightTrackInteractor
+import com.github.belyakovleonid.feature_weight_track.domain.model.WeightGoal
 import com.github.belyakovleonid.feature_weight_track.domain.model.WeightTrack
 import com.github.belyakovleonid.feature_weight_track.presentation.model.toUi
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class WeightTrackViewModel @Inject constructor(
@@ -35,31 +36,26 @@ class WeightTrackViewModel @Inject constructor(
     }
 
     private fun subscribeToWeightTracks() {
-        weightTrackInteractor.getWeightTrackAsFlow()
-            .onEach {
-                mutableState.value = transmitResultToState(it)
-                mutableSideEffect.send(WeightTrackContract.SideEffect.AnimateChart)
-            }.launchIn(viewModelScope)
+        combine(
+            weightTrackInteractor.getWeightTrackAsFlow(),
+            weightTrackInteractor.getWeightGoalAsFlow()
+        ) { weightTrack, weightGoal ->
+            mutableState.value = transmitResultToState(weightTrack, weightGoal)
+            mutableSideEffect.send(WeightTrackContract.SideEffect.AnimateChart)
+        }.launchIn(viewModelScope)
     }
 
     private fun transmitResultToState(
-        result: List<WeightTrack>
+        weight: List<WeightTrack>,
+        goal: WeightGoal
     ): WeightTrackContract.State {
-        return when {
-            result.isNotEmpty() -> {
-                val chartData = result.sortedBy { it.date }
-                    .map(WeightTrack::toUi)
+        val chartData = weight.sortedBy { it.date }
+            .map(WeightTrack::toUi)
 
-                WeightTrackContract.State(
-                    chartData = chartData,
-                    isChartAnimated = true
-                )
-            }
-            else -> {
-                WeightTrackContract.State(
-                    hasError = true
-                )
-            }
-        }
+        return WeightTrackContract.State(
+            goalWeight = goal.weight,
+            chartData = chartData,
+            isChartAnimated = true
+        )
     }
 }

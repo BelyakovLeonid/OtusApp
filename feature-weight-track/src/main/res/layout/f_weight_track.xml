@@ -139,4 +139,11 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="0px"
         android:layout="@layout/empty_stub_layout" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/contentGroup"
+        android:visibility="gone"
+        app:constraint_referenced_ids="fabEdit, fabAdd, fabDelete, chartView, goalRemain, goalCurrent, goalHint, goalImage, goalTitle, goalSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </androidx.constraintlayout.widget.ConstraintLayout>

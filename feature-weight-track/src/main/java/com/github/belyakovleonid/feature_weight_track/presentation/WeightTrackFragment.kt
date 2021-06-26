@@ -1,6 +1,7 @@
 package com.github.belyakovleonid.feature_weight_track.presentation
 
 import android.os.Bundle
+import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.belyakovleonid.core.presentation.base.BaseFragment
 import com.github.belyakovleonid.core.presentation.getDependencies
@@ -29,8 +30,18 @@ class WeightTrackFragment : BaseFragment<WeightTrackContract.State, WeightTrackC
         }
     }
 
-    override fun renderState(state: WeightTrackContract.State) = with(binding) {
-        chartView.setData(state.chartData)
+    override fun renderState(state: WeightTrackContract.State): Unit = with(binding) {
+        when {
+            state.goalWeight == null -> {
+                contentGroup.isVisible = false
+                emptyStub.inflate()
+
+            }
+            else -> {
+                contentGroup.isVisible = true
+                chartView.setData(state.chartData)
+            }
+        }
     }
 
     override fun reactToSideEffect(effect: WeightTrackContract.SideEffect) = with(binding) {
