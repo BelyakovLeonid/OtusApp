@@ -12,4 +12,6 @@
     <string name="weight_track_empty_goal_hint">Расскажте нам о своем желаннном весе, чтобы легче следить за своим прогрессом и добиваться результата!</string>
     <string name="weight_track_empty_goal_button">Указать цель</string>
     <string name="weight_track_no_track_title">Добавить взвешивание</string>
+
+    <string name="weight_track_empty_weight_hint">Добавьте информацию о взвешивании, чтобы отслеживать прогресс.</string>
 </resources>

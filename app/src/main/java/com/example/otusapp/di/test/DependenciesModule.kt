@@ -4,7 +4,7 @@ import com.github.belyakovleonid.core.DependenciesProvider
 import com.github.belyakovleonid.feature_main.di.MainDependencies
 import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailDependencies
 import com.github.belyakovleonid.feature_recipe_list.di.RecipeListDependencies
-import com.github.belyakovleonid.feature_weight_track.di.WeightTrackDependencies
+import com.github.belyakovleonid.feature_weight_track.base.di.WeightTrackDependencies
 import com.github.belyakovleonid.module_injector.BaseDependencies
 import com.github.belyakovleonid.module_injector.NoDependencies
 import dagger.Binds
