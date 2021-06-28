@@ -7,5 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface WeightTrackRepository {
     fun getWeightTrackAsFlow(): Flow<List<WeightTrack>>
     fun getWeightGoalAsFlow(): Flow<WeightGoal?>
-    fun getWeightGoal(): WeightGoal?
+    suspend fun getWeightGoal(): WeightGoal?
+    suspend fun updateGoalWeight(weight: Float)
 }

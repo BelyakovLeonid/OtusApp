@@ -3,6 +3,7 @@ package com.github.belyakovleonid.feature_weight_track.root.data
 import com.github.belyakovleonid.core.presentation.mapElements
 import com.github.belyakovleonid.feature_weight_track.root.data.local.WeightGoalDao
 import com.github.belyakovleonid.feature_weight_track.root.data.local.WeightTrackDao
+import com.github.belyakovleonid.feature_weight_track.root.data.local.model.WeightGoalEntity
 import com.github.belyakovleonid.feature_weight_track.root.data.local.model.toDomain
 import com.github.belyakovleonid.feature_weight_track.root.domain.WeightTrackRepository
 import com.github.belyakovleonid.feature_weight_track.root.domain.model.WeightGoal
@@ -24,7 +25,11 @@ class WeightTrackRepositoryImpl @Inject constructor(
         return goalDao.getWeightGoalAsFlow().map { it?.toDomain() }
     }
 
-    override fun getWeightGoal(): WeightGoal? {
+    override suspend fun getWeightGoal(): WeightGoal? {
         return goalDao.getWeightGoal()?.toDomain()
+    }
+
+    override suspend fun updateGoalWeight(weight: Float) {
+        goalDao.insertGoal(WeightGoalEntity(weight = weight))
     }
 }

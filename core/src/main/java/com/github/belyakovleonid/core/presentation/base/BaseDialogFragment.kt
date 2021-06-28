@@ -3,14 +3,14 @@ package com.github.belyakovleonid.core.presentation.base
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import com.github.belyakovleonid.core.presentation.ISideEffect
 import com.github.belyakovleonid.core.presentation.IState
 import com.github.belyakovleonid.core.presentation.observeFlow
 
-abstract class BaseFragment<S : IState, E : ISideEffect>(
+abstract class BaseDialogFragment<S : IState, E : ISideEffect>(
     @LayoutRes contentLayoutId: Int
-) : Fragment(contentLayoutId) {
+) : DialogFragment(contentLayoutId) {
 
     protected abstract val viewModel: BaseViewModel<S, E>
 

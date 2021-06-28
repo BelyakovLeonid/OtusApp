@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingHorizontal="20dp">
+
+    <TextView
+        android:id="@+id/pickerTitle"
+        style="@style/XLargeText"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/goal_picker_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.github.belyakovleonid.feature_weight_track.goalpicker.presentation.view.WeightPickerView
+        android:id="@+id/weightPicker"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:textSize="38sp"
+        android:layout_marginTop="20dp"
+        app:controlsSize="medium"
+        app:controlsTint="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/pickerTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/applyButton"
+        app:notSelectedTextColor="@color/gray"
+        app:selectedTextColor="@color/black" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/applyButton"
+        android:layout_width="0px"
+        style="@style/FilledButton"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="16dp"
+        android:text="@string/goal_picker_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/weightPicker" />
+</androidx.constraintlayout.widget.ConstraintLayout>

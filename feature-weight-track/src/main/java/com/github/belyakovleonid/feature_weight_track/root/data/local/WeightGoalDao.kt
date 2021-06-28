@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.Flow
 interface WeightGoalDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertGoal(goal: WeightGoalEntity)
+    suspend fun insertGoal(goal: WeightGoalEntity)
 
     @Query(SELECT_GOAL_QUERY)
     fun getWeightGoalAsFlow(): Flow<WeightGoalEntity?>
 
     @Query(SELECT_GOAL_QUERY)
-    fun getWeightGoal(): WeightGoalEntity?
+    suspend fun getWeightGoal(): WeightGoalEntity?
 
     companion object {
 

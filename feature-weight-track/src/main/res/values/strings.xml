@@ -14,4 +14,8 @@
     <string name="weight_track_no_track_title">Добавить взвешивание</string>
 
     <string name="weight_track_empty_weight_hint">Добавьте информацию о взвешивании, чтобы отслеживать прогресс.</string>
+
+    <string name="goal_picker_title">Укажите цель</string>
+    <string name="goal_picker_button">Обновить данные о цели</string>
+    <string name="goal_picker_separator">.</string>
 </resources>

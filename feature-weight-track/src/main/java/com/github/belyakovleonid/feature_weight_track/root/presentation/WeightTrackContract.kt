@@ -19,6 +19,7 @@ object WeightTrackContract {
     ) : IState
 
     sealed class Event : IEvent {
+        object ChooseGoalClick : Event()
         data class ChartItemClicked(
             val item: WeightTrackUiModel
         ) : Event()

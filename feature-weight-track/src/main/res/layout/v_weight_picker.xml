@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="com.github.belyakovleonid.feature_weight_track.goalpicker.presentation.view.WeightPickerView">
+
+    <ImageView
+        android:id="@+id/minusControl"
+        android:layout_width="wrap_content"
+        android:scaleType="fitCenter"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/ic_remove"
+        app:layout_constraintBottom_toBottomOf="@id/intPart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/intPart" />
+
+    <TextView
+        android:id="@+id/intPart"
+        style="@style/XXXLargeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        app:layout_constraintEnd_toStartOf="@id/fractPart"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/minusControl"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="30" />
+
+    <TextView
+        android:id="@+id/fractPart"
+        style="@style/XXXLargeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_marginStart="6dp"
+        android:layout_marginEnd="20dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        app:layout_constraintEnd_toStartOf="@id/plusControl"
+        app:layout_constraintStart_toEndOf="@id/intPart"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text=".99" />
+
+    <ImageView
+        android:id="@+id/plusControl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="@id/intPart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/intPart" />
+</merge>

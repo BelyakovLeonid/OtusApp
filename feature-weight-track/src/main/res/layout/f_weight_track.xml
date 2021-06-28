@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/goalTitle"
-        style="@style/XLargeText"
+        style="@style/XXLargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -130,21 +130,19 @@
         app:layout_constraintEnd_toStartOf="@id/fabEdit"
         app:layout_constraintTop_toTopOf="@id/fabEdit" />
 
-    <ViewStub
-        android:id="@+id/emptyStub"
+    <include
+        layout="@layout/empty_goal_layout"
         android:layout_width="0px"
         android:layout_height="0px"
-        android:layout="@layout/empty_stub_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ViewStub
-        android:id="@+id/emptyChartStub"
+    <include
+        layout="@layout/empty_chart_layout"
         android:layout_width="0px"
         android:layout_height="0px"
-        android:layout="@layout/empty_chart_stub_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
