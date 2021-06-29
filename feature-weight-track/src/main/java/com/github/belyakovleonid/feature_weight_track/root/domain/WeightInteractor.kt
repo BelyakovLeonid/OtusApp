@@ -40,4 +40,8 @@ class WeightInteractor @Inject constructor(
     fun getPermittedWeightInterval(): ClosedFloatingPointRange<Float> {
         return MIN_PERMITTED_WEIGHT..MAX_PERMITTED_WEIGHT
     }
+
+    suspend fun deleteWeightTrackByDate(date: LocalDate?) {
+        repository.deleteWeightTRackByDate(date)
+    }
 }

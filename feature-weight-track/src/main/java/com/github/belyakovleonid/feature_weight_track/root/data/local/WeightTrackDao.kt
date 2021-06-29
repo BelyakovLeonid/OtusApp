@@ -21,5 +21,5 @@ interface WeightTrackDao {
     suspend fun updateWeightTrack(track: WeightTrackEntity)
 
     @Query("DELETE FROM ${WeightTrackEntity.WEIGHT_TRACK_TABLE_NAME} WHERE date = :date")
-    fun deleteWeightTrackByDate(date: LocalDate)
+    suspend fun deleteWeightTrackByDate(date: LocalDate?)
 }

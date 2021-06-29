@@ -30,10 +30,10 @@ class GoalPickerDialogFragment : BaseDialogFragment<GoalPickerContract.State, IS
 
         with(binding) {
             weightPicker.onChangeQuantityListener = { newWeight ->
-                viewModel.submitEvent(GoalPickerContract.Event.WeightChanged(newWeight))
+                submitEvent(GoalPickerContract.Event.WeightChanged(newWeight))
             }
             applyButton.setOnClickListener {
-                viewModel.submitEvent(GoalPickerContract.Event.ApplyClick)
+                submitEvent(GoalPickerContract.Event.ApplyClick)
                 dismiss()
             }
         }

@@ -14,7 +14,7 @@ import com.github.belyakovleonid.feature_weight_track.R
 import com.github.belyakovleonid.feature_weight_track.base.di.WeightTrackApiProvider
 import com.github.belyakovleonid.feature_weight_track.base.di.WeightTrackComponentHolder
 import com.github.belyakovleonid.feature_weight_track.databinding.FWeightPickerBinding
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.util.*
 
 class WeightPickerDialogFragment
@@ -70,28 +70,20 @@ class WeightPickerDialogFragment
     }
 
     private fun openDatePicker() {
-        val calendar = Calendar.getInstance()
+        val date = viewModel.getCurrentDate()
         val dateListener = DatePickerDialog.OnDateSetListener { _, y, m, d ->
-            calendar.set(Calendar.YEAR, y)
-            calendar.set(Calendar.MONTH, m)
-            calendar.set(Calendar.DAY_OF_MONTH, d)
-            val localDate = LocalDateTime.ofInstant(
-                calendar.toInstant(),
-                calendar.timeZone.toZoneId()
-            ).toLocalDate()
-
-            submitEvent(WeightPickerContract.Event.DateChanged(localDate))
+            submitEvent(WeightPickerContract.Event.DateChanged(LocalDate.of(y, m, d)))
         }
 
         DatePickerDialog(
             requireContext(),
             R.style.PickerDialogTheme,
             dateListener,
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
+            date.year,
+            date.monthValue,
+            date.dayOfMonth
         ).apply {
-            this.datePicker.maxDate = calendar.timeInMillis
+            this.datePicker.maxDate = Calendar.getInstance().timeInMillis
             show()
         }
     }

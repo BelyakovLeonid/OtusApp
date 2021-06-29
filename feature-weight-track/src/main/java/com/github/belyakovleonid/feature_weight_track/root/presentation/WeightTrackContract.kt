@@ -20,6 +20,8 @@ object WeightTrackContract {
 
     sealed class Event : IEvent {
         object ChooseGoalClick : Event()
+        object DeleteSelectedTrack : Event()
+
         data class ChartItemClicked(
             val item: WeightTrackUiModel
         ) : Event()

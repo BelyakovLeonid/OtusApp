@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -153,6 +154,7 @@ class WeightChartView @JvmOverloads constructor(
     }
 
     fun setData(data: List<WeightTrackUiModel>) {
+        Log.d("MyTag", "data = ${data.joinToString()}")
         dataSet = WeightDataSet(
             rawData = data,
             maxWeight = data.maxByOrNull { it.weight }?.weight ?: 0f,

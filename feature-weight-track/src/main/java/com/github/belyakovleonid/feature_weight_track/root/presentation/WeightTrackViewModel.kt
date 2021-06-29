@@ -6,9 +6,12 @@ import com.github.belyakovleonid.core.presentation.base.BaseViewModel
 import com.github.belyakovleonid.feature_weight_track.root.domain.WeightInteractor
 import com.github.belyakovleonid.feature_weight_track.root.domain.model.WeightGoal
 import com.github.belyakovleonid.feature_weight_track.root.domain.model.WeightTrack
+import com.github.belyakovleonid.feature_weight_track.root.presentation.model.WeightTrackUiModel
 import com.github.belyakovleonid.feature_weight_track.root.presentation.model.toUi
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 class WeightTrackViewModel @Inject constructor(
@@ -27,11 +30,23 @@ class WeightTrackViewModel @Inject constructor(
                     val newState = if (it == event.item) !event.item.isSelected else false
                     it.copy(isSelected = newState)
                 }
+                val hasSelected = newChartData.any { it.isSelected }
                 mutableState.value = currentValue.copy(
                     chartData = newChartData,
+                    isEditFabVisible = hasSelected,
+                    isAddFabVisible = !hasSelected,
                 )
             }
+            is WeightTrackContract.Event.DeleteSelectedTrack -> {
+                viewModelScope.launch {
+                    weightInteractor.deleteWeightTrackByDate(getSelectedDate())
+                }
+            }
         }
+    }
+
+    fun getSelectedDate(): LocalDate? {
+        return getSelectedWeightTrack()?.date
     }
 
     private fun subscribeToWeightTracks() {
@@ -61,5 +76,9 @@ class WeightTrackViewModel @Inject constructor(
             isEditFabVisible = false,
             isAddFabVisible = true,
         )
+    }
+
+    private fun getSelectedWeightTrack(): WeightTrackUiModel? {
+        return mutableState.value?.chartData?.find { it.isSelected }
     }
 }

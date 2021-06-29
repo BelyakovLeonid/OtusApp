@@ -42,4 +42,8 @@ class WeightTrackRepositoryImpl @Inject constructor(
     override suspend fun updateGoalWeight(weight: Float) {
         goalDao.insertGoal(WeightGoalEntity(weight = weight))
     }
+
+    override suspend fun deleteWeightTRackByDate(date: LocalDate?) {
+        weightDao.deleteWeightTrackByDate(date)
+    }
 }

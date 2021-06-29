@@ -17,6 +17,7 @@ import com.github.belyakovleonid.feature_weight_track.databinding.FWeightTrackBi
 import com.github.belyakovleonid.feature_weight_track.goalpicker.presentation.GoalPickerDialogFragment
 import com.github.belyakovleonid.feature_weight_track.weightpicker.presentation.WeightPickerDialogFragment
 import com.github.belyakovleonid.feature_weight_track.weightpicker.presentation.params.WeightPickerParams
+import java.time.LocalDate
 
 class WeightTrackFragment : BaseFragment<WeightTrackContract.State, WeightTrackContract.SideEffect>(
     R.layout.f_weight_track
@@ -36,22 +37,38 @@ class WeightTrackFragment : BaseFragment<WeightTrackContract.State, WeightTrackC
 
     override fun setupView() {
         binding.chartView.onItemSelectListener = {
-            viewModel.submitEvent(WeightTrackContract.Event.ChartItemClicked(it))
+            submitEvent(WeightTrackContract.Event.ChartItemClicked(it))
+        }
+        binding.fabAdd.setOnClickListener {
+            updateWeightTrack()
         }
         binding.goalSubtitle.setOnClickListener {
-            viewModel.submitEvent(WeightTrackContract.Event.ChooseGoalClick)
+            submitEvent(WeightTrackContract.Event.ChooseGoalClick)
             //todo вынести в навигацию ч/з cicerone
             GoalPickerDialogFragment().show(childFragmentManager, null)
         }
+        binding.fabDelete.setOnClickListener {
+            submitEvent(WeightTrackContract.Event.DeleteSelectedTrack)
+        }
+        binding.fabEdit.setOnClickListener {
+            viewModel.getSelectedDate()?.let { selectedDate ->
+                updateWeightTrack(selectedDate)
+            }
+        }
         emptyGoalBinding.chooseGoalButton.setOnClickListener {
-            viewModel.submitEvent(WeightTrackContract.Event.ChooseGoalClick)
+            submitEvent(WeightTrackContract.Event.ChooseGoalClick)
             //todo вынести в навигацию ч/з cicerone
             GoalPickerDialogFragment().show(childFragmentManager, null)
         }
         emptyChartBinding.emptyChartFabAdd.setOnClickListener {
-            WeightPickerDialogFragment().withParams(WeightPickerParams(getCurrentDate()))
-                .show(childFragmentManager, null)
+            updateWeightTrack()
         }
+    }
+
+    private fun updateWeightTrack(date: LocalDate? = null) {
+        //todo вынести в навигацию ч/з cicerone
+        WeightPickerDialogFragment().withParams(WeightPickerParams(date ?: getCurrentDate()))
+            .show(childFragmentManager, null)
     }
 
     override fun renderState(state: WeightTrackContract.State): Unit = with(binding) {
@@ -59,6 +76,8 @@ class WeightTrackFragment : BaseFragment<WeightTrackContract.State, WeightTrackC
             resources.getString(R.string.weight_track_goal_subtitle, state.goalWeight)
         titleGroup.isVisible = state.isGoalVisible
         chartGroup.isVisible = state.isChartVisible
+        fabEditGroup.isVisible = state.isEditFabVisible
+        fabAdd.isVisible = state.isAddFabVisible
         chartView.setData(state.chartData)
         emptyGoalBinding.emptyGoalGroup.isVisible = state.isEmptyGoalVisible
         emptyChartBinding.emptyChartGroup.isVisible = state.isEmptyChartVisible

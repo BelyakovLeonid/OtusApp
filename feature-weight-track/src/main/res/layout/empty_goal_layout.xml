@@ -46,6 +46,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/chooseGoalButton"
+        style="@style/FilledButton"
         android:layout_width="0px"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
@@ -60,5 +61,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="emptyGoalTitle, emptyGoalImage, emptyGoalHint, chooseGoalButton" />
+        app:constraint_referenced_ids="emptyGoalTitle, emptyGoalImage, emptyGoalHint, chooseGoalButton"
+        tools:visibility="visible" />
 </merge>

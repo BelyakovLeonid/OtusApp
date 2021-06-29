@@ -80,6 +80,10 @@ class WeightPickerViewModel @AssistedInject constructor(
         }
     }
 
+    fun getCurrentDate(): LocalDate {
+        return mutableState.value?.date ?: params.localDateOfTrack
+    }
+
     @AssistedFactory
     interface Factory : AssistedVMFactory<WeightPickerViewModel, WeightPickerParams>
 

@@ -14,4 +14,5 @@ interface WeightTrackRepository {
     fun getWeightGoalAsFlow(): Flow<WeightGoal?>
     suspend fun getWeightGoal(): WeightGoal?
     suspend fun updateGoalWeight(weight: Float)
+    suspend fun deleteWeightTRackByDate(date: LocalDate?)
 }

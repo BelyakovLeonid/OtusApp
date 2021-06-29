@@ -167,7 +167,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="fabEdit, fabAdd, fabDelete, chartView, goalRemain, goalCurrent, goalHint, goalImage, goalTitle, goalSubtitle"
+        app:constraint_referenced_ids="goalHint, goalImage, goalTitle, goalSubtitle, divider"
         tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Group
@@ -176,5 +176,13 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:constraint_referenced_ids="fabEdit, fabAdd, fabDelete, chartView, goalRemain, goalCurrent"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/fabEditGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="fabEdit, fabDelete"
         tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>
