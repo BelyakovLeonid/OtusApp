@@ -1,4 +1,4 @@
-package com.github.belyakovleonid.feature_weight_track.goalpicker.presentation.view
+package com.github.belyakovleonid.feature_weight_track.base.presentation.view
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -12,8 +12,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import com.github.belyakovleonid.core.base.fractionalnumber.FractionalNumber
 import com.github.belyakovleonid.core.base.fractionalnumber.NumberPart
+import com.github.belyakovleonid.core.base.fractionalnumber.toFloat
+import com.github.belyakovleonid.core.base.fractionalnumber.toFractional
 import com.github.belyakovleonid.core.presentation.*
 import com.github.belyakovleonid.feature_weight_track.R
+import com.github.belyakovleonid.feature_weight_track.base.presentation.model.WeightPickerUiModel
 import com.github.belyakovleonid.feature_weight_track.databinding.VWeightPickerBinding
 
 class WeightPickerView @JvmOverloads constructor(
@@ -22,30 +25,35 @@ class WeightPickerView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attributeSet, defStyleAttr), View.OnClickListener {
 
-    var onPlusListener: ((numPartSelected: NumberPart, weight: FractionalNumber) -> Unit)? = null
-    var onMinusListener: ((numPartSelected: NumberPart, weight: FractionalNumber) -> Unit)? = null
+    var onChangeQuantityListener: ((weight: FractionalNumber) -> Unit)? = null
 
     private var binding: VWeightPickerBinding = VWeightPickerBinding.inflate(
         LayoutInflater.from(context), this
     )
 
+    private var weightLimits: ClosedFloatingPointRange<Float> = Float.MIN_VALUE..Float.MAX_VALUE
     private var currentWeight = FractionalNumber.ZERO
+        set(value) {
+            binding.intPart.text = value.intPart.toString()
+            binding.fractPart.text = ".${value.fractPart}" //todo change
+            field = value
+        }
 
-    private var numberPartSelected: NumberPart = NumberPart.INT_PART
+    private var partSelected: NumberPart = NumberPart.INT_PART
         set(value) {
             field = value
             renderSelectPart()
         }
 
     private val selectedView: TextView
-        get() = if (numberPartSelected == NumberPart.INT_PART) {
+        get() = if (partSelected == NumberPart.INT_PART) {
             binding.intPart
         } else {
             binding.fractPart
         }
 
     private val notSelectedView: TextView
-        get() = if (numberPartSelected == NumberPart.INT_PART) {
+        get() = if (partSelected == NumberPart.INT_PART) {
             binding.fractPart
         } else {
             binding.intPart
@@ -113,11 +121,21 @@ class WeightPickerView @JvmOverloads constructor(
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.minusControl -> onMinusListener?.invoke(numberPartSelected, currentWeight)
-            R.id.plusControl -> onPlusListener?.invoke(numberPartSelected, currentWeight)
-            R.id.intPart -> numberPartSelected = NumberPart.INT_PART
-            R.id.fractPart -> numberPartSelected = NumberPart.FRACT_PART
+            R.id.minusControl -> tryToChangeQuantity(isAdd = false)
+            R.id.plusControl -> tryToChangeQuantity(isAdd = true)
+            R.id.intPart -> partSelected = NumberPart.INT_PART
+            R.id.fractPart -> partSelected = NumberPart.FRACT_PART
             else -> throw NotImplementedError()
+        }
+    }
+
+    private fun tryToChangeQuantity(isAdd: Boolean) {
+        val multiplier = if (isAdd) POSITIVE_MULTIPLIER else NEGATIVE_MULTIPLIER
+        val delta = if (partSelected == NumberPart.INT_PART) WEIGHT_INT_STEP else WEIGHT_FRACT_STEP
+        val changedWeight = currentWeight.toFloat() + (multiplier * delta)
+
+        if (changedWeight in weightLimits) {
+            onChangeQuantityListener?.invoke(changedWeight.toFractional())
         }
     }
 
@@ -126,17 +144,12 @@ class WeightPickerView @JvmOverloads constructor(
         super.onDetachedFromWindow()
     }
 
-    fun setWeight(weight: FractionalNumber, animated: Boolean) {
-        currentWeight = weight
-        binding.intPart.text = currentWeight.intPart.toString()
-        binding.fractPart.text = ".${currentWeight.fractPart}"
-
-        if (animated) animateSelectedPart()
+    fun setModel(model: WeightPickerUiModel) {
+        currentWeight = model.weight
+        weightLimits = model.weightLimits
     }
 
-    fun getCurrentWeight(): FractionalNumber = currentWeight
-
-    private fun animateSelectedPart() {
+    fun animateSelectedPart() {
         animator.cancel()
         animator.start()
     }
@@ -156,6 +169,11 @@ class WeightPickerView @JvmOverloads constructor(
         private const val MARGIN_RATIO = 0.2F
 
         private const val ANIMATION_DURATION = 200L
+
+        private const val POSITIVE_MULTIPLIER = 1F
+        private const val NEGATIVE_MULTIPLIER = -1F
+        private const val WEIGHT_INT_STEP = 1F
+        private const val WEIGHT_FRACT_STEP = 0.1F
     }
 
     private enum class ControlsSize(val dpSize: Int) {

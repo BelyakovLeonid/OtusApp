@@ -14,8 +14,11 @@ interface WeightTrackDao {
     @Query("SELECT * FROM ${WeightTrackEntity.WEIGHT_TRACK_TABLE_NAME}")
     fun getWeightTracksAsFlow(): Flow<List<WeightTrackEntity>>
 
+    @Query("SELECT * FROM ${WeightTrackEntity.WEIGHT_TRACK_TABLE_NAME} WHERE date = :date")
+    suspend fun getWeightTrackByDate(date: LocalDate): WeightTrackEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertWeightTrack(track: WeightTrackEntity)
+    suspend fun updateWeightTrack(track: WeightTrackEntity)
 
     @Query("DELETE FROM ${WeightTrackEntity.WEIGHT_TRACK_TABLE_NAME} WHERE date = :date")
     fun deleteWeightTrackByDate(date: LocalDate)

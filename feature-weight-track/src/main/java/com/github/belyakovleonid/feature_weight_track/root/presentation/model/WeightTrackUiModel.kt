@@ -1,7 +1,7 @@
 package com.github.belyakovleonid.feature_weight_track.root.presentation.model
 
-import com.github.belyakovleonid.core.presentation.getDateString
 import com.github.belyakovleonid.core.presentation.getWeightString
+import com.github.belyakovleonid.core.presentation.toDateString
 import com.github.belyakovleonid.feature_weight_track.root.domain.model.WeightTrack
 import java.time.LocalDate
 
@@ -18,5 +18,5 @@ fun WeightTrack.toUi() = WeightTrackUiModel(
     weight = weight,
     date = date,
     weightText = getWeightString(weight),
-    dateText = getDateString(date)
+    dateText = date.toDateString()
 )

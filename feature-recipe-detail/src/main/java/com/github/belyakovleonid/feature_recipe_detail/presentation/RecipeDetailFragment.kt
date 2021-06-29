@@ -14,8 +14,9 @@ import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailApiProvide
 import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailComponentHolder
 
 
-class RecipeDetailFragment :
-    BaseFragment<RecipeDetailContract.State, ISideEffect>(R.layout.f_recipe_detail) {
+class RecipeDetailFragment : BaseFragment<RecipeDetailContract.State, ISideEffect>(
+    R.layout.f_recipe_detail
+) {
 
     private lateinit var injector: RecipeDetailApiProvider
 

@@ -24,3 +24,10 @@ fun WeightTrackEntity.toDomain(): WeightTrack {
         weight = weight
     )
 }
+
+fun WeightTrack.toEntity(): WeightTrackEntity {
+    return WeightTrackEntity(
+        date = date,
+        weight = weight
+    )
+}

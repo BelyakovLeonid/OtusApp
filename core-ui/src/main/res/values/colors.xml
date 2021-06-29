@@ -11,6 +11,7 @@
     <color name="light_blue">#93CDF1</color>
     <color name="red">#FF474E</color>
     <color name="gray">#9D9D9D</color>
+    <color name="light_gray">#DDDDDD</color>
     <color name="white">#FFFFFFFF</color>
     <color name="salad">#6FC39C</color>
     <color name="ripple">#9D9D9D</color>

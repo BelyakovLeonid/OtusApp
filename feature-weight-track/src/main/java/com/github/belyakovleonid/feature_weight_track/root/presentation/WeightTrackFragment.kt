@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.belyakovleonid.core.presentation.base.BaseFragment
+import com.github.belyakovleonid.core.presentation.getCurrentDate
 import com.github.belyakovleonid.core.presentation.getDependencies
 import com.github.belyakovleonid.core.presentation.viewModel
+import com.github.belyakovleonid.core.presentation.withParams
 import com.github.belyakovleonid.feature_weight_track.R
 import com.github.belyakovleonid.feature_weight_track.base.di.WeightTrackApiProvider
 import com.github.belyakovleonid.feature_weight_track.base.di.WeightTrackComponentHolder
@@ -13,6 +15,8 @@ import com.github.belyakovleonid.feature_weight_track.databinding.EmptyChartLayo
 import com.github.belyakovleonid.feature_weight_track.databinding.EmptyGoalLayoutBinding
 import com.github.belyakovleonid.feature_weight_track.databinding.FWeightTrackBinding
 import com.github.belyakovleonid.feature_weight_track.goalpicker.presentation.GoalPickerDialogFragment
+import com.github.belyakovleonid.feature_weight_track.weightpicker.presentation.WeightPickerDialogFragment
+import com.github.belyakovleonid.feature_weight_track.weightpicker.presentation.params.WeightPickerParams
 
 class WeightTrackFragment : BaseFragment<WeightTrackContract.State, WeightTrackContract.SideEffect>(
     R.layout.f_weight_track
@@ -34,15 +38,19 @@ class WeightTrackFragment : BaseFragment<WeightTrackContract.State, WeightTrackC
         binding.chartView.onItemSelectListener = {
             viewModel.submitEvent(WeightTrackContract.Event.ChartItemClicked(it))
         }
-        emptyGoalBinding.chooseGoalButton.setOnClickListener {
-            viewModel.submitEvent(WeightTrackContract.Event.ChooseGoalClick)
-            //todo вынести в навигацию ч/з cicerone
-            GoalPickerDialogFragment().show(childFragmentManager, "pickerTag")
-        }
         binding.goalSubtitle.setOnClickListener {
             viewModel.submitEvent(WeightTrackContract.Event.ChooseGoalClick)
             //todo вынести в навигацию ч/з cicerone
-            GoalPickerDialogFragment().show(childFragmentManager, "pickerTag")
+            GoalPickerDialogFragment().show(childFragmentManager, null)
+        }
+        emptyGoalBinding.chooseGoalButton.setOnClickListener {
+            viewModel.submitEvent(WeightTrackContract.Event.ChooseGoalClick)
+            //todo вынести в навигацию ч/з cicerone
+            GoalPickerDialogFragment().show(childFragmentManager, null)
+        }
+        emptyChartBinding.emptyChartFabAdd.setOnClickListener {
+            WeightPickerDialogFragment().withParams(WeightPickerParams(getCurrentDate()))
+                .show(childFragmentManager, null)
         }
     }
 

@@ -29,36 +29,27 @@ class GoalPickerDialogFragment : BaseDialogFragment<GoalPickerContract.State, IS
         setFullScreen()
 
         with(binding) {
-            weightPicker.onMinusListener = { numberPartSelected, currentWeight ->
-                viewModel.submitEvent(
-                    GoalPickerContract.Event.ControlClick(
-                        isAdd = false,
-                        numberPartSelected = numberPartSelected,
-                        weight = currentWeight
-                    )
-                )
-            }
-            weightPicker.onPlusListener = { numberPartSelected, currentWeight ->
-                viewModel.submitEvent(
-                    GoalPickerContract.Event.ControlClick(
-                        isAdd = true,
-                        numberPartSelected = numberPartSelected,
-                        weight = currentWeight
-                    )
-                )
+            weightPicker.onChangeQuantityListener = { newWeight ->
+                viewModel.submitEvent(GoalPickerContract.Event.WeightChanged(newWeight))
             }
             applyButton.setOnClickListener {
-                viewModel.submitEvent(
-                    GoalPickerContract.Event.ApplyClick(
-                        weight = weightPicker.getCurrentWeight()
-                    )
-                )
+                viewModel.submitEvent(GoalPickerContract.Event.ApplyClick)
                 dismiss()
             }
         }
     }
 
     override fun renderState(state: GoalPickerContract.State) {
-        binding.weightPicker.setWeight(state.weight, state.animated)
+        with(binding) {
+            weightPicker.setModel(state.weightPickerModel)
+        }
+    }
+
+    override fun reactToSideEffect(effect: ISideEffect) {
+        when (effect) {
+            is GoalPickerContract.SideEffect.AnimateWeight -> {
+                binding.weightPicker.animateSelectedPart()
+            }
+        }
     }
 }

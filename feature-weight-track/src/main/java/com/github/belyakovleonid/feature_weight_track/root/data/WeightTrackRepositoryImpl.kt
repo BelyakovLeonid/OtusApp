@@ -5,11 +5,13 @@ import com.github.belyakovleonid.feature_weight_track.root.data.local.WeightGoal
 import com.github.belyakovleonid.feature_weight_track.root.data.local.WeightTrackDao
 import com.github.belyakovleonid.feature_weight_track.root.data.local.model.WeightGoalEntity
 import com.github.belyakovleonid.feature_weight_track.root.data.local.model.toDomain
+import com.github.belyakovleonid.feature_weight_track.root.data.local.model.toEntity
 import com.github.belyakovleonid.feature_weight_track.root.domain.WeightTrackRepository
 import com.github.belyakovleonid.feature_weight_track.root.domain.model.WeightGoal
 import com.github.belyakovleonid.feature_weight_track.root.domain.model.WeightTrack
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 import javax.inject.Inject
 
 class WeightTrackRepositoryImpl @Inject constructor(
@@ -19,6 +21,14 @@ class WeightTrackRepositoryImpl @Inject constructor(
 
     override fun getWeightTrackAsFlow(): Flow<List<WeightTrack>> {
         return weightDao.getWeightTracksAsFlow().mapElements { it.toDomain() }
+    }
+
+    override suspend fun getWeightTrackByDate(date: LocalDate): WeightTrack? {
+        return weightDao.getWeightTrackByDate(date)?.toDomain()
+    }
+
+    override suspend fun updateWeightTrack(track: WeightTrack) {
+        weightDao.updateWeightTrack(track.toEntity())
     }
 
     override fun getWeightGoalAsFlow(): Flow<WeightGoal?> {
