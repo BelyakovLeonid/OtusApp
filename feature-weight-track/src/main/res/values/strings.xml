@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="weight_track_goal">Цель</string>
-    <string name="weight_track_goal_subtitle">Ваша цель: %1sкг</string>
+    <string name="weight_track_goal_subtitle">Ваша цель: %1$.1f кг</string>
     <string name="weight_track_hint">Каждый грамм имеет значение: вносите информацию о своем весе ежедневно.</string>
     <string name="weight_track_button">Обновить данные о весе</string>
     <string name="weight_track_weight">Вес</string>

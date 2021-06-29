@@ -39,9 +39,16 @@ class WeightTrackFragment : BaseFragment<WeightTrackContract.State, WeightTrackC
             //todo вынести в навигацию ч/з cicerone
             GoalPickerDialogFragment().show(childFragmentManager, "pickerTag")
         }
+        binding.goalSubtitle.setOnClickListener {
+            viewModel.submitEvent(WeightTrackContract.Event.ChooseGoalClick)
+            //todo вынести в навигацию ч/з cicerone
+            GoalPickerDialogFragment().show(childFragmentManager, "pickerTag")
+        }
     }
 
     override fun renderState(state: WeightTrackContract.State): Unit = with(binding) {
+        goalSubtitle.text =
+            resources.getString(R.string.weight_track_goal_subtitle, state.goalWeight)
         titleGroup.isVisible = state.isGoalVisible
         chartGroup.isVisible = state.isChartVisible
         chartView.setData(state.chartData)
