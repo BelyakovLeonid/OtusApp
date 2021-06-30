@@ -363,7 +363,7 @@ class WeightChartView @JvmOverloads constructor(
     }
 
     companion object {
-        private const val ANIMATION_DURATION = 2000L
+        private const val ANIMATION_DURATION = 1000L
 
         private const val DEFAULT_AXIS_PADDING_DP = 8
         private const val DEFAULT_SKELETON_STROKE_WIDTH_DP = 1

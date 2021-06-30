@@ -90,6 +90,7 @@ class WeightTrackFragment : BaseFragment<WeightTrackContract.State, WeightTrackC
         }
     }
 
+    // todo не нравится такой подход, надо переделать + есть минорный баг
     private fun animateViewVisibilityIfNeed(
         addVisible: Boolean,
         editVisible: Boolean,

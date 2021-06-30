@@ -22,9 +22,12 @@
     <TextView
         android:id="@+id/goalSubtitle"
         style="@style/LargeText"
+        android:layout_marginTop="4dp"
+        android:paddingHorizontal="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
+        android:background="@drawable/rounded_bg"
+        android:backgroundTint="@color/salad_transparent"
         android:clickable="true"
         android:padding="6dp"
         android:text="@string/weight_track_goal"
