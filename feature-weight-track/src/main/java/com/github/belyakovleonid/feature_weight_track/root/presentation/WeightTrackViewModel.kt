@@ -3,9 +3,9 @@ package com.github.belyakovleonid.feature_weight_track.root.presentation
 import androidx.lifecycle.viewModelScope
 import com.github.belyakovleonid.core.presentation.IEvent
 import com.github.belyakovleonid.core.presentation.base.BaseViewModel
-import com.github.belyakovleonid.feature_weight_track.root.domain.WeightInteractor
-import com.github.belyakovleonid.feature_weight_track.root.domain.model.WeightGoal
-import com.github.belyakovleonid.feature_weight_track.root.domain.model.WeightTrack
+import com.github.belyakovleonid.feature_weight_track.base.domain.WeightInteractor
+import com.github.belyakovleonid.feature_weight_track.base.domain.model.WeightGoal
+import com.github.belyakovleonid.feature_weight_track.base.domain.model.WeightTrack
 import com.github.belyakovleonid.feature_weight_track.root.presentation.model.WeightTrackUiModel
 import com.github.belyakovleonid.feature_weight_track.root.presentation.model.toUi
 import kotlinx.coroutines.flow.combine

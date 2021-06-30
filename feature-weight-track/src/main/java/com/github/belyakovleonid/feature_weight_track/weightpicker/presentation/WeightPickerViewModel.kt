@@ -8,9 +8,9 @@ import com.github.belyakovleonid.core.presentation.IEvent
 import com.github.belyakovleonid.core.presentation.base.BaseViewModel
 import com.github.belyakovleonid.core.presentation.toDateString
 import com.github.belyakovleonid.core.viewmodel.AssistedVMFactory
+import com.github.belyakovleonid.feature_weight_track.base.domain.WeightInteractor
+import com.github.belyakovleonid.feature_weight_track.base.domain.model.WeightTrack
 import com.github.belyakovleonid.feature_weight_track.base.presentation.model.WeightPickerUiModel
-import com.github.belyakovleonid.feature_weight_track.root.domain.WeightInteractor
-import com.github.belyakovleonid.feature_weight_track.root.domain.model.WeightTrack
 import com.github.belyakovleonid.feature_weight_track.weightpicker.presentation.params.WeightPickerParams
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

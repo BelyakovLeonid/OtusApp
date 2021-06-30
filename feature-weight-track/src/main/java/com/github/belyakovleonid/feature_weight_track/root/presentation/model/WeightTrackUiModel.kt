@@ -2,7 +2,7 @@ package com.github.belyakovleonid.feature_weight_track.root.presentation.model
 
 import com.github.belyakovleonid.core.presentation.getWeightString
 import com.github.belyakovleonid.core.presentation.toDateString
-import com.github.belyakovleonid.feature_weight_track.root.domain.model.WeightTrack
+import com.github.belyakovleonid.feature_weight_track.base.domain.model.WeightTrack
 import java.time.LocalDate
 
 data class WeightTrackUiModel(

@@ -1,4 +1,4 @@
-package com.github.belyakovleonid.feature_weight_track.root.data.local.converters
+package com.github.belyakovleonid.feature_weight_track.base.data.local.converters
 
 import androidx.room.TypeConverter
 import java.time.LocalDate

@@ -1,9 +1,9 @@
-package com.github.belyakovleonid.feature_weight_track.root.data.local.model
+package com.github.belyakovleonid.feature_weight_track.base.data.local.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.github.belyakovleonid.feature_weight_track.root.data.local.model.WeightTrackEntity.Companion.WEIGHT_TRACK_TABLE_NAME
-import com.github.belyakovleonid.feature_weight_track.root.domain.model.WeightTrack
+import com.github.belyakovleonid.feature_weight_track.base.data.local.model.WeightTrackEntity.Companion.WEIGHT_TRACK_TABLE_NAME
+import com.github.belyakovleonid.feature_weight_track.base.domain.model.WeightTrack
 import java.time.LocalDate
 
 

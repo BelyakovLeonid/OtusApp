@@ -1,10 +1,10 @@
-package com.github.belyakovleonid.feature_weight_track.root.data.local
+package com.github.belyakovleonid.feature_weight_track.base.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.github.belyakovleonid.feature_weight_track.root.data.local.model.WeightTrackEntity
+import com.github.belyakovleonid.feature_weight_track.base.data.local.model.WeightTrackEntity
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 

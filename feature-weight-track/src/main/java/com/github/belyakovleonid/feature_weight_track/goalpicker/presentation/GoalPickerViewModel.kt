@@ -7,8 +7,8 @@ import com.github.belyakovleonid.core.base.fractionalnumber.toFractional
 import com.github.belyakovleonid.core.presentation.IEvent
 import com.github.belyakovleonid.core.presentation.ISideEffect
 import com.github.belyakovleonid.core.presentation.base.BaseViewModel
+import com.github.belyakovleonid.feature_weight_track.base.domain.WeightInteractor
 import com.github.belyakovleonid.feature_weight_track.base.presentation.model.WeightPickerUiModel
-import com.github.belyakovleonid.feature_weight_track.root.domain.WeightInteractor
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
