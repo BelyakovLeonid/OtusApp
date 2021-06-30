@@ -18,7 +18,8 @@ import java.time.LocalDate
 import java.util.*
 
 class WeightPickerDialogFragment
-    : BaseBottomSheetFragment<WeightPickerContract.State, WeightPickerContract.SideEffect>() {
+    : BaseBottomSheetFragment<WeightPickerContract.State, WeightPickerContract.SideEffect>(),
+    View.OnClickListener {
 
     private lateinit var injector: WeightTrackApiProvider
 
@@ -39,18 +40,22 @@ class WeightPickerDialogFragment
         return inflater.inflate(R.layout.f_weight_picker, container, false)
     }
 
+    override fun onClick(v: View?) = when (v?.id) {
+        R.id.datePicker -> openDatePicker()
+        R.id.applyButton -> {
+            submitEvent(WeightPickerContract.Event.ApplyClick)
+            dismiss() //todo cicerone
+        }
+        else -> throw NotImplementedError()
+    }
+
     override fun setupView() {
         with(binding) {
             weightPicker.onChangeQuantityListener = { newWeight ->
                 submitEvent(WeightPickerContract.Event.WeightChanged(newWeight))
             }
-            datePicker.setOnClickListener {
-                openDatePicker()
-            }
-            applyButton.setOnClickListener {
-                submitEvent(WeightPickerContract.Event.ApplyClick)
-                dismiss()
-            }
+            datePicker.setOnClickListener(this@WeightPickerDialogFragment)
+            applyButton.setOnClickListener(this@WeightPickerDialogFragment)
         }
     }
 

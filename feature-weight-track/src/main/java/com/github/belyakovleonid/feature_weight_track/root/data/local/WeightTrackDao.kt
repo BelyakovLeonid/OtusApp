@@ -11,10 +11,10 @@ import java.time.LocalDate
 @Dao
 interface WeightTrackDao {
 
-    @Query("SELECT * FROM ${WeightTrackEntity.WEIGHT_TRACK_TABLE_NAME}")
+    @Query(SELECT_QUERY)
     fun getWeightTracksAsFlow(): Flow<List<WeightTrackEntity>>
 
-    @Query("SELECT * FROM ${WeightTrackEntity.WEIGHT_TRACK_TABLE_NAME} WHERE date = :date")
+    @Query("$SELECT_QUERY WHERE date = :date")
     suspend fun getWeightTrackByDate(date: LocalDate): WeightTrackEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -22,4 +22,10 @@ interface WeightTrackDao {
 
     @Query("DELETE FROM ${WeightTrackEntity.WEIGHT_TRACK_TABLE_NAME} WHERE date = :date")
     suspend fun deleteWeightTrackByDate(date: LocalDate?)
+
+    companion object {
+        private const val SELECT_QUERY = """
+           SELECT * FROM ${WeightTrackEntity.WEIGHT_TRACK_TABLE_NAME} 
+        """
+    }
 }

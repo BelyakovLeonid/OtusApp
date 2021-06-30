@@ -24,29 +24,34 @@ class WeightTrackViewModel @Inject constructor(
 
     override fun submitEvent(event: IEvent) {
         when (event) {
-            is WeightTrackContract.Event.ChartItemClicked -> {
-                val currentValue = mutableState.value ?: return
-                val newChartData = currentValue.chartData.map {
-                    val newState = if (it == event.item) !event.item.isSelected else false
-                    it.copy(isSelected = newState)
-                }
-                val hasSelected = newChartData.any { it.isSelected }
-                mutableState.value = currentValue.copy(
-                    chartData = newChartData,
-                    isEditFabVisible = hasSelected,
-                    isAddFabVisible = !hasSelected,
-                )
-            }
-            is WeightTrackContract.Event.DeleteSelectedTrack -> {
-                viewModelScope.launch {
-                    weightInteractor.deleteWeightTrackByDate(getSelectedDate())
-                }
-            }
+            is WeightTrackContract.Event.ChartItemClicked -> changeItemState(event.item)
+            is WeightTrackContract.Event.DeleteSelectedTrack -> deleteSelectedWeightTrack()
         }
     }
 
     fun getSelectedDate(): LocalDate? {
-        return getSelectedWeightTrack()?.date
+        return mutableState.value?.chartData?.find { it.isSelected }?.date
+    }
+
+    private fun changeItemState(item: WeightTrackUiModel) {
+        val currentValue = mutableState.value ?: return
+        val newChartData = currentValue.chartData.map {
+            val newState = if (it == item) !item.isSelected else false
+            it.copy(isSelected = newState)
+        }
+        val hasSelected = newChartData.any { it.isSelected }
+        mutableState.value = currentValue.copy(
+            chartData = newChartData,
+            isEditFabVisible = hasSelected,
+            isAddFabVisible = !hasSelected,
+            isFabAnimated = true,
+        )
+    }
+
+    private fun deleteSelectedWeightTrack() {
+        viewModelScope.launch {
+            weightInteractor.deleteWeightTrackByDate(getSelectedDate())
+        }
     }
 
     private fun subscribeToWeightTracks() {
@@ -74,11 +79,7 @@ class WeightTrackViewModel @Inject constructor(
             isChartVisible = chartData.isNotEmpty(),
             isEmptyChartVisible = goal != null && chartData.isEmpty(),
             isEditFabVisible = false,
-            isAddFabVisible = true,
+            isAddFabVisible = chartData.isNotEmpty(),
         )
-    }
-
-    private fun getSelectedWeightTrack(): WeightTrackUiModel? {
-        return mutableState.value?.chartData?.find { it.isSelected }
     }
 }

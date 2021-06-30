@@ -9,6 +9,10 @@ data class WeightDataSet(
     val minWeight: Float
 ) {
     val lastIndex: Int get() = rawData.lastIndex
+    val size: Int get() = rawData.size
+
+    val isFlat: Boolean get() = maxWeight == minWeight
+    val weightDelta: Float get() = maxWeight - minWeight
 
     companion object {
         val EMPTY_SET = WeightDataSet(

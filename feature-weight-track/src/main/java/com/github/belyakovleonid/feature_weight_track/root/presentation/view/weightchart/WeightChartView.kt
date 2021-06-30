@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -144,7 +143,6 @@ class WeightChartView @JvmOverloads constructor(
         drawChartSkelet(canvas)
         drawChartItems(canvas)
         drawSelectedItems(canvas)
-//        drawItemsLabels(canvas)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -154,7 +152,6 @@ class WeightChartView @JvmOverloads constructor(
     }
 
     fun setData(data: List<WeightTrackUiModel>) {
-        Log.d("MyTag", "data = ${data.joinToString()}")
         dataSet = WeightDataSet(
             rawData = data,
             maxWeight = data.maxByOrNull { it.weight }?.weight ?: 0f,
@@ -196,7 +193,7 @@ class WeightChartView @JvmOverloads constructor(
         pointsPath.moveTo(chartData.first().coordinates)
         for (i in 0..chartData.lastIndex) {
             if (occupiedLength + chartSections[i].length > animatedLength) {
-                drawPartChartSection(canvas, chartSections[i], occupiedLength)
+                drawPartChartSection(chartSections[i], occupiedLength)
                 break
             } else {
                 drawnItems++
@@ -212,7 +209,7 @@ class WeightChartView @JvmOverloads constructor(
         }
     }
 
-    private fun drawPartChartSection(canvas: Canvas, section: ChartSection, occupiedLength: Float) {
+    private fun drawPartChartSection(section: ChartSection, occupiedLength: Float) {
         // сюда попадаем только в случае, если вью анимируется
         val partProgress = (animatedLength - occupiedLength) / section.length
 
@@ -260,7 +257,7 @@ class WeightChartView @JvmOverloads constructor(
     }
 
     private fun calculateScale() {
-        val weightDelta = dataSet.maxWeight - dataSet.minWeight
+        val weightDelta = if (dataSet.isFlat) DEFAULT_WEIGHT_DELTA else dataSet.weightDelta
         val availableHeight = height - offsets.bottom - offsets.top
         scaleValue = availableHeight / weightDelta
 
@@ -274,7 +271,8 @@ class WeightChartView @JvmOverloads constructor(
         rowHeight = scaleDivision * scaleValue
         verticalAxisCount = rowCount + 1
 
-        columnWidth = (width - offsets.left - offsets.right) / (dataSet.lastIndex)
+        val widthDivider = if (dataSet.size == 1) dataSet.size else dataSet.lastIndex
+        columnWidth = (width - offsets.left - offsets.right) / widthDivider
     }
 
     private fun getScaleDivisionByWeightDelta(weightDelta: Float) = when {
@@ -374,6 +372,7 @@ class WeightChartView @JvmOverloads constructor(
         private const val DEFAULT_TEXT_SP = 12
         private const val DEFAULT_RADIUS_DP = 6
 
+        private const val DEFAULT_WEIGHT_DELTA = 5f
         private const val SCALE_DIVISION_SMALL = 1f
         private const val SCALE_DIVISION_MEDIUM = 5f
         private const val SCALE_DIVISION_LARGE = 10f

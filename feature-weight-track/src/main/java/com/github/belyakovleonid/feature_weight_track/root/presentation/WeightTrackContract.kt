@@ -16,6 +16,7 @@ object WeightTrackContract {
         val isEmptyChartVisible: Boolean = false,
         val isEditFabVisible: Boolean = false,
         val isAddFabVisible: Boolean = false,
+        val isFabAnimated: Boolean = false,
     ) : IState
 
     sealed class Event : IEvent {
