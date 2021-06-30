@@ -64,8 +64,9 @@ class WeightTrackFragment : BaseFragment<WeightTrackContract.State, WeightTrackC
     }
 
     override fun renderState(state: WeightTrackContract.State): Unit = with(binding) {
-        goalSubtitle.text =
-            resources.getString(R.string.weight_track_goal_subtitle, state.goalWeight)
+        goalSubtitle.text = resources.getString(R.string.weight_track_goal, state.goalWeight)
+        goalRemain.text = resources.getString(R.string.weight_track_remain, state.remainWeight)
+        goalCurrent.text = resources.getString(R.string.weight_track_current, state.currentWeight)
         titleGroup.isVisible = state.isGoalVisible
         chartGroup.isVisible = state.isChartVisible
         chartView.setData(state.chartData)

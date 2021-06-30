@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlin.math.abs
 
 class WeightTrackViewModel @Inject constructor(
     private val weightInteractor: WeightInteractor
@@ -68,11 +69,14 @@ class WeightTrackViewModel @Inject constructor(
         weight: List<WeightTrack>,
         goal: WeightGoal?
     ): WeightTrackContract.State {
-        val chartData = weight.sortedBy { it.date }
-            .map(WeightTrack::toUi)
+        val sortedWeightsByDate = weight.sortedBy { it.date }
+        val chartData = sortedWeightsByDate.map(WeightTrack::toUi)
+        val currentWeight = sortedWeightsByDate.lastOrNull()?.weight ?: 0F
 
         return WeightTrackContract.State(
             goalWeight = goal?.weight,
+            currentWeight = currentWeight,
+            remainWeight = if (goal?.weight != null) abs(goal.weight - currentWeight) else null,
             chartData = chartData,
             isGoalVisible = goal != null,
             isEmptyGoalVisible = goal == null,

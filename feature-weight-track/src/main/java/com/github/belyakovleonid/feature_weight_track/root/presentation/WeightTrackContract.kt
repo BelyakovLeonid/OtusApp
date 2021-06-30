@@ -9,6 +9,8 @@ object WeightTrackContract {
 
     data class State(
         val goalWeight: Float? = null,
+        val remainWeight: Float? = null,
+        val currentWeight: Float? = null,
         val chartData: List<WeightTrackUiModel> = emptyList(),
         val isGoalVisible: Boolean = false,
         val isChartVisible: Boolean = false,
