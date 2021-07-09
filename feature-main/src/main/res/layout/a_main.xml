@@ -17,6 +17,6 @@
         app:itemIconTint="@color/tab_tint_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/teal_200"
+        android:background="@color/salad"
         app:menu="@menu/bottom_menu" />
 </LinearLayout>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingHorizontal="20dp">
+
+    <TextView
+        android:id="@+id/pickerTitle"
+        style="@style/XLargeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/weight_picker_title"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.github.belyakovleonid.feature_weight_track.base.presentation.view.WeightPickerView
+        android:id="@+id/weightPicker"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textSize="38sp"
+        app:controlsSize="medium"
+        app:controlsTint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pickerTitle"
+        app:notSelectedTextColor="@color/gray"
+        app:selectedTextColor="@color/black" />
+
+    <TextView
+        android:id="@+id/datePicker"
+        style="@style/LargeText"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_bg"
+        android:clickable="true"
+        android:paddingVertical="10dp"
+        android:paddingStart="36dp"
+        android:paddingEnd="16dp"
+        android:text="10.12.12"
+        app:drawableEndCompat="@drawable/ic_calendar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/weightPicker" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/applyButton"
+        style="@style/FilledButton"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/weight_picker_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/datePicker" />
+</androidx.constraintlayout.widget.ConstraintLayout>

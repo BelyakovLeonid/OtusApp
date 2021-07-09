@@ -42,7 +42,7 @@ inline fun <reified T : BaseParams> Fragment.requireParams(): T {
     }
 }
 
-inline fun <reified T : BaseParams> Fragment.withParams(params: T): Fragment {
+inline fun <reified T : BaseParams, F : Fragment> F.withParams(params: T): F {
     return this.apply {
         arguments = Bundle().apply {
             putParcelable(FRAGMENT_PARAMS_KEY, params)

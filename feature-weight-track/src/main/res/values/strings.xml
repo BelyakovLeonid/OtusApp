@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="weight_track_goal">Ваша цель: %1$.1f кг</string>
+    <string name="weight_track_goal_title">Цель</string>
+    <string name="weight_track_hint">Каждый грамм имеет значение: вносите информацию о своем весе ежедневно.</string>
+    <string name="weight_track_button">Обновить данные о весе</string>
+    <string name="weight_track_weight">Вес</string>
+    <string name="weight_track_current">Текущий вес: %1$.1f кг</string>
+    <string name="weight_track_remain">Осталось: %1$.1f кг</string>
+
+    <string name="weight_track_empty_goal_title">Цель не задана</string>
+    <string name="weight_track_empty_goal_hint">Расскажте нам о своем желаннном весе, чтобы легче следить за своим прогрессом и добиваться результата!</string>
+    <string name="weight_track_empty_goal_button">Указать цель</string>
+    <string name="weight_track_no_track_title">Добавить взвешивание</string>
+
+    <string name="weight_track_empty_weight_hint">Добавьте информацию о взвешивании, чтобы отслеживать прогресс.</string>
+
+    <string name="goal_picker_title">Укажите цель</string>
+    <string name="goal_picker_button">Обновить данные о цели</string>
+    <string name="goal_picker_separator">.</string>
+
+    <string name="weight_picker_title">Укажите вес</string>
+    <string name="weight_picker_button">Обновить данные о весе</string>
+</resources>
