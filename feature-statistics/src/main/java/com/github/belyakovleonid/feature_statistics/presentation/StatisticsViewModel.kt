@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.belyakovleonid.core.presentation.IEvent
 import com.github.belyakovleonid.core.presentation.base.BaseViewModel
 import com.github.belyakovleonid.core_network_api.model.Result
+import com.github.belyakovleonid.core_ui.expandablelist.ExpandableList
 import com.github.belyakovleonid.feature_statistics.domain.StatisticsInteractor
 import com.github.belyakovleonid.feature_statistics.domain.model.StatisticsCategory
 import com.github.belyakovleonid.feature_statistics.presentation.model.toPercentUi
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 class StatisticsViewModel @Inject constructor(
     private val statisticsInteractor: StatisticsInteractor
-) : BaseViewModel<StatisticsContract.State>() {
+) : BaseViewModel<StatisticsContract.State, StatisticsContract.SideEffect>() {
 
     init {
         loadStatistics()
@@ -21,20 +22,29 @@ class StatisticsViewModel @Inject constructor(
 
     override fun submitEvent(event: IEvent) {
         when (event) {
-            is StatisticsContract.Event.CategoryClicked -> {
-                val currentValue = mutableState.value as? StatisticsContract.State.Data ?: return
-                val newCategories = currentValue.statisticCategories.toMutableList()
-                val index = newCategories.indexOf(event.item)
-                if (event.item.expanded) {
-                    newCategories[index] = event.item.copy(expanded = false)
-                    newCategories.removeAll(event.item.subcategories)
-                } else {
-                    newCategories[index] = event.item.copy(expanded = true)
-                    newCategories.addAll(index + 1, event.item.subcategories)
-                }
-                mutableState.value = currentValue.copy(
-                    statisticCategories = newCategories
-                )
+            is StatisticsContract.Event.ItemClicked -> selectItem(event.item.id)
+            is StatisticsContract.Event.CategoryClicked -> selectItem(event.item.id)
+        }
+    }
+
+    private fun selectItem(itemId: Long) {
+        val currentValue = mutableState.value ?: return
+        val prevExpanded = currentValue.categories.getCurrentExpanded()
+        val newCategories = currentValue.categories.getChangedStateOfItem(itemId)
+        mutableState.value = currentValue.copy(
+            categories = newCategories,
+            isDataAnimated = false
+        )
+        when (prevExpanded?.id) {
+            itemId -> {
+                mutableSideEffect.offer(StatisticsContract.SideEffect.AnimCollapseItem(itemId))
+            }
+            null -> {
+                mutableSideEffect.offer(StatisticsContract.SideEffect.AnimExpandItem(itemId))
+            }
+            else -> {
+                mutableSideEffect.offer(StatisticsContract.SideEffect.AnimCollapseItem(prevExpanded.id))
+                mutableSideEffect.offer(StatisticsContract.SideEffect.AnimExpandItem(itemId))
             }
         }
     }
@@ -43,6 +53,7 @@ class StatisticsViewModel @Inject constructor(
         viewModelScope.launch {
             val result = statisticsInteractor.getStatisticsInfo()
             mutableState.value = transmitResultToState(result)
+            mutableSideEffect.send(StatisticsContract.SideEffect.AnimateData)
         }
     }
 
@@ -55,17 +66,16 @@ class StatisticsViewModel @Inject constructor(
                 val percents = resultSorted.map(StatisticsCategory::toPercentUi)
                 val categories = resultSorted.map(StatisticsCategory::toUi)
 
-                if (percents.isNotEmpty() && categories.isNotEmpty()) {
-                    StatisticsContract.State.Data(
-                        statisticPercents = percents,
-                        statisticCategories = categories
-                    )
-                } else {
-                    StatisticsContract.State.NoElements
-                }
+                StatisticsContract.State(
+                    percents = percents,
+                    categories = ExpandableList(categories),
+                    isDataAnimated = true
+                )
             }
             else -> {
-                StatisticsContract.State.Error
+                StatisticsContract.State(
+                    hasError = true
+                )
             }
         }
     }

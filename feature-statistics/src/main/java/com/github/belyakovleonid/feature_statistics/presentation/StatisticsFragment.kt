@@ -11,7 +11,8 @@ import com.github.belyakovleonid.feature_statistics.di.StatisticsApiProvider
 import com.github.belyakovleonid.feature_statistics.di.StatisticsComponentHolder
 import com.github.belyakovleonid.feature_statistics.presentation.adapter.StatisticsCategoryAdapter
 
-class StatisticsFragment : BaseFragment<StatisticsContract.State>(R.layout.f_statistics) {
+class StatisticsFragment :
+    BaseFragment<StatisticsContract.State, StatisticsContract.SideEffect>(R.layout.f_statistics) {
 
     private lateinit var injector: StatisticsApiProvider
 
@@ -32,14 +33,29 @@ class StatisticsFragment : BaseFragment<StatisticsContract.State>(R.layout.f_sta
 
     override fun setupView() = with(binding) {
         productList.adapter = adapter
+        percentView.onItemClickListener = viewModel::submitEvent
+        percentDiagramView.onItemClickListener = viewModel::submitEvent
     }
 
     override fun renderState(state: StatisticsContract.State) = with(binding) {
-        when (state) {
-            is StatisticsContract.State.Data -> {
-                percentDiagramView.setData(state.statisticPercents)
-                percentView.setData(state.statisticPercents)
-                adapter.submitList(state.statisticCategories)
+        percentDiagramView.setData(state.percents)
+        percentView.setData(state.percents)
+        adapter.submitList(state.categories.getItems())
+    }
+
+    override fun reactToSideEffect(effect: StatisticsContract.SideEffect) = with(binding) {
+        when (effect) {
+            is StatisticsContract.SideEffect.AnimateData -> {
+                percentDiagramView.animateData()
+                percentView.animateData()
+            }
+            is StatisticsContract.SideEffect.AnimExpandItem -> {
+                percentDiagramView.animateItem(effect.itemId, true)
+//                percentView.animateItem(effect.itemId)
+            }
+            is StatisticsContract.SideEffect.AnimCollapseItem -> {
+                percentDiagramView.animateItem(effect.itemId, false)
+//                percentView.animateItem(effect.itemId)
             }
         }
     }

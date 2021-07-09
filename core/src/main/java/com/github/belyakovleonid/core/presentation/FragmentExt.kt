@@ -7,11 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.github.belyakovleonid.core.AppWithDependenciesProvider
-import com.github.belyakovleonid.module_injector.BaseDependencies
 import com.github.belyakovleonid.core.viewmodel.BaseParams
+import com.github.belyakovleonid.module_injector.BaseDependencies
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
 
 const val FRAGMENT_PARAMS_KEY = "fragment_params_key"
 
@@ -32,7 +31,9 @@ inline fun <reified D : BaseDependencies> Fragment.getDependencies(): D {
 }
 
 fun <T> Fragment.observeFlow(flow: Flow<T>, action: (T) -> Unit) {
-    flow.onEach { action(it) }.launchIn(viewLifecycleOwner.lifecycleScope)
+    viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        flow.collect { action(it) }
+    }
 }
 
 inline fun <reified T : BaseParams> Fragment.requireParams(): T {
@@ -41,7 +42,7 @@ inline fun <reified T : BaseParams> Fragment.requireParams(): T {
     }
 }
 
-inline fun <reified T : BaseParams> Fragment.withParams(params: T): Fragment {
+inline fun <reified T : BaseParams, F : Fragment> F.withParams(params: T): F {
     return this.apply {
         arguments = Bundle().apply {
             putParcelable(FRAGMENT_PARAMS_KEY, params)

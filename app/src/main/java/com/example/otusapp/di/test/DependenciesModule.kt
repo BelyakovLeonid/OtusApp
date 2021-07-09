@@ -4,6 +4,7 @@ import com.github.belyakovleonid.core.DependenciesProvider
 import com.github.belyakovleonid.feature_main.di.MainDependencies
 import com.github.belyakovleonid.feature_recipe_detail.di.RecipeDetailDependencies
 import com.github.belyakovleonid.feature_recipe_list.di.RecipeListDependencies
+import com.github.belyakovleonid.feature_weight_track.base.di.WeightTrackDependencies
 import com.github.belyakovleonid.module_injector.BaseDependencies
 import com.github.belyakovleonid.module_injector.NoDependencies
 import dagger.Binds
@@ -29,6 +30,13 @@ interface DependenciesBindsModule {
     @DependenciesKey(MainDependencies::class)
     fun provideRootDependencies(
         dependencies: MainDependencies
+    ): BaseDependencies
+
+    @Binds
+    @IntoMap
+    @DependenciesKey(WeightTrackDependencies::class)
+    fun provideWeightTrackDependencies(
+        dependencies: WeightTrackDependencies
     ): BaseDependencies
 
     @Binds

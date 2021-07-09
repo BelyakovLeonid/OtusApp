@@ -1,6 +1,7 @@
 package com.github.belyakovleonid.feature_recipe_detail.presentation
 
 import androidx.lifecycle.viewModelScope
+import com.github.belyakovleonid.core.presentation.ISideEffect
 import com.github.belyakovleonid.core.presentation.base.BaseViewModel
 import com.github.belyakovleonid.core.viewmodel.AssistedVMFactory
 import com.github.belyakovleonid.core_network_api.model.Result
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
 class RecipeDetailViewModel @AssistedInject constructor(
     private val recipesInteractor: RecipeDetailInteractor,
     @Assisted private val params: RecipeDetailParams
-) : BaseViewModel<RecipeDetailContract.State>(RecipeDetailContract.State.Loading) {
+) : BaseViewModel<RecipeDetailContract.State, ISideEffect>(RecipeDetailContract.State.Loading) {
 
     init {
         viewModelScope.launch {

@@ -3,6 +3,7 @@ package com.github.belyakovleonid.feature_recipe_list.presentation
 import android.os.Bundle
 import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.github.belyakovleonid.core.presentation.ISideEffect
 import com.github.belyakovleonid.core.presentation.addOnScrollToEndListener
 import com.github.belyakovleonid.core.presentation.base.BaseFragment
 import com.github.belyakovleonid.core.presentation.getDependencies
@@ -14,7 +15,8 @@ import com.github.belyakovleonid.feature_recipe_list.di.RecipeListComponentHolde
 import com.github.belyakovleonid.feature_recipe_list.presentation.adapter.RecipesListAdapter
 
 
-class RecipeListFragment : BaseFragment<RecipeListContract.State>(R.layout.f_recipes_list) {
+class RecipeListFragment :
+    BaseFragment<RecipeListContract.State, ISideEffect>(R.layout.f_recipes_list) {
 
     private lateinit var injector: RecipeListApiProvider
 
