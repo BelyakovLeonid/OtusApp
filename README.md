@@ -22,6 +22,6 @@ Room
 Retrofit, OkHttp
 
 
-API: https://spoonacular.com/ + firebase
+API: https://spoonacular.com/
 
-Дизайн: https://www.ideamotive.co/case-study/fitnete, https://dribbble.com/shots/4874873-Nutrition-App-for-iOS, приложение Lifesum (https://lifesum.com/ru/)
+Референсы дизайна: https://www.ideamotive.co/case-study/fitnete, https://dribbble.com/shots/4874873-Nutrition-App-for-iOS, приложение Lifesum (https://lifesum.com/ru/)
